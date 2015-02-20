@@ -7,12 +7,25 @@ import java.awt.Point;
 public class GridDraw extends Applet
 {
 	private static final long	serialVersionUID	= 1L;
+	private Grid				grid;
 
 	public void paint(Graphics g)
 	{
 		// resize(600, 600);
-		Grid grid = new Grid(16, 16, 40, 40);
+		grid.paint(g);
+		System.out.println(grid.getFurthestPoint().x + ", " + grid.getFurthestPoint().y);
+		/*
+		 * grid.paintPointSet(g, new Point[] { new Point(9, 4), new Point(1, 3),
+		 * new Point(2, 1), new Point(5, 3) });
+		 */
+	}
+
+	public void init()
+	{
+		resize(800, 700);
+		grid = new Grid(20, 20, 35, 35);
 		grid.setSquareContents(new Point(2, 2), SquareType.START);
+		grid.setSquareContents(new Point(5, 11), SquareType.FINISH);
 
 		grid.setSquareContents(new Point(3, 2), SquareType.HAZARD);
 		grid.setSquareContents(new Point(3, 3), SquareType.HAZARD);
@@ -28,13 +41,6 @@ public class GridDraw extends Applet
 		grid.setSquareContents(new Point(8, 10), SquareType.HAZARD);
 		grid.setSquareContents(new Point(9, 11), SquareType.HAZARD);
 
-		// System.out.println(grid.getStartPoint().x + ", " +
-		// grid.getStartPoint().y);
 		PathfindAI.computeDistance(grid, grid.getStartPoint());
-		grid.paint(g);
-		/*
-		 * grid.paintPointSet(g, new Point[] { new Point(9, 4), new Point(1, 3),
-		 * new Point(2, 1), new Point(5, 3) });
-		 */
 	}
 }

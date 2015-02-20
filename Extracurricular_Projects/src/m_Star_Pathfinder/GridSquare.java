@@ -11,10 +11,12 @@ public class GridSquare implements Cloneable
 	private int					distance;
 	private static final Font	font1	= new Font("Arial", Font.PLAIN, 20);
 	private static final Font	font2	= new Font("Arial", Font.PLAIN, 12);
+	private final Grid			superGrid;
 
-	public GridSquare(SquareType contents, int x, int y, int width, int height)
+	public GridSquare(Grid superGrid, SquareType contents, int x, int y, int width, int height)
 	{
 		this.contents = contents;
+		this.superGrid = superGrid;
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -96,23 +98,29 @@ public class GridSquare implements Cloneable
 		return contents;
 	}
 
+	public Grid getSuperGrid()
+	{
+		return superGrid;
+	}
+
 	public void paint(Graphics g)
 	{
 		switch (contents)
 		{
 		case EMPTY:
-			g.setColor(new Color(255 - 4 * distance, 255 - 4 * distance, 255 - 4 * distance));
+			int shade = 255 - (int) (255 * (distance / (double) superGrid.getSquareCopy(superGrid.getFurthestPoint()).getDistance()));
+			g.setColor(new Color(shade, shade, shade));
 			g.fillRect(x, y, width, height);
 
 			g.setFont(font2);
-			g.setColor(new Color(31, 31, 31));
+			g.setColor(new Color(191, 127, 63));
 			g.drawString(distance + "", x, y + height / 2);
 
 			g.setColor(new Color(255, 255, 255));
 			g.drawRect(x, y, width, height);
 			break;
 		case HAZARD:
-			g.setColor(new Color(63, 63, 63));
+			g.setColor(new Color(127, 63, 127));
 			g.fillRect(x, y, width, height);
 			g.setColor(new Color(255, 255, 255));
 			g.drawRect(x, y, width, height);
@@ -130,13 +138,13 @@ public class GridSquare implements Cloneable
 			g.drawRect(x, y, width, height);
 			break;
 		case FINISH:
-			//g.setColor(new Color(191, 191, 191));
+			// g.setColor(new Color(191, 191, 191));
 			g.setColor(new Color(0, 63, 255));
 			g.fillRect(x, y, width, height);
 
 			g.setFont(font1);
 			g.setColor(new Color(0, 63, 255));
-			//g.drawString("Finish", x + width / 4, y + height / 2);
+			// g.drawString("Finish", x + width / 4, y + height / 2);
 
 			g.setColor(new Color(255, 255, 255));
 			g.drawRect(x, y, width, height);

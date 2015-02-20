@@ -7,7 +7,7 @@ import java.awt.Point;
 public class Grid
 {
 	private GridSquare[][]	grid;
-	private Point			startPoint, finishPoint;
+	private Point			startPoint, finishPoint, furthestPoint;
 
 	public Grid(GridSquare[][] grid)
 	{
@@ -23,7 +23,7 @@ public class Grid
 		{
 			for (int column = 0; column < grid[row].length; column++)
 			{
-				this.setSquare(new GridSquare(SquareType.EMPTY, column * squareWidth, row * squareHeight, squareWidth, squareHeight), row, column);
+				this.setSquare(new GridSquare(this, SquareType.EMPTY, column * squareWidth, row * squareHeight, squareWidth, squareHeight), row, column);
 			}
 		}
 	}
@@ -74,6 +74,16 @@ public class Grid
 	public Point getFinishPoint()
 	{
 		return finishPoint;
+	}
+
+	public Point getFurthestPoint()
+	{
+		return furthestPoint;
+	}
+
+	public void setFurthestPoint(Point p)
+	{
+		furthestPoint = p;
 	}
 
 	public void setSquareContents(Point p, SquareType contents)

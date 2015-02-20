@@ -75,14 +75,15 @@ public class PathfindAI
 			 * System.out.println(Arrays.toString(points.toArray()));
 			 * System.out.println(Arrays.toString(newPoints.toArray()));
 			 */
-			points.clear();
-			points.addAll(newPoints);
-
 			if (numFailedCells == points.size() || points.size() == 0)
 			// If all cells completely failed
 			{
 				noMoreLeft = true; // End looping
+				grid.setFurthestPoint(points.get(0));
 			}
+			points.clear();
+			points.addAll(newPoints);
+
 		}
 	}
 }
