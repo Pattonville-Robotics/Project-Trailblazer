@@ -11,7 +11,7 @@ public class GridDraw extends Applet
 	public void paint(Graphics g)
 	{
 		// resize(600, 600);
-		Grid grid = new Grid(20, 20, 30, 30);
+		Grid grid = new Grid(16, 16, 40, 40);
 		grid.setSquareContents(new Point(2, 2), SquareType.START);
 
 		grid.setSquareContents(new Point(3, 2), SquareType.HAZARD);
@@ -24,8 +24,12 @@ public class GridDraw extends Applet
 		grid.setSquareContents(new Point(5, 7), SquareType.HAZARD);
 		grid.setSquareContents(new Point(6, 8), SquareType.HAZARD);
 		grid.setSquareContents(new Point(4, 5), SquareType.HAZARD);
+		grid.setSquareContents(new Point(7, 9), SquareType.HAZARD);
+		grid.setSquareContents(new Point(8, 10), SquareType.HAZARD);
+		grid.setSquareContents(new Point(9, 11), SquareType.HAZARD);
 
-		System.out.println(grid.getStartPoint().x + ", " + grid.getStartPoint().y);
+		// System.out.println(grid.getStartPoint().x + ", " +
+		// grid.getStartPoint().y);
 		PathfindAI.computeDistance(grid, grid.getStartPoint());
 		grid.paint(g);
 		/*

@@ -10,7 +10,7 @@ public class GridSquare implements Cloneable
 	private int					x, y, width, height;
 	private int					distance;
 	private static final Font	font1	= new Font("Arial", Font.PLAIN, 20);
-	private static final Font	font2	= new Font("Arial", Font.PLAIN, 20);
+	private static final Font	font2	= new Font("Arial", Font.PLAIN, 12);
 
 	public GridSquare(SquareType contents, int x, int y, int width, int height)
 	{
@@ -118,23 +118,25 @@ public class GridSquare implements Cloneable
 			g.drawRect(x, y, width, height);
 			break;
 		case START:
-			g.setColor(new Color(191, 191, 191));
+			// g.setColor(new Color(191, 191, 191));
+			g.setColor(new Color(0, 255, 63));
 			g.fillRect(x, y, width, height);
 
 			g.setFont(font1);
 			g.setColor(new Color(0, 255, 63));
-			g.drawString("Start", x + width / 4, y + height / 2);
+			// g.drawString("Start", x + width / 4, y + height / 2);
 
 			g.setColor(new Color(255, 255, 255));
 			g.drawRect(x, y, width, height);
 			break;
 		case FINISH:
-			g.setColor(new Color(191, 191, 191));
+			//g.setColor(new Color(191, 191, 191));
+			g.setColor(new Color(0, 63, 255));
 			g.fillRect(x, y, width, height);
 
 			g.setFont(font1);
 			g.setColor(new Color(0, 63, 255));
-			g.drawString("Finish", x + width / 4, y + height / 2);
+			//g.drawString("Finish", x + width / 4, y + height / 2);
 
 			g.setColor(new Color(255, 255, 255));
 			g.drawRect(x, y, width, height);

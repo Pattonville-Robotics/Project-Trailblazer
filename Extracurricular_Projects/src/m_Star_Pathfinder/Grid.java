@@ -23,8 +23,7 @@ public class Grid
 		{
 			for (int column = 0; column < grid[row].length; column++)
 			{
-				this.setSquare(new GridSquare(SquareType.EMPTY, column * squareWidth, row
-						* squareHeight, squareWidth, squareHeight), row, column);
+				this.setSquare(new GridSquare(SquareType.EMPTY, column * squareWidth, row * squareHeight, squareWidth, squareHeight), row, column);
 			}
 		}
 	}
@@ -93,7 +92,7 @@ public class Grid
 		}
 		catch (ArrayIndexOutOfBoundsException e)
 		{
-			System.out.println("\"setSquareContents\" is trying to access out of bounds!");
+			// System.out.println("\"setSquareContents\" is trying to access out of bounds!");
 		}
 	}
 
@@ -105,15 +104,14 @@ public class Grid
 		}
 		catch (ArrayIndexOutOfBoundsException e)
 		{
-			System.out.println("\"setSquareDistance\" is trying to access out of bounds!");
+			// System.out.println("\"setSquareDistance\" is trying to access out of bounds!");
 		}
 	}
 
 	public void paintLine(Graphics g, Point p1, Point p2)
 	{
 		g.setColor(new Color(255, 0, 0));
-		g.drawLine(this.getSquare(p1).getXCenter(), this.getSquare(p1).getYCenter(), this
-				.getSquare(p2).getXCenter(), this.getSquare(p2).getYCenter());
+		g.drawLine(this.getSquare(p1).getXCenter(), this.getSquare(p1).getYCenter(), this.getSquare(p2).getXCenter(), this.getSquare(p2).getYCenter());
 	}
 
 	public void paintPointSet(Graphics g, Point[] points)

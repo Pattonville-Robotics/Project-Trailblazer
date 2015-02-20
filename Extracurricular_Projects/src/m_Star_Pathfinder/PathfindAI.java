@@ -3,7 +3,6 @@ package m_Star_Pathfinder;
 import java.awt.Point;
 import java.util.AbstractSet;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
@@ -15,8 +14,8 @@ public class PathfindAI
 
 	public static void computeDistance(Grid grid, Point start)
 	{
-		List<Point> points = new ArrayList<Point>();
-		AbstractSet<Point> pointSet = new HashSet<Point>();
+		List<Point> points = new ArrayList<Point>(grid.getGrid().length * 4);
+		AbstractSet<Point> pointSet = new HashSet<Point>((int) Math.pow(grid.getGrid().length, 2));
 		points.add(start);
 		boolean noMoreLeft = false;
 		int distance = 0;
@@ -24,7 +23,8 @@ public class PathfindAI
 		{
 			for (int i = 0; i < points.size(); i++)
 			{
-				System.out.println("Setting distance of: (" + points.get(i).x + ", " + points.get(i).y + ")");
+				// System.out.println("Setting distance of: (" + points.get(i).x
+				// + ", " + points.get(i).y + ")");
 				grid.setSquareDistance(points.get(i), distance);
 			}
 
@@ -36,7 +36,8 @@ public class PathfindAI
 
 			for (int i = 0; i < points.size(); i++)
 			{
-				System.out.println("Point " + i + " (" + points.get(i).x + ", " + points.get(i).y + ")");
+				// System.out.println("Point " + i + " (" + points.get(i).x +
+				// ", " + points.get(i).y + ")");
 				int numFailed = 0;
 				for (int j = 0; j < xMod.length; j++)
 				{
@@ -53,7 +54,7 @@ public class PathfindAI
 						}
 						else
 						{
-							System.out.println("Tried to add a point twice!");
+							// System.out.println("Tried to add a point twice!");
 						}
 						// Add it to the new list
 					}
@@ -70,10 +71,10 @@ public class PathfindAI
 			}
 			// System.out.println(distance);
 			distance++;
-
-			System.out.println(Arrays.toString(points.toArray()));
-			System.out.println(Arrays.toString(newPoints.toArray()));
-
+			/*
+			 * System.out.println(Arrays.toString(points.toArray()));
+			 * System.out.println(Arrays.toString(newPoints.toArray()));
+			 */
 			points.clear();
 			points.addAll(newPoints);
 
