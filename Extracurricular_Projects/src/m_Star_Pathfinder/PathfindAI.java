@@ -86,4 +86,8 @@ public class PathfindAI
 
 		}
 	}
+
+	public void computePaths(Grid grid)
+	{
+	}
 }

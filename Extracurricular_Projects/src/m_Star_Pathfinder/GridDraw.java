@@ -11,13 +11,12 @@ public class GridDraw extends Applet
 
 	public void paint(Graphics g)
 	{
-		// resize(600, 600);
 		grid.paint(g);
 		System.out.println(grid.getFurthestPoint().x + ", " + grid.getFurthestPoint().y);
-		/*
-		 * grid.paintPointSet(g, new Point[] { new Point(9, 4), new Point(1, 3),
-		 * new Point(2, 1), new Point(5, 3) });
-		 */
+
+		// grid.paintPointSet(g, new Point[] { new Point(9, 4), new Point(1,
+		// 3),new Point(2, 1), new Point(5, 3) });
+
 	}
 
 	public void init()
@@ -40,6 +39,7 @@ public class GridDraw extends Applet
 		grid.setSquareContents(new Point(7, 9), SquareType.HAZARD);
 		grid.setSquareContents(new Point(8, 10), SquareType.HAZARD);
 		grid.setSquareContents(new Point(9, 11), SquareType.HAZARD);
+		grid.setSquareContents(new Point(3, 1), SquareType.HAZARD);
 
 		PathfindAI.computeDistance(grid, grid.getStartPoint());
 	}

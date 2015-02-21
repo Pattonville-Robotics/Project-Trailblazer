@@ -109,7 +109,14 @@ public class GridSquare implements Cloneable
 		{
 		case EMPTY:
 			int shade = 255 - (int) (255 * (distance / (double) superGrid.getSquareCopy(superGrid.getFurthestPoint()).getDistance()));
-			g.setColor(new Color(shade, shade, shade));
+			if (shade >= 0 && shade <= 255)
+			{
+				g.setColor(new Color(shade, shade, shade));
+			}
+			else
+			{
+				g.setColor(new Color(0, 0, 0));
+			}
 			g.fillRect(x, y, width, height);
 
 			g.setFont(font2);
@@ -151,5 +158,4 @@ public class GridSquare implements Cloneable
 			break;
 		}
 	}
-
 }
