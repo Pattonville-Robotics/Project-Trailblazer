@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 
 public class PathfindAI
@@ -91,9 +90,10 @@ public class PathfindAI
 
 	public static void computePaths(Grid grid)
 	{
-		LinkedList<VertexMap> paths = new LinkedList<VertexMap>();
+		ArrayList<VertexMap> paths = new ArrayList<VertexMap>();
 		paths.add(new VertexMap());
 		paths.get(0).addPoint(grid.getFinishPoint());
+		// System.out.println(paths);
 
 		boolean allZero = false;
 		int progressFromFinish = 0;
@@ -101,12 +101,41 @@ public class PathfindAI
 		{
 			for (int i = 0; i < paths.size(); i++)
 			{
+				System.out.println("i = " + i);
+				System.out.println("lowestAdjacentSquares = " + grid.getLowestAdjacentSquares(paths.get(i).getPoint(progressFromFinish)));
 				ArrayList<Point> adjacent = grid.getLowestAdjacentSquares(paths.get(i).getPoint(progressFromFinish));
-				System.out.println("adjacent" + adjacent);
-			}
-			allZero = true; // Just to make it finish prematurely
-		}
 
-		System.out.println(paths);
+				if (adjacent.size() == 1)
+				{
+					System.out.println(paths.get(i) + " gets point " + adjacent.get(0) + "added.");
+					paths.get(i).addPoint(adjacent.get(0));
+				}
+				else if (adjacent.size() == 2)
+				{
+					VertexMap altMap = paths.get(i).clone();
+
+					System.out.println("altMap = " + altMap);
+					
+					paths.get(i).addPoint(adjacent.get(1));
+					altMap.addPoint(adjacent.get(1));
+
+					paths.add(altMap);
+					i++;
+				}
+				else if (adjacent.size() == 0)
+				{
+					allZero = true;
+					System.out.println("Found zero adjacent lower squares");
+				}
+				else
+				{
+					allZero = true;
+					System.out.println("Less than 0 or more than 2 adjacent points were returned! This is a sign of something bad!");
+				}
+			}
+			progressFromFinish++;
+			// System.out.println(progressFromFinish);
+		}
+		grid.setPaths(paths);
 	}
 }

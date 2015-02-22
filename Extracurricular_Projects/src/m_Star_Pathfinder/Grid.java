@@ -7,8 +7,9 @@ import java.util.ArrayList;
 
 public class Grid
 {
-	private GridSquare[][]	grid;
-	private Point			startPoint, finishPoint, furthestPoint;
+	private GridSquare[][]			grid;
+	private Point					startPoint, finishPoint, furthestPoint;
+	private ArrayList<VertexMap>	paths;
 
 	public Grid(GridSquare[][] grid)
 	{
@@ -50,6 +51,16 @@ public class Grid
 	public void setGrid(GridSquare[][] grid)
 	{
 		this.grid = grid;
+	}
+
+	public void setPaths(ArrayList<VertexMap> v)
+	{
+		this.paths = v;
+	}
+
+	public ArrayList<VertexMap> getPaths()
+	{
+		return paths;
 	}
 
 	private GridSquare getSquare(Point p)
@@ -100,6 +111,7 @@ public class Grid
 			if (contents == SquareType.START)
 			{
 				startPoint = p;
+				this.getSquare(p).setDistance(0);
 			}
 			else if (contents == SquareType.FINISH)
 			{

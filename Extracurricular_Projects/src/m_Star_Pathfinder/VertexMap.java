@@ -3,13 +3,35 @@ package m_Star_Pathfinder;
 import java.awt.Point;
 import java.util.LinkedList;
 
-public class VertexMap implements Comparable<VertexMap>
+public class VertexMap implements Comparable<VertexMap>, Cloneable
 {
 	private LinkedList<Point>	points;
 
 	public VertexMap()
 	{
 		this.points = new LinkedList<Point>();
+	}
+
+	public VertexMap(LinkedList<Point> points)
+	{
+		this.points = points;
+	}
+
+	public VertexMap clone()
+	{
+		LinkedList<Point> newList = new LinkedList<Point>();
+
+		for (Point p : points)
+		{
+			newList.add(p);
+		}
+
+		return new VertexMap(newList);
+	}
+
+	public LinkedList<Point> getList()
+	{
+		return points;
 	}
 
 	public void addPoint(Point p)
@@ -41,9 +63,9 @@ public class VertexMap implements Comparable<VertexMap>
 
 	public int compareTo(VertexMap map)
 	{
-		if (this.getTotalDistance() - map.getTotalDistance() > 0)
+		if (this.getTotalDistance() > map.getTotalDistance())
 			return 1;
-		else if (this.getTotalDistance() - map.getTotalDistance() < 0)
+		else if (this.getTotalDistance() < map.getTotalDistance())
 			return -1;
 		else
 			return 0;
