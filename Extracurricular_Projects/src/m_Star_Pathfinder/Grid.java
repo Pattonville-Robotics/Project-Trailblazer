@@ -3,6 +3,7 @@ package m_Star_Pathfinder;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.ArrayList;
 
 public class Grid
 {
@@ -86,6 +87,11 @@ public class Grid
 		furthestPoint = p;
 	}
 
+	public int getDistance(Point p)
+	{
+		return this.getSquare(p).getDistance();
+	}
+
 	public void setSquareContents(Point p, SquareType contents)
 	{
 		try
@@ -130,6 +136,25 @@ public class Grid
 		{
 			paintLine(g, points[i], points[i + 1]);
 		}
+	}
+
+	public ArrayList<Point> getLowestAdjacentSquares(Point p)
+	{
+		ArrayList<Point> adjacent = new ArrayList<Point>();
+		final int[] xMod = new int[] { 1, -1, 0, 0 };
+		final int[] yMod = new int[] { 0, 0, 1, -1 };
+
+		for (int i = 0; i < xMod.length; i++)
+		{
+			Point possiblePoint = new Point(p.x + xMod[i], p.y + yMod[i]);
+			if (this.canAccess(possiblePoint) && this.getSquareCopy(possiblePoint).getDistance() == this.getDistance(p) - 1)
+			// If it exists and is a lower value than the center
+			{
+				adjacent.add(new Point(p.x + xMod[i], p.y + yMod[i]));
+			}
+		}
+
+		return adjacent;
 	}
 
 	public void paint(Graphics g)

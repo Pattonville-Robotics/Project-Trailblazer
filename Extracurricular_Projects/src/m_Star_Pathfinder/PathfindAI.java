@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.AbstractSet;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 public class PathfindAI
@@ -41,9 +42,10 @@ public class PathfindAI
 				int numFailed = 0;
 				for (int j = 0; j < xMod.length; j++)
 				{
-					if (grid.canAccess(new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j]))
-							&& grid.getSquareCopy(new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j])).getDistance() == -1
-							&& grid.getSquareCopy(new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j])).getContents() == SquareType.EMPTY)
+					Point prospectivePoint = new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j]);
+					if (grid.canAccess(prospectivePoint)
+							&& grid.getSquareCopy(prospectivePoint).getDistance() == -1
+							&& (grid.getSquareCopy(prospectivePoint).getContents() == SquareType.EMPTY || grid.getSquareCopy(prospectivePoint).getContents() == SquareType.FINISH))
 					// If it's not outside the grid and hasn't been set already
 					// and is an empty square
 					{
@@ -87,7 +89,24 @@ public class PathfindAI
 		}
 	}
 
-	public void computePaths(Grid grid)
+	public static void computePaths(Grid grid)
 	{
+		LinkedList<VertexMap> paths = new LinkedList<VertexMap>();
+		paths.add(new VertexMap());
+		paths.get(0).addPoint(grid.getFinishPoint());
+
+		boolean allZero = false;
+		int progressFromFinish = 0;
+		while (!allZero)
+		{
+			for (int i = 0; i < paths.size(); i++)
+			{
+				ArrayList<Point> adjacent = grid.getLowestAdjacentSquares(paths.get(i).getPoint(progressFromFinish));
+				System.out.println("adjacent" + adjacent);
+			}
+			allZero = true; // Just to make it finish prematurely
+		}
+
+		System.out.println(paths);
 	}
 }

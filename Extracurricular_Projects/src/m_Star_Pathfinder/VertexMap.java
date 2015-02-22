@@ -17,6 +17,11 @@ public class VertexMap implements Comparable<VertexMap>
 		points.add(p);
 	}
 
+	public Point getPoint(int i)
+	{
+		return points.get(i);
+	}
+
 	public double getTotalDistance()
 	{
 		double sum = 0;
@@ -42,5 +47,10 @@ public class VertexMap implements Comparable<VertexMap>
 			return -1;
 		else
 			return 0;
+	}
+
+	public String toString()
+	{
+		return points.toString();
 	}
 }

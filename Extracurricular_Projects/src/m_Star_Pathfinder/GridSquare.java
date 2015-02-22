@@ -3,6 +3,7 @@ package m_Star_Pathfinder;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 
 public class GridSquare implements Cloneable
 {
@@ -71,6 +72,11 @@ public class GridSquare implements Cloneable
 	public int getY()
 	{
 		return y;
+	}
+
+	public Point getPoint()
+	{
+		return new Point(x, y);
 	}
 
 	public int getWidth()
