@@ -96,28 +96,39 @@ public class PathfindAI
 		// System.out.println(paths);
 
 		boolean allZero = false;
-		int progressFromFinish = 0;
+		// int progressFromFinish = 0;
 		while (!allZero)
 		{
 			for (int i = 0; i < paths.size(); i++)
 			{
-				System.out.println("i = " + i);
-				System.out.println("lowestAdjacentSquares = " + grid.getLowestAdjacentSquares(paths.get(i).getPoint(progressFromFinish)));
-				ArrayList<Point> adjacent = grid.getLowestAdjacentSquares(paths.get(i).getPoint(progressFromFinish));
+				// System.out.println("i = " + i); // DEBUG
+				// System.out.println("progressFromFinish = " +
+				// progressFromFinish); // DEBUG
+				// System.out.println("lowestAdjacentSquares = " +
+				// grid.getLowestAdjacentSquares(paths.get(i).getLastPoint()));
+				// // DEBUG
+
+				ArrayList<Point> adjacent = grid.getLowestAdjacentSquares(paths.get(i).getLastPoint());
 
 				if (adjacent.size() == 1)
 				{
-					System.out.println(paths.get(i) + " gets point " + adjacent.get(0) + "added.");
+					// System.out.println(paths.get(i) + " gets point " +
+					// adjacent.get(0) + "added."); // DEBUG
+
 					paths.get(i).addPoint(adjacent.get(0));
 				}
 				else if (adjacent.size() == 2)
 				{
 					VertexMap altMap = paths.get(i).clone();
 
-					System.out.println("altMap = " + altMap);
-					
-					paths.get(i).addPoint(adjacent.get(1));
+					// System.out.println(paths.get(i) + " gets point " +
+					// adjacent.get(0) + "added."); // DEBUG
+
+					paths.get(i).addPoint(adjacent.get(0));
 					altMap.addPoint(adjacent.get(1));
+
+					// System.out.println(altMap + " gets point " +
+					// adjacent.get(1) + "added."); // DEBUG
 
 					paths.add(altMap);
 					i++;
@@ -125,16 +136,18 @@ public class PathfindAI
 				else if (adjacent.size() == 0)
 				{
 					allZero = true;
-					System.out.println("Found zero adjacent lower squares");
+					// System.out.println("Found zero adjacent lower squares");
+					// // DEBUG
 				}
 				else
 				{
 					allZero = true;
-					System.out.println("Less than 0 or more than 2 adjacent points were returned! This is a sign of something bad!");
+					// System.out.println("Less than 0 or more than 2 adjacent points were returned! This is a sign of something bad!");
+					// // DEBUG
 				}
 			}
-			progressFromFinish++;
-			// System.out.println(progressFromFinish);
+			// progressFromFinish++;
+			// System.out.println(progressFromFinish); // DEBUG
 		}
 		grid.setPaths(paths);
 	}

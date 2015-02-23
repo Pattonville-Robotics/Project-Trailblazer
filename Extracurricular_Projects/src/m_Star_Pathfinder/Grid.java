@@ -1,12 +1,14 @@
 package m_Star_Pathfinder;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Grid
+public class Grid implements Serializable
 {
+	private static final long		serialVersionUID	= 1L;
+
 	private GridSquare[][]			grid;
 	private Point					startPoint, finishPoint, furthestPoint;
 	private ArrayList<VertexMap>	paths;
@@ -138,7 +140,7 @@ public class Grid
 
 	public void paintLine(Graphics g, Point p1, Point p2)
 	{
-		g.setColor(new Color(255, 0, 0));
+		// g.setColor(new Color(255, 0, 0));
 		g.drawLine(this.getSquare(p1).getXCenter(), this.getSquare(p1).getYCenter(), this.getSquare(p2).getXCenter(), this.getSquare(p2).getYCenter());
 	}
 

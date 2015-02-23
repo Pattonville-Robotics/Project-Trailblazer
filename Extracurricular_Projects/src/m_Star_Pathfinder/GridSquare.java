@@ -4,14 +4,16 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.Serializable;
 
-public class GridSquare implements Cloneable
+public class GridSquare implements Cloneable, Serializable
 {
+	private static final long	serialVersionUID	= 1L;
 	private SquareType			contents;
 	private int					x, y, width, height;
 	private int					distance;
-	private static final Font	font1	= new Font("Arial", Font.PLAIN, 20);
-	private static final Font	font2	= new Font("Arial", Font.PLAIN, 12);
+	private static final Font	font1				= new Font("Arial", Font.PLAIN, 20);
+	private static final Font	font2				= new Font("Arial", Font.PLAIN, 12);
 	private final Grid			superGrid;
 
 	public GridSquare(Grid superGrid, SquareType contents, int x, int y, int width, int height)

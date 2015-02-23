@@ -1,10 +1,12 @@
 package m_Star_Pathfinder;
 
 import java.awt.Point;
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class VertexMap implements Comparable<VertexMap>, Cloneable
+public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 {
+	private static final long	serialVersionUID	= 1L;
 	private LinkedList<Point>	points;
 
 	public VertexMap()
@@ -41,7 +43,20 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable
 
 	public Point getPoint(int i)
 	{
-		return points.get(i);
+		try
+		{
+			return points.get(i);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Tried to get point at " + i + ", but the size of the array is only " + points.size() + "!");
+			return this.getPoint(i - 1);
+		}
+	}
+
+	public Point getLastPoint()
+	{
+		return points.get(points.size() - 1);
 	}
 
 	public double getTotalDistance()
@@ -59,6 +74,12 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable
 	public double getDistance(Point p1, Point p2)
 	{
 		return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+	}
+
+	public Point[] getArray()
+	{
+		Point[] result = new Point[points.size()];
+		return points.toArray(result);
 	}
 
 	public int compareTo(VertexMap map)
