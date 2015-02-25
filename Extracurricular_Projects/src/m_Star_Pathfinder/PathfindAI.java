@@ -96,9 +96,11 @@ public class PathfindAI
 		// System.out.println(paths);
 
 		boolean allZero = false;
+		int numZero = 0;
 		// int progressFromFinish = 0;
 		while (!allZero)
 		{
+			numZero = 0;
 			for (int i = 0; i < paths.size(); i++)
 			{
 				// System.out.println("i = " + i); // DEBUG
@@ -131,20 +133,25 @@ public class PathfindAI
 					// adjacent.get(1) + "added."); // DEBUG
 
 					paths.add(altMap);
-					i++;
+					i--;
 				}
 				else if (adjacent.size() == 0)
 				{
-					allZero = true;
-					// System.out.println("Found zero adjacent lower squares");
-					// // DEBUG
+					// allZero = true;
+					numZero++;
+					// System.out.println("Found zero adjacent lower squares"); // DEBUG
 				}
 				else
 				{
-					allZero = true;
-					// System.out.println("Less than 0 or more than 2 adjacent points were returned! This is a sign of something bad!");
-					// // DEBUG
+					// allZero = true;
+					numZero++;
+					System.out.println("Less than 0 or more than 2 adjacent points were returned! This is a sign of something bad!"); // DEBUG
 				}
+			}
+			System.out.println(numZero + " paths out of " + paths.size() + " paths have finished.");
+			if (numZero == paths.size())
+			{
+				allZero = true;
 			}
 			// progressFromFinish++;
 			// System.out.println(progressFromFinish); // DEBUG

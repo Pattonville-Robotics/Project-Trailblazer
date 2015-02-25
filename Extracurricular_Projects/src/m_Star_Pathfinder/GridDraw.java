@@ -16,15 +16,18 @@ public class GridDraw extends Applet
 
 	public void paint(Graphics g)
 	{
+		System.out.println("Began drawing to the screen.");
 		grid.paint(g);
 		// System.out.println("Lowest next to start: " +
 		// grid.getLowestAdjacentSquares(grid.getFinishPoint()));
 
 		g.setColor(new Color(255, 0, 0));
+
 		for (int i = 0; i < grid.getPaths().size(); i++)
 		{
 			grid.paintPointSet(g, grid.getPaths().get(i).getArray());
 		}
+		System.out.println("Finished drawing " + grid.getPaths().size() + " paths to the screen.");
 	}
 
 	public void init()
@@ -32,6 +35,7 @@ public class GridDraw extends Applet
 
 		try
 		{
+			System.out.println("Began reading in data file.");
 			FileInputStream fileIn = new FileInputStream("grid.data");
 			ObjectInputStream objIn = new ObjectInputStream(fileIn);
 
@@ -42,10 +46,11 @@ public class GridDraw extends Applet
 			{
 				grid = (Grid) obj;
 			}
+			System.out.println("Finished reading in data file.");
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.out.println("File not found. Began generating new data.");
 			grid = new Grid(16, 16, 40, 40);
 			grid.setSquareContents(new Point(1, 2), SquareType.START);
 			grid.setSquareContents(new Point(5, 11), SquareType.FINISH);
@@ -69,6 +74,7 @@ public class GridDraw extends Applet
 			PathfindAI.computeDistance(grid, grid.getStartPoint());
 			PathfindAI.computePaths(grid);
 
+			System.out.println("Finished generating new data. Begin caching.");
 			try
 			{
 				FileOutputStream fileOut = new FileOutputStream("grid.data");
@@ -76,12 +82,14 @@ public class GridDraw extends Applet
 
 				objOut.writeObject(grid);
 				objOut.close();
+				System.out.println("Sucessfully cached data.");
 			}
 			catch (Exception e1)
 			{
-				e1.printStackTrace();
+				System.out.println("Failed to cache data.");
 			}
 		}
+		System.out.println("Finished initialization.");
 		resize(700, 700);
 	}
 }
