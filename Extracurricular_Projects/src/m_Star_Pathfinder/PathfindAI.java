@@ -8,8 +8,9 @@ import java.util.List;
 
 public class PathfindAI implements Runnable
 {
-	private PathfindAI()
+	public PathfindAI()
 	{
+		System.out.println("y u do dis?");
 	}
 
 	public static void computeDistance(Grid grid, Point start)
@@ -43,10 +44,8 @@ public class PathfindAI implements Runnable
 				{
 					Point prospectivePoint = new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j]);
 					if (grid.canAccess(prospectivePoint)
-							&& grid.getSquareCopy(prospectivePoint).getDistance() == -1
 							&& (grid.getSquareCopy(prospectivePoint).getContents() == SquareType.EMPTY || grid.getSquareCopy(prospectivePoint).getContents() == SquareType.FINISH))
-					// If it's not outside the grid and hasn't been set already
-					// and is an empty square
+					// If it's not outside the grid and is an empty square
 					{
 						if (!pointSet.contains(new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j])))
 						{
@@ -80,11 +79,10 @@ public class PathfindAI implements Runnable
 			// If all cells completely failed
 			{
 				noMoreLeft = true; // End looping
-				grid.setFurthestPoint(points.get(0));
 			}
 			points.clear();
 			points.addAll(newPoints);
-
+			grid.findFurthestPoint();
 		}
 	}
 
@@ -133,6 +131,49 @@ public class PathfindAI implements Runnable
 					// adjacent.get(1) + "added."); // DEBUG
 
 					paths.add(altMap);
+					i--;
+				}
+				else if (adjacent.size() == 3)
+				{
+					System.out.println("Oh baby, a triple!");
+					VertexMap altMap1 = paths.get(i).clone();
+					VertexMap altMap2 = paths.get(i).clone();
+
+					// System.out.println(paths.get(i) + " gets point " +
+					// adjacent.get(0) + "added."); // DEBUG
+
+					paths.get(i).addPoint(adjacent.get(0));
+					altMap1.addPoint(adjacent.get(1));
+					altMap2.addPoint(adjacent.get(2));
+
+					// System.out.println(altMap + " gets point " +
+					// adjacent.get(1) + "added."); // DEBUG
+
+					paths.add(altMap1);
+					paths.add(altMap2);
+					i--;
+				}
+				else if (adjacent.size() == 4)
+				{
+					System.out.println("Mum, get the camera!");
+					VertexMap altMap1 = paths.get(i).clone();
+					VertexMap altMap2 = paths.get(i).clone();
+					VertexMap altMap3 = paths.get(i).clone();
+
+					// System.out.println(paths.get(i) + " gets point " +
+					// adjacent.get(0) + "added."); // DEBUG
+
+					paths.get(i).addPoint(adjacent.get(0));
+					altMap1.addPoint(adjacent.get(1));
+					altMap2.addPoint(adjacent.get(2));
+					altMap3.addPoint(adjacent.get(3));
+
+					// System.out.println(altMap + " gets point " +
+					// adjacent.get(1) + "added."); // DEBUG
+
+					paths.add(altMap1);
+					paths.add(altMap2);
+					paths.add(altMap3);
 					i--;
 				}
 				else if (adjacent.size() == 0)

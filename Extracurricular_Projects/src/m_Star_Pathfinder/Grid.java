@@ -89,6 +89,11 @@ public class Grid implements Serializable
 		grid[row][column] = gridSquare;
 	}
 
+	public void setStartPoint(Point p)
+	{
+		startPoint = p;
+	}
+
 	public Point getStartPoint()
 	{
 		return startPoint;
@@ -106,6 +111,27 @@ public class Grid implements Serializable
 
 	public void setFurthestPoint(Point p)
 	{
+		furthestPoint = p;
+	}
+
+	public void findFurthestPoint()
+	{
+		Point p = new Point(0, 0);
+
+		for (int i = 0; i < grid.length; i++)
+		{
+			for (int j = 0; j < grid[i].length; j++)
+			{
+				// System.out.println("Checked distance: " + this.getSquare(new
+				// Point(j, i)).getDistance() + ", Previous best distance: " +
+				// this.getSquare(p).getDistance());
+				if (this.getSquare(new Point(j, i)).getDistance() > this.getSquare(p).getDistance())
+				{
+					p.setLocation(j, i);
+				}
+			}
+		}
+
 		furthestPoint = p;
 	}
 
@@ -155,19 +181,47 @@ public class Grid implements Serializable
 		try
 		{
 			this.getSquare(p).setContents(contents);
-			if (contents == SquareType.START)
+			if (contents == SquareType.HAZARD)
 			{
+				this.getSquare(p).setDistance(-2);
+			}
+			else if (contents == SquareType.START)
+			{
+				for (int y = 0; y < grid.length; y++)
+				{
+					for (int x = 0; x < grid[y].length; x++)
+					{
+						if (this.getSquare(new Point(x, y)).getContents() == SquareType.START)
+						{
+							this.setSquareContents(new Point(x, y), SquareType.EMPTY);
+						}
+					}
+				}
+
 				startPoint = p;
+				this.getSquare(p).setContents(contents);
 				this.getSquare(p).setDistance(0);
 			}
 			else if (contents == SquareType.FINISH)
 			{
+				for (int y = 0; y < grid.length; y++)
+				{
+					for (int x = 0; x < grid[y].length; x++)
+					{
+						if (this.getSquare(new Point(x, y)).getContents() == SquareType.FINISH)
+						{
+							this.setSquareContents(new Point(x, y), SquareType.EMPTY);
+						}
+					}
+				}
+
 				finishPoint = p;
+				this.getSquare(p).setContents(contents);
 			}
 		}
 		catch (ArrayIndexOutOfBoundsException e)
 		{
-			// System.out.println("\"setSquareContents\" is trying to access out of bounds!");
+			System.out.println("\"setSquareContents\" is trying to access out of bounds!");
 		}
 	}
 
@@ -180,6 +234,46 @@ public class Grid implements Serializable
 		catch (ArrayIndexOutOfBoundsException e)
 		{
 			// System.out.println("\"setSquareDistance\" is trying to access out of bounds!");
+		}
+	}
+
+	public void rotateHighlightedSquare(boolean clockWise)
+	{
+		if (clockWise)
+		{
+			switch (this.getSquare(highlightedPoint).getContents())
+			{
+			case EMPTY:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.HAZARD);
+				break;
+			case HAZARD:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.START);
+				break;
+			case START:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.FINISH);
+				break;
+			case FINISH:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.EMPTY);
+				break;
+			}
+		}
+		else
+		{
+			switch (this.getSquare(highlightedPoint).getContents())
+			{
+			case EMPTY:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.FINISH);
+				break;
+			case HAZARD:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.EMPTY);
+				break;
+			case START:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.HAZARD);
+				break;
+			case FINISH:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.START);
+				break;
+			}
 		}
 	}
 
@@ -225,6 +319,7 @@ public class Grid implements Serializable
 				this.getSquare(new Point(column, row)).paint(g);
 			}
 		}
+
 		g.setColor(new Color(0, 63, 255));
 		for (int i = 0; i <= highlightThickness; i++)
 		{

@@ -14,7 +14,7 @@ public class GridSquare implements Cloneable, Serializable
 	private int					distance;
 	private static final Font	font1				= new Font("Arial", Font.PLAIN, 20);
 	private static final Font	font2				= new Font("Arial", Font.PLAIN, 12);
-	private final Grid			superGrid;
+	public Grid					superGrid;
 
 	public GridSquare(Grid superGrid, SquareType contents, int x, int y, int width, int height)
 	{
@@ -36,6 +36,7 @@ public class GridSquare implements Cloneable, Serializable
 		}
 		catch (Exception e)
 		{
+			System.out.println("Couldn't clone GridSquare!");
 			return null;
 		}
 	}
@@ -124,7 +125,8 @@ public class GridSquare implements Cloneable, Serializable
 			}
 			else
 			{
-				g.setColor(new Color(0, 0, 0));
+				System.out.println("Out of bounds.");
+				g.setColor(new Color(255, 0, 0));
 			}
 			g.fillRect(x, y, width, height);
 
@@ -140,6 +142,10 @@ public class GridSquare implements Cloneable, Serializable
 			g.fillRect(x, y, width, height);
 			g.setColor(new Color(255, 255, 255));
 			g.drawRect(x, y, width, height);
+
+			g.setFont(font2);
+			g.setColor(new Color(191, 127, 63));
+			g.drawString(distance + "", x, y + height / 2);
 			break;
 		case START:
 			// g.setColor(new Color(191, 191, 191));
@@ -152,6 +158,10 @@ public class GridSquare implements Cloneable, Serializable
 
 			g.setColor(new Color(255, 255, 255));
 			g.drawRect(x, y, width, height);
+
+			g.setFont(font2);
+			g.setColor(new Color(191, 127, 63));
+			g.drawString(distance + "", x, y + height / 2);
 			break;
 		case FINISH:
 			// g.setColor(new Color(191, 191, 191));
@@ -164,6 +174,10 @@ public class GridSquare implements Cloneable, Serializable
 
 			g.setColor(new Color(255, 255, 255));
 			g.drawRect(x, y, width, height);
+
+			g.setFont(font2);
+			g.setColor(new Color(191, 127, 63));
+			g.drawString(distance + "", x, y + height / 2);
 			break;
 		}
 	}
