@@ -1,7 +1,7 @@
 package m_Star_Pathfinder;
 
-import java.applet.Applet;
 import java.awt.Color;
+import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.io.FileInputStream;
@@ -9,13 +9,34 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-public class GridDraw extends Applet
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+
+public class GridDraw extends JComponent
 {
 	private static final long	serialVersionUID	= 1L;
 	private Grid				grid;
 
+	public static void main(String[] args)
+	{
+		JFrame window = new JFrame("window");
+		window.setBounds(0, 0, 700, 700);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		GridDraw component = new GridDraw();
+		component.setBackground(Color.WHITE);
+		Container container = window.getContentPane();
+		container.add(component);
+		window.setVisible(true);
+	}
+
+	public GridDraw()
+	{
+		super();
+		init();
+	}
+
 	@Override
-	public void paint(Graphics g)
+	public void paintComponent(Graphics g)
 	{
 		// TODO Use ActionListeners to make the blue highlighted box move around
 		// the screen
@@ -37,7 +58,6 @@ public class GridDraw extends Applet
 		System.out.println("Each path is " + grid.getPaths().get(0).getTotalDistance() + " units long.");
 	}
 
-	@Override
 	public void init()
 	{
 		// TODO Experiment to make loading faster
@@ -98,6 +118,5 @@ public class GridDraw extends Applet
 			}
 		}
 		System.out.println("Finished initialization.");
-		resize(700, 700);
 	}
 }

@@ -14,7 +14,7 @@ public class Grid implements Serializable
 	private Point					startPoint, finishPoint, furthestPoint, highlightedPoint;
 	private ArrayList<VertexMap>	paths;
 	private int						squareWidth, squareHeight;
-	private int						highlightThickness	= 3;
+	private int						highlightThickness	= 2;
 
 	public Grid(GridSquare[][] grid)
 	{
@@ -190,7 +190,7 @@ public class Grid implements Serializable
 			}
 		}
 		g.setColor(new Color(0, 63, 255));
-		for (int i = 1; i <= highlightThickness; i++)
+		for (int i = 0; i <= highlightThickness; i++)
 		{
 			g.drawRect(highlightedPoint.x - i, highlightedPoint.y - i, squareWidth + 2 * i, squareHeight + 2 * i);
 		}
