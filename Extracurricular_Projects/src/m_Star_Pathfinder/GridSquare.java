@@ -27,6 +27,7 @@ public class GridSquare implements Cloneable, Serializable
 		this.distance = -1;
 	}
 
+	@Override
 	public GridSquare clone()
 	{
 		try

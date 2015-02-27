@@ -14,9 +14,14 @@ public class GridDraw extends Applet
 	private static final long	serialVersionUID	= 1L;
 	private Grid				grid;
 
+	@Override
 	public void paint(Graphics g)
 	{
-		//TODO Use ActionListeners to make a blue highlighted box move around the screen
+		// TODO Use ActionListeners to make the blue highlighted box move around
+		// the screen
+		// TODO Use ActionListeners to rotate through cell options
+		// TODO Use ActionListeners to show/hide paths
+		// TODO Use ActionListeners to recalculate paths
 		System.out.println("Began drawing to the screen.");
 		grid.paint(g);
 		// System.out.println("Lowest next to start: " +
@@ -32,9 +37,10 @@ public class GridDraw extends Applet
 		System.out.println("Each path is " + grid.getPaths().get(0).getTotalDistance() + " units long.");
 	}
 
+	@Override
 	public void init()
 	{
-		//TODO Experiment to make loading faster
+		// TODO Experiment to make loading faster
 		try
 		{
 			System.out.println("Began reading in data file.");

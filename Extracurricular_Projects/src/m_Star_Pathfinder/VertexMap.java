@@ -19,6 +19,7 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 		this.points = points;
 	}
 
+	@Override
 	public VertexMap clone()
 	{
 		LinkedList<Point> newList = new LinkedList<Point>();
@@ -82,6 +83,7 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 		return points.toArray(result);
 	}
 
+	@Override
 	public int compareTo(VertexMap map)
 	{
 		if (this.getTotalDistance() > map.getTotalDistance())
@@ -92,6 +94,7 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 			return 0;
 	}
 
+	@Override
 	public String toString()
 	{
 		return points.toString();
