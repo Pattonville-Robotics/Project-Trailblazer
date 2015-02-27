@@ -11,6 +11,7 @@ import java.io.ObjectOutputStream;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.KeyStroke;
 
 public class GridDraw extends JComponent
 {
@@ -26,6 +27,12 @@ public class GridDraw extends JComponent
 		component.setBackground(Color.WHITE);
 		Container container = window.getContentPane();
 		container.add(component);
+
+		GridActions anAction = new GridActions();
+		component.getInputMap().put(KeyStroke.getKeyStroke("F2"), "doSomething");
+		component.getActionMap().put("doSomething", anAction);
+		// where anAction is a javax.swing.Action
+
 		window.setVisible(true);
 	}
 
