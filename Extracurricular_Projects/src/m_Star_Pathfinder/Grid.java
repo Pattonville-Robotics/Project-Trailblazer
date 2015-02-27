@@ -109,6 +109,42 @@ public class Grid implements Serializable
 		furthestPoint = p;
 	}
 
+	public Point getHighlightedPoint()
+	{
+		return highlightedPoint;
+	}
+
+	public void moveHighlightedSquare(int direction)
+	{
+		switch (direction)
+		{
+		case 0: // Up
+			if (this.getHighlightedPoint().y > 0)
+			{
+				this.getHighlightedPoint().y -= 1;
+			}
+			break;
+		case 1: // Down
+			if (this.getHighlightedPoint().y < this.getGrid().length - 1)
+			{
+				this.getHighlightedPoint().y += 1;
+			}
+			break;
+		case 2: // Left
+			if (this.getHighlightedPoint().x > 0)
+			{
+				this.getHighlightedPoint().x -= 1;
+			}
+			break;
+		case 3: // Right
+			if (this.getHighlightedPoint().x < this.getGrid()[0].length - 1)
+			{
+				this.getHighlightedPoint().x += 1;
+			}
+			break;
+		}
+	}
+
 	public int getDistance(Point p)
 	{
 		return this.getSquare(p).getDistance();
@@ -192,7 +228,7 @@ public class Grid implements Serializable
 		g.setColor(new Color(0, 63, 255));
 		for (int i = 0; i <= highlightThickness; i++)
 		{
-			g.drawRect(highlightedPoint.x - i, highlightedPoint.y - i, squareWidth + 2 * i, squareHeight + 2 * i);
+			g.drawRect(highlightedPoint.x * squareWidth - i, highlightedPoint.y * squareHeight - i, squareWidth + 2 * i, squareHeight + 2 * i);
 		}
 	}
 }

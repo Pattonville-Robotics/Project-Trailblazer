@@ -4,11 +4,13 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
@@ -16,22 +18,22 @@ import javax.swing.KeyStroke;
 public class GridDraw extends JComponent
 {
 	private static final long	serialVersionUID	= 1L;
-	private Grid				grid;
+	private static Grid			grid;
+	private static JFrame		window;
+	private static GridDraw		component;
+	private static Container	container;
 
 	public static void main(String[] args)
 	{
-		JFrame window = new JFrame("window");
+		window = new JFrame("window");
 		window.setBounds(0, 0, 700, 700);
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		GridDraw component = new GridDraw();
+		component = new GridDraw();
 		component.setBackground(Color.WHITE);
-		Container container = window.getContentPane();
+		container = window.getContentPane();
 		container.add(component);
 
-		GridActions anAction = new GridActions();
-		component.getInputMap().put(KeyStroke.getKeyStroke("F2"), "doSomething");
-		component.getActionMap().put("doSomething", anAction);
-		// where anAction is a javax.swing.Action
+		setupInOutMapping();
 
 		window.setVisible(true);
 	}
@@ -42,15 +44,33 @@ public class GridDraw extends JComponent
 		init();
 	}
 
+	public static void setupInOutMapping()
+	{
+		UpAction upAction = new UpAction(grid, component);
+		DownAction downAction = new DownAction(grid, component);
+		LeftAction leftAction = new LeftAction(grid, component);
+		RightAction rightAction = new RightAction(grid, component);
+
+		component.getInputMap().put(KeyStroke.getKeyStroke("UP"), "upAction");
+		component.getActionMap().put("upAction", upAction);
+
+		component.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "downAction");
+		component.getActionMap().put("downAction", downAction);
+
+		component.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "leftAction");
+		component.getActionMap().put("leftAction", leftAction);
+
+		component.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "rightAction");
+		component.getActionMap().put("rightAction", rightAction);
+	}
+
 	@Override
 	public void paintComponent(Graphics g)
 	{
-		// TODO Use ActionListeners to make the blue highlighted box move around
-		// the screen
 		// TODO Use ActionListeners to rotate through cell options
 		// TODO Use ActionListeners to show/hide paths
 		// TODO Use ActionListeners to recalculate paths
-		System.out.println("Began drawing to the screen.");
+		// System.out.println("Began drawing to the screen.");
 		grid.paint(g);
 		// System.out.println("Lowest next to start: " +
 		// grid.getLowestAdjacentSquares(grid.getFinishPoint()));
@@ -59,10 +79,12 @@ public class GridDraw extends JComponent
 
 		for (int i = 0; i < grid.getPaths().size(); i++)
 		{
-			grid.paintPointSet(g, grid.getPaths().get(i).getArray());
+			// grid.paintPointSet(g, grid.getPaths().get(i).getArray());
 		}
-		System.out.println("Finished drawing " + grid.getPaths().size() + " paths to the screen.");
-		System.out.println("Each path is " + grid.getPaths().get(0).getTotalDistance() + " units long.");
+		// System.out.println("Finished drawing " + grid.getPaths().size() +
+		// " paths to the screen.");
+		// System.out.println("Each path is " +
+		// grid.getPaths().get(0).getTotalDistance() + " units long.");
 	}
 
 	public void init()
@@ -126,4 +148,96 @@ public class GridDraw extends JComponent
 		}
 		System.out.println("Finished initialization.");
 	}
+}
+
+class UpAction extends AbstractAction
+{
+	private static final long	serialVersionUID	= 1L;
+	private Grid				grid;
+	private GridDraw			component;
+
+	public UpAction(Grid grid, GridDraw component)
+	{
+		super();
+		this.grid = grid;
+		this.component = component;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		// System.out.println("UpAction performed!");
+		grid.moveHighlightedSquare(0);
+		component.repaint();
+	}
+
+}
+
+class DownAction extends AbstractAction
+{
+	private static final long	serialVersionUID	= 1L;
+	private Grid				grid;
+	private GridDraw			component;
+
+	public DownAction(Grid grid, GridDraw component)
+	{
+		super();
+		this.grid = grid;
+		this.component = component;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		// System.out.println("DownAction performed!");
+		grid.moveHighlightedSquare(1);
+		component.repaint();
+	}
+
+}
+
+class LeftAction extends AbstractAction
+{
+	private static final long	serialVersionUID	= 1L;
+	private Grid				grid;
+	private GridDraw			component;
+
+	public LeftAction(Grid grid, GridDraw component)
+	{
+		super();
+		this.grid = grid;
+		this.component = component;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		// System.out.println("LeftAction performed!");
+		grid.moveHighlightedSquare(2);
+		component.repaint();
+	}
+
+}
+
+class RightAction extends AbstractAction
+{
+	private static final long	serialVersionUID	= 1L;
+	private Grid				grid;
+	private GridDraw			component;
+
+	public RightAction(Grid grid, GridDraw component)
+	{
+		super();
+		this.grid = grid;
+		this.component = component;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		// System.out.println("RightAction performed!");
+		grid.moveHighlightedSquare(3);
+		component.repaint();
+	}
+
 }
