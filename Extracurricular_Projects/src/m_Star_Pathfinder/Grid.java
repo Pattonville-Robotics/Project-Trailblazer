@@ -1,5 +1,6 @@
 package m_Star_Pathfinder;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.io.Serializable;
@@ -10,8 +11,10 @@ public class Grid implements Serializable
 	private static final long		serialVersionUID	= 1L;
 
 	private GridSquare[][]			grid;
-	private Point					startPoint, finishPoint, furthestPoint;
+	private Point					startPoint, finishPoint, furthestPoint, highlightedPoint;
 	private ArrayList<VertexMap>	paths;
+	private int						squareWidth, squareHeight;
+	private int						highlightThickness	= 3;
 
 	public Grid(GridSquare[][] grid)
 	{
@@ -21,7 +24,13 @@ public class Grid implements Serializable
 	public Grid(int width, int height, int squareWidth, int squareHeight)
 	{
 		grid = new GridSquare[height][width];
-		startPoint = new Point(0, 0);
+		startPoint = new Point(-1, -1);
+		finishPoint = new Point(-1, -1);
+		furthestPoint = new Point(-1, -1);
+		highlightedPoint = new Point(0, 0);
+
+		this.squareWidth = squareWidth;
+		this.squareHeight = squareHeight;
 
 		for (int row = 0; row < grid.length; row++)
 		{
@@ -179,6 +188,11 @@ public class Grid implements Serializable
 			{
 				this.getSquare(new Point(column, row)).paint(g);
 			}
+		}
+		g.setColor(new Color(0, 63, 255));
+		for (int i = 1; i <= highlightThickness; i++)
+		{
+			g.drawRect(highlightedPoint.x - i, highlightedPoint.y - i, squareWidth + 2 * i, squareHeight + 2 * i);
 		}
 	}
 }

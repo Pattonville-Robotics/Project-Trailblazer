@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class PathfindAI
+public class PathfindAI implements Runnable
 {
 	private PathfindAI()
 	{
@@ -139,7 +139,8 @@ public class PathfindAI
 				{
 					// allZero = true;
 					numZero++;
-					// System.out.println("Found zero adjacent lower squares"); // DEBUG
+					// System.out.println("Found zero adjacent lower squares");
+					// //
 				}
 				else
 				{
@@ -157,5 +158,17 @@ public class PathfindAI
 			// System.out.println(progressFromFinish); // DEBUG
 		}
 		grid.setPaths(paths);
+	}
+
+	public static void optimizePaths(Grid grid)
+	{
+		// ArrayList<VertexMap> paths = grid.getPaths();
+		// TODO Make the method
+	}
+
+	@Override
+	public void run()
+	{
+		// TODO Figure out how to make calculations run in a different thread
 	}
 }

@@ -16,6 +16,7 @@ public class GridDraw extends Applet
 
 	public void paint(Graphics g)
 	{
+		//TODO Use ActionListeners to make a blue highlighted box move around the screen
 		System.out.println("Began drawing to the screen.");
 		grid.paint(g);
 		// System.out.println("Lowest next to start: " +
@@ -28,11 +29,12 @@ public class GridDraw extends Applet
 			grid.paintPointSet(g, grid.getPaths().get(i).getArray());
 		}
 		System.out.println("Finished drawing " + grid.getPaths().size() + " paths to the screen.");
+		System.out.println("Each path is " + grid.getPaths().get(0).getTotalDistance() + " units long.");
 	}
 
 	public void init()
 	{
-
+		//TODO Experiment to make loading faster
 		try
 		{
 			System.out.println("Began reading in data file.");
