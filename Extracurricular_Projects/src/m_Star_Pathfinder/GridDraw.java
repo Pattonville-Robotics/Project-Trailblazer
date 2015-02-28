@@ -25,7 +25,7 @@ public class GridDraw extends JComponent
 	private static GridDraw		component;
 	private static JMenuBar		menuBar;
 	private static JMenu		help;
-	private static JMenuItem	help1, help2, help3, help4, help5;
+	private static JMenuItem	help1, help2, help3, help4, help5, help6;
 	private boolean				drawPaths			= false;
 
 	public static void main(String[] args)
@@ -44,12 +44,15 @@ public class GridDraw extends JComponent
 		help3 = new JMenuItem("Pressing \"P\" will toggle calculation and drawing of paths. Be forewarned: this can take a long time on slower hardware!");
 		help4 = new JMenuItem("To save and load Grids, use the \"S\" and \"L\" keys.");
 		help5 = new JMenuItem("Press \"R\" to recalculate the paths without toggling them.");
+		help6 = new JMenuItem(
+				"The green square is start, the blue square is finish, the purple squares are walls, and the numbers are the distance to the start.");
 
 		help.add(help1);
 		help.add(help2);
 		help.add(help3);
 		help.add(help4);
 		help.add(help5);
+		help.add(help6);
 		menuBar = new JMenuBar();
 		menuBar.add(help);
 
@@ -450,8 +453,7 @@ class LoadAction extends AbstractAction
 		}
 		catch (Exception e1)
 		{
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			System.out.println("No Grid found!");
 		}
 	}
 }
