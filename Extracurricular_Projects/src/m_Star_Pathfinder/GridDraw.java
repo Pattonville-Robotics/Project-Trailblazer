@@ -1,7 +1,6 @@
 package m_Star_Pathfinder;
 
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -13,30 +12,52 @@ import java.io.ObjectOutputStream;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 public class GridDraw extends JComponent
 {
 	private static final long	serialVersionUID	= 1L;
 	private static Grid			grid;
-	private static JFrame		window;
+	private static JFrame		frame;
 	private static GridDraw		component;
-	private static Container	container;
+	private static JMenuBar		menuBar;
+	private static JMenu		help;
+	private static JMenuItem	help1, help2, help3, help4, help5;
 	private boolean				drawPaths			= false;
 
 	public static void main(String[] args)
 	{
-		window = new JFrame("window");
-		window.setBounds(0, 0, 700, 700);
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame = new JFrame("window");
+		frame.setBounds(50, 50, 700, 700);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		component = new GridDraw();
 		component.setBackground(Color.WHITE);
-		container = window.getContentPane();
-		container.add(component);
+		frame.getContentPane().add(component);
+
+		help = new JMenu("Help");
+
+		help1 = new JMenuItem("You can use the arrow keys to select a square to modify.");
+		help2 = new JMenuItem("Use \"ENTER\" and \"SHIFT + ENTER\" to cycle through possible square contents.");
+		help3 = new JMenuItem("Pressing \"P\" will toggle calculation and drawing of paths. Be forewarned: this can take a long time on slower hardware!");
+		help4 = new JMenuItem("To save and load Grids, use the \"S\" and \"L\" keys.");
+		help5 = new JMenuItem("Press \"R\" to recalculate the paths without toggling them.");
+
+		help.add(help1);
+		help.add(help2);
+		help.add(help3);
+		help.add(help4);
+		help.add(help5);
+		menuBar = new JMenuBar();
+		menuBar.add(help);
+
+		frame.setJMenuBar(menuBar);
 
 		setupInOutMapping();
 
-		window.setVisible(true);
+		frame.setVisible(true);
 	}
 
 	public GridDraw()
@@ -54,6 +75,9 @@ public class GridDraw extends JComponent
 		RotateClockWiseAction rotateClockWiseAction = new RotateClockWiseAction(grid, component);
 		RotateCounterClockWiseAction rotateCounterClockWiseAction = new RotateCounterClockWiseAction(grid, component);
 		TogglePathsAction togglePathsAction = new TogglePathsAction(grid, component);
+		CalculatePathsAction calculatePathsAction = new CalculatePathsAction(grid, component);
+		SaveAction saveAction = new SaveAction(component);
+		LoadAction loadAction = new LoadAction(component);
 
 		component.getInputMap().put(KeyStroke.getKeyStroke("UP"), "upAction");
 		component.getActionMap().put("upAction", upAction);
@@ -75,13 +99,20 @@ public class GridDraw extends JComponent
 
 		component.getInputMap().put(KeyStroke.getKeyStroke("P"), "togglePathsAction");
 		component.getActionMap().put("togglePathsAction", togglePathsAction);
+
+		component.getInputMap().put(KeyStroke.getKeyStroke("R"), "calculatePathsAction");
+		component.getActionMap().put("calculatePathsAction", calculatePathsAction);
+
+		component.getInputMap().put(KeyStroke.getKeyStroke("S"), "saveAction");
+		component.getActionMap().put("saveAction", saveAction);
+
+		component.getInputMap().put(KeyStroke.getKeyStroke("L"), "loadAction");
+		component.getActionMap().put("loadAction", loadAction);
 	}
 
 	@Override
 	public void paintComponent(Graphics g)
 	{
-		// TODO Use ActionListeners to show/hide paths
-		// TODO Use ActionListeners to recalculate paths
 		// System.out.println("Began drawing to the screen.");
 		grid.paint(g);
 		// System.out.println("Lowest next to start: " +
@@ -352,5 +383,75 @@ class TogglePathsAction extends AbstractAction
 
 		component.togglePaths();
 		component.repaint();
+	}
+}
+
+class CalculatePathsAction extends AbstractAction
+{
+	private static final long	serialVersionUID	= 1L;
+	private Grid				grid;
+	private GridDraw			component;
+
+	public CalculatePathsAction(Grid grid, GridDraw component)
+	{
+		super();
+		this.grid = grid;
+		this.component = component;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		// System.out.println("CalculatePathsAction performed!");
+		PathfindAI.computeDistance(grid, grid.getStartPoint());
+		PathfindAI.computePaths(grid);
+
+		component.repaint();
+	}
+}
+
+class SaveAction extends AbstractAction
+{
+	private static final long	serialVersionUID	= 1L;
+	private GridDraw			component;
+
+	public SaveAction(GridDraw component)
+	{
+		super();
+		this.component = component;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		// System.out.println("SaveAction performed!");
+		component.cacheGrid();
+	}
+}
+
+class LoadAction extends AbstractAction
+{
+	private static final long	serialVersionUID	= 1L;
+	private GridDraw			component;
+
+	public LoadAction(GridDraw component)
+	{
+		super();
+		this.component = component;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		// System.out.println("SaveAction performed!");
+		try
+		{
+			component.loadGrid();
+		}
+		catch (Exception e1)
+		{
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 }
