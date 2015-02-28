@@ -1,5 +1,6 @@
 package m_Star_Pathfinder;
 
+import java.awt.Graphics;
 import java.awt.Point;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -201,10 +202,24 @@ public class PathfindAI implements Runnable
 		grid.setPaths(paths);
 	}
 
-	public static void optimizePaths(Grid grid)
+	public static void optimizePaths(Graphics g, Grid grid, int i)
 	{
-		// ArrayList<VertexMap> paths = grid.getPaths();
-		// TODO Make the method
+		System.out.println("Does the first line segment (("
+				+ grid.getSquareCopy(grid.getPaths().get(0).getPoint(0)).getXCenter()
+				+ ", "
+				+ grid.getSquareCopy(grid.getPaths().get(0).getPoint(0)).getYCenter()
+				+ ") to ("
+				+ grid.getSquareCopy(grid.getPaths().get(0).getPoint(i)).getXCenter()
+				+ ", "
+				+ grid.getSquareCopy(grid.getPaths().get(0).getPoint(i)).getYCenter()
+				+ ")) intersect any points? = "
+				+ grid.collidesWithHazard(
+						new Point(grid.getSquareCopy(grid.getPaths().get(0).getPoint(0)).getXCenter(), grid.getSquareCopy(grid.getPaths().get(0).getPoint(0))
+								.getYCenter()),
+						new Point(grid.getSquareCopy(grid.getPaths().get(0).getPoint(i)).getXCenter(), grid.getSquareCopy(grid.getPaths().get(0).getPoint(i))
+								.getYCenter()), g));
+
+		grid.paintLine(g, grid.getPaths().get(0).getPoint(0), grid.getPaths().get(0).getPoint(i));
 	}
 
 	@Override

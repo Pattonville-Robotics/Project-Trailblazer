@@ -27,8 +27,22 @@ public class GridDraw extends JComponent
 	private static JMenu		help;
 	private static JMenuItem	help1, help2, help3, help4, help5, help6;
 	private boolean				drawPaths			= false;
+	private static int			i					= 1;
 
 	public static void main(String[] args)
+	{
+		setupDisplay();
+		setupIOMapping();
+		frame.setVisible(true);
+	}
+
+	public GridDraw()
+	{
+		super();
+		init();
+	}
+
+	public static void setupDisplay()
 	{
 		frame = new JFrame("window");
 		frame.setBounds(50, 50, 700, 700);
@@ -57,19 +71,9 @@ public class GridDraw extends JComponent
 		menuBar.add(help);
 
 		frame.setJMenuBar(menuBar);
-
-		setupInOutMapping();
-
-		frame.setVisible(true);
 	}
 
-	public GridDraw()
-	{
-		super();
-		init();
-	}
-
-	public static void setupInOutMapping()
+	public static void setupIOMapping()
 	{
 		UpAction upAction = new UpAction(grid, component);
 		DownAction downAction = new DownAction(grid, component);
@@ -130,6 +134,8 @@ public class GridDraw extends JComponent
 				grid.paintPointSet(g, grid.getPaths().get(i).getArray());
 			}
 		}
+
+		PathfindAI.optimizePaths(g, grid, i++);
 		// System.out.println("Finished drawing " + grid.getPaths().size() +
 		// " paths to the screen.");
 		// System.out.println("Each path is " +

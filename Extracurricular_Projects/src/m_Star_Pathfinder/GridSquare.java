@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.io.Serializable;
 
 public class GridSquare implements Cloneable, Serializable
@@ -111,6 +112,11 @@ public class GridSquare implements Cloneable, Serializable
 	public Grid getSuperGrid()
 	{
 		return superGrid;
+	}
+
+	public Rectangle getBounds()
+	{
+		return new Rectangle(x, y, width, height);
 	}
 
 	public void paint(Graphics g)

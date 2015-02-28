@@ -3,6 +3,8 @@ package m_Star_Pathfinder;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -237,6 +239,16 @@ public class Grid implements Serializable
 		}
 	}
 
+	public int getSquareHeight()
+	{
+		return squareHeight;
+	}
+
+	public int getSquareWidth()
+	{
+		return squareWidth;
+	}
+
 	public void rotateHighlightedSquare(boolean clockWise)
 	{
 		if (clockWise)
@@ -291,6 +303,11 @@ public class Grid implements Serializable
 		}
 	}
 
+	public void paintRectangle(Graphics g, Rectangle2D r)
+	{
+		g.drawRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
+	}
+
 	public ArrayList<Point> getLowestAdjacentSquares(Point p)
 	{
 		ArrayList<Point> adjacent = new ArrayList<Point>();
@@ -308,6 +325,29 @@ public class Grid implements Serializable
 		}
 
 		return adjacent;
+	}
+
+	public boolean collidesWithHazard(Point p1, Point p2, Graphics g)
+	{
+		Line2D.Double line = new Line2D.Double(p1, p2);
+
+		for (int y = 0; y < grid.length; y++)
+		{
+			for (int x = 0; x < grid[y].length; x++)
+			{
+				if (this.getSquare(new Point(x, y)).getContents() == SquareType.HAZARD)
+				{
+					if (this.getSquare(new Point(x, y)).getBounds().intersectsLine(line))
+					{
+						this.paintRectangle(g, this.getSquare(new Point(x, y)).getBounds());
+						System.out.println("Collides with: " + this.getSquare(new Point(x, y)).getBounds());
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 
 	public void paint(Graphics g)
