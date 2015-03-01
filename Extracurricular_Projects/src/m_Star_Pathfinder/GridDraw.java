@@ -6,8 +6,6 @@ import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
@@ -17,9 +15,14 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+
 public class GridDraw extends JComponent
 {
 	private static final long	serialVersionUID	= 1L;
+	private static Kryo			kryo				= new Kryo();
 	private static Grid			grid;
 	private static JFrame		frame;
 	private static GridDraw		component;
@@ -150,15 +153,22 @@ public class GridDraw extends JComponent
 	{
 		try
 		{
-			FileOutputStream fileOut = new FileOutputStream("grid.data");
-			ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
+			/*
+			 * FileOutputStream fileOut = new FileOutputStream("grid.data");
+			 * ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
+			 * 
+			 * objOut.writeObject(grid); objOut.close();
+			 */
 
-			objOut.writeObject(grid);
-			objOut.close();
+			Output output = new Output(new FileOutputStream("grid.data"));
+			kryo.writeObject(output, grid);
+			output.close();
+
 			System.out.println("Sucessfully cached data.");
 		}
 		catch (Exception e1)
 		{
+			e1.printStackTrace();
 			System.out.println("Failed to cache data.");
 		}
 	}
@@ -176,16 +186,19 @@ public class GridDraw extends JComponent
 	public void loadGrid() throws Exception
 	{
 		System.out.println("Began reading in data file.");
-		FileInputStream fileIn = new FileInputStream("grid.data");
-		ObjectInputStream objIn = new ObjectInputStream(fileIn);
+		/*
+		 * FileInputStream fileIn = new FileInputStream("grid.data");
+		 * ObjectInputStream objIn = new ObjectInputStream(fileIn);
+		 * 
+		 * Object obj = objIn.readObject(); objIn.close();
+		 * 
+		 * if (obj instanceof Grid) { grid = (Grid) obj; }
+		 */
 
-		Object obj = objIn.readObject();
-		objIn.close();
+		Input input = new Input(new FileInputStream("grid.data"));
+		grid = kryo.readObject(input, Grid.class);
+		input.close();
 
-		if (obj instanceof Grid)
-		{
-			grid = (Grid) obj;
-		}
 		System.out.println("Finished reading in data file.");
 	}
 
