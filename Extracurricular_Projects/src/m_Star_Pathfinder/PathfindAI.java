@@ -1,9 +1,9 @@
 package m_Star_Pathfinder;
 
-import java.awt.Graphics;
 import java.awt.Point;
 import java.util.AbstractSet;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -199,31 +199,59 @@ public class PathfindAI implements Runnable
 			// progressFromFinish++;
 			// System.out.println(progressFromFinish); // DEBUG
 		}
+
+		for (int i = 0; i < paths.size(); i++)
+		{
+			paths.get(i).reverseList();
+		}
+
 		grid.setPaths(paths);
-	}
-
-	public static void testCollision(Graphics g, Grid grid, int i)
-	{
-		System.out.println("Does the first line segment (("
-				+ grid.getSquareCopy(grid.getPaths().get(0).getPoint(0)).getXCenter()
-				+ ", "
-				+ grid.getSquareCopy(grid.getPaths().get(0).getPoint(0)).getYCenter()
-				+ ") to ("
-				+ grid.getSquareCopy(grid.getPaths().get(0).getPoint(i)).getXCenter()
-				+ ", "
-				+ grid.getSquareCopy(grid.getPaths().get(0).getPoint(i)).getYCenter()
-				+ ")) intersect any points? = "
-				+ grid.collidesWithHazard(
-						new Point(grid.getSquareCopy(grid.getPaths().get(0).getPoint(0)).getXCenter(), grid.getSquareCopy(grid.getPaths().get(0).getPoint(0))
-								.getYCenter()),
-						new Point(grid.getSquareCopy(grid.getPaths().get(0).getPoint(i)).getXCenter(), grid.getSquareCopy(grid.getPaths().get(0).getPoint(i))
-								.getYCenter()), g));
-
-		grid.paintLine(g, grid.getPaths().get(0).getPoint(0), grid.getPaths().get(0).getPoint(i));
 	}
 
 	public static void optimizePaths(Grid grid)
 	{
+		ArrayList<VertexMap> paths = grid.getPaths();
+		ArrayList<VertexMap> newPaths = new ArrayList<VertexMap>(paths.size());
+
+		for (int i = 0; i < paths.size(); i++)
+		{
+			System.out.println("Progress: " + i + " / " + paths.size());
+			newPaths.add(optimizePath(grid, paths.get(i)));
+		}
+		Collections.sort(newPaths);
+		grid.setPaths(newPaths);
+	}
+
+	public static VertexMap optimizePath(Grid grid, VertexMap map)
+	{
+		VertexMap newMap = new VertexMap();
+		newMap.addPoint(map.getPoint(0));
+
+		for (int i = 0; i < map.size(); i++)
+		{
+			for (int j = i; j < map.size(); j++)
+			{
+				// System.out.println("Point " + map.getPoint(i) + " to " +
+				// map.getPoint(j) + " intersect status: "
+				// + grid.collidesWithHazard(map.getPoint(i), map.getPoint(j)));
+				if (grid.collidesWithHazard(map.getPoint(i), map.getPoint(j)))
+				{
+					// System.out.println("Line from " +
+					// map.getPoint(i).toString() + " to " +
+					// map.getPoint(j).toString() + " collided with a wall!");
+
+					// System.out.println("Creating line from " +
+					// newMap.getLastPoint() + " to " + map.getPoint(j));
+					newMap.addPoint(map.getPoint(j - 1));
+					i = j - 2;
+
+					break;
+				}
+			}
+		}
+		newMap.addPoint(map.getLastPoint());
+
+		return newMap;
 	}
 
 	@Override

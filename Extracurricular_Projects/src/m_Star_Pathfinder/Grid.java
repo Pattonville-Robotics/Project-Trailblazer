@@ -327,9 +327,9 @@ public class Grid implements Serializable
 		return adjacent;
 	}
 
-	public boolean collidesWithHazard(Point p1, Point p2, Graphics g)
+	public boolean collidesWithHazard(Point p1, Point p2)
 	{
-		Line2D.Double line = new Line2D.Double(p1, p2);
+		Line2D.Double line = new Line2D.Double(p1.x + .5, p1.y + .5, p2.x + .5, p2.y + .5);
 
 		for (int y = 0; y < grid.length; y++)
 		{
@@ -339,8 +339,10 @@ public class Grid implements Serializable
 				{
 					if (this.getSquare(new Point(x, y)).getBounds().intersectsLine(line))
 					{
-						this.paintRectangle(g, this.getSquare(new Point(x, y)).getBounds());
-						System.out.println("Collides with: " + this.getSquare(new Point(x, y)).getBounds());
+						// this.paintRectangle(g, this.getSquare(new Point(x,
+						// y)).getBounds());
+						// System.out.println("Collides with: " +
+						// this.getSquare(new Point(x, y)).getBounds());
 						return true;
 					}
 				}

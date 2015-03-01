@@ -2,6 +2,7 @@ package m_Star_Pathfinder;
 
 import java.awt.Point;
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
@@ -30,6 +31,42 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 		}
 
 		return new VertexMap(newList);
+	}
+
+	public void reverseList()
+	{
+		Iterator<Point> reverseIterator = points.descendingIterator();
+		LinkedList<Point> newPoints = new LinkedList<Point>();
+
+		while (reverseIterator.hasNext())
+		{
+			newPoints.add(reverseIterator.next());
+		}
+
+		points = newPoints;
+	}
+
+	public LinkedList<Point> getReverseList()
+	{
+		Iterator<Point> reverseIterator = points.descendingIterator();
+		LinkedList<Point> newPoints = new LinkedList<Point>();
+
+		while (reverseIterator.hasNext())
+		{
+			newPoints.add(reverseIterator.next());
+		}
+
+		return newPoints;
+	}
+
+	public VertexMap getReverseMap()
+	{
+		return new VertexMap(this.getReverseList());
+	}
+
+	public int size()
+	{
+		return points.size();
 	}
 
 	public LinkedList<Point> getList()

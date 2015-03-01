@@ -28,9 +28,8 @@ public class GridDraw extends JComponent
 	private static GridDraw		component;
 	private static JMenuBar		menuBar;
 	private static JMenu		help;
-	private static JMenuItem	help1, help2, help3, help4, help5, help6;
+	private static JMenuItem	help1, help2, help3, help4, help5, help6, help7;
 	private boolean				drawPaths			= false;
-	private static int			i					= 1;
 
 	public static void main(String[] args)
 	{
@@ -61,7 +60,8 @@ public class GridDraw extends JComponent
 		help3 = new JMenuItem("Pressing \"P\" will toggle calculation and drawing of paths. Be forewarned: this can take a long time on slower hardware!");
 		help4 = new JMenuItem("To save and load Grids, use the \"S\" and \"L\" keys.");
 		help5 = new JMenuItem("Press \"R\" to recalculate the paths without toggling them and \"CTRL + R\" to redraw the screen.");
-		help6 = new JMenuItem(
+		help6 = new JMenuItem("Press \"O\" to optimize the calculated paths.");
+		help7 = new JMenuItem(
 				"The green square is start, the blue square is finish, the purple squares are walls, and the numbers are the distance to the start.");
 
 		help.add(help1);
@@ -70,6 +70,7 @@ public class GridDraw extends JComponent
 		help.add(help4);
 		help.add(help5);
 		help.add(help6);
+		help.add(help7);
 		menuBar = new JMenuBar();
 		menuBar.add(help);
 
@@ -89,6 +90,7 @@ public class GridDraw extends JComponent
 		SaveAction saveAction = new SaveAction(component);
 		LoadAction loadAction = new LoadAction(component);
 		RedrawAction redrawAction = new RedrawAction(component);
+		OptimizeAction optimizeAction = new OptimizeAction(grid, component);
 
 		component.getInputMap().put(KeyStroke.getKeyStroke("UP"), "upAction");
 		component.getActionMap().put("upAction", upAction);
@@ -114,14 +116,17 @@ public class GridDraw extends JComponent
 		component.getInputMap().put(KeyStroke.getKeyStroke("R"), "calculatePathsAction");
 		component.getActionMap().put("calculatePathsAction", calculatePathsAction);
 
+		component.getInputMap().put(KeyStroke.getKeyStroke("control R"), "redrawAction");
+		component.getActionMap().put("redrawAction", redrawAction);
+
 		component.getInputMap().put(KeyStroke.getKeyStroke("S"), "saveAction");
 		component.getActionMap().put("saveAction", saveAction);
 
 		component.getInputMap().put(KeyStroke.getKeyStroke("L"), "loadAction");
 		component.getActionMap().put("loadAction", loadAction);
 
-		component.getInputMap().put(KeyStroke.getKeyStroke("control R"), "redrawAction");
-		component.getActionMap().put("redrawAction", redrawAction);
+		component.getInputMap().put(KeyStroke.getKeyStroke("O"), "optimizeAction");
+		component.getActionMap().put("optimizeAction", optimizeAction);
 	}
 
 	@Override
@@ -139,10 +144,20 @@ public class GridDraw extends JComponent
 			for (int i = 0; i < grid.getPaths().size(); i++)
 			{
 				grid.paintPointSet(g, grid.getPaths().get(i).getArray());
+				System.out.println("Distance of path " + i + " is " + grid.getPaths().get(i).getTotalDistance());
+			}
+
+			g.setColor(new Color(0, 255, 255));
+
+			double lowestDistance = grid.getPaths().get(0).getTotalDistance();
+			for (int i = 0; i < grid.getPaths().size(); i++)
+			{
+				if (grid.getPaths().get(i).getTotalDistance() == lowestDistance)
+				{
+					grid.paintPointSet(g, grid.getPaths().get(i).getArray());
+				}
 			}
 		}
-
-		PathfindAI.testCollision(g, grid, i++);
 		// System.out.println("Finished drawing " + grid.getPaths().size() +
 		// " paths to the screen.");
 		// System.out.println("Each path is " +
@@ -178,6 +193,16 @@ public class GridDraw extends JComponent
 		drawPaths = !drawPaths;
 	}
 
+	public void disablePaths()
+	{
+		drawPaths = false;
+	}
+
+	public void enablePaths()
+	{
+		drawPaths = true;
+	}
+
 	public boolean getDrawPaths()
 	{
 		return drawPaths;
@@ -204,7 +229,6 @@ public class GridDraw extends JComponent
 
 	public void init()
 	{
-		// TODO Experiment to make loading faster
 		try
 		{
 			loadGrid();
@@ -357,6 +381,7 @@ class RotateClockWiseAction extends AbstractAction
 		// System.out.println("RotateAction performed!");
 		grid.rotateHighlightedSquare(true);
 		PathfindAI.computeDistance(grid, grid.getStartPoint());
+		component.disablePaths();
 		component.repaint();
 	}
 }
@@ -380,6 +405,7 @@ class RotateCounterClockWiseAction extends AbstractAction
 		// System.out.println("RotateAction performed!");
 		grid.rotateHighlightedSquare(false);
 		PathfindAI.computeDistance(grid, grid.getStartPoint());
+		component.disablePaths();
 		component.repaint();
 	}
 }
@@ -497,6 +523,29 @@ class RedrawAction extends AbstractAction
 	{
 		// System.out.println("RedrawAction performed!");
 
+		component.repaint();
+	}
+}
+
+class OptimizeAction extends AbstractAction
+{
+	private static final long	serialVersionUID	= 1L;
+	private GridDraw			component;
+	private Grid				grid;
+
+	public OptimizeAction(Grid grid, GridDraw component)
+	{
+		super();
+		this.component = component;
+		this.grid = grid;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		// System.out.println("OptimizeAction performed!");
+
+		PathfindAI.optimizePaths(grid);
 		component.repaint();
 	}
 }

@@ -104,6 +104,11 @@ public class GridSquare implements Cloneable, Serializable
 		return y + height / 2;
 	}
 
+	public Point getCenterPoint()
+	{
+		return new Point(this.getXCenter(), this.getYCenter());
+	}
+
 	public SquareType getContents()
 	{
 		return contents;
@@ -116,7 +121,8 @@ public class GridSquare implements Cloneable, Serializable
 
 	public Rectangle getBounds()
 	{
-		return new Rectangle(x, y, width, height);
+		return new Rectangle(x / superGrid.getSquareWidth(), y / superGrid.getSquareHeight(), width / superGrid.getSquareWidth(), height
+				/ superGrid.getSquareHeight());
 	}
 
 	public void paint(Graphics g)
