@@ -54,10 +54,10 @@ public class GridDraw extends JComponent
 		help = new JMenu("Help");
 
 		help1 = new JMenuItem("You can use the arrow keys to select a square to modify.");
-		help2 = new JMenuItem("Use \"ENTER\" and \"SHIFT + ENTER\" to cycle through possible square contents.");
+		help2 = new JMenuItem("Use \"ENTER\" and \"CTRL + ENTER\" to cycle through possible square contents.");
 		help3 = new JMenuItem("Pressing \"P\" will toggle calculation and drawing of paths. Be forewarned: this can take a long time on slower hardware!");
 		help4 = new JMenuItem("To save and load Grids, use the \"S\" and \"L\" keys.");
-		help5 = new JMenuItem("Press \"R\" to recalculate the paths without toggling them.");
+		help5 = new JMenuItem("Press \"R\" to recalculate the paths without toggling them and \"CTRL + R\" to redraw the screen.");
 		help6 = new JMenuItem(
 				"The green square is start, the blue square is finish, the purple squares are walls, and the numbers are the distance to the start.");
 
@@ -85,6 +85,7 @@ public class GridDraw extends JComponent
 		CalculatePathsAction calculatePathsAction = new CalculatePathsAction(grid, component);
 		SaveAction saveAction = new SaveAction(component);
 		LoadAction loadAction = new LoadAction(component);
+		RedrawAction redrawAction = new RedrawAction(component);
 
 		component.getInputMap().put(KeyStroke.getKeyStroke("UP"), "upAction");
 		component.getActionMap().put("upAction", upAction);
@@ -101,7 +102,7 @@ public class GridDraw extends JComponent
 		component.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "rotateClockWiseAction");
 		component.getActionMap().put("rotateClockWiseAction", rotateClockWiseAction);
 
-		component.getInputMap().put(KeyStroke.getKeyStroke("shift ENTER"), "rotateCounterClockWiseAction");
+		component.getInputMap().put(KeyStroke.getKeyStroke("control ENTER"), "rotateCounterClockWiseAction");
 		component.getActionMap().put("rotateCounterClockWiseAction", rotateCounterClockWiseAction);
 
 		component.getInputMap().put(KeyStroke.getKeyStroke("P"), "togglePathsAction");
@@ -115,6 +116,9 @@ public class GridDraw extends JComponent
 
 		component.getInputMap().put(KeyStroke.getKeyStroke("L"), "loadAction");
 		component.getActionMap().put("loadAction", loadAction);
+
+		component.getInputMap().put(KeyStroke.getKeyStroke("control R"), "redrawAction");
+		component.getActionMap().put("redrawAction", redrawAction);
 	}
 
 	@Override
@@ -135,7 +139,7 @@ public class GridDraw extends JComponent
 			}
 		}
 
-		PathfindAI.optimizePaths(g, grid, i++);
+		PathfindAI.testCollision(g, grid, i++);
 		// System.out.println("Finished drawing " + grid.getPaths().size() +
 		// " paths to the screen.");
 		// System.out.println("Each path is " +
@@ -452,7 +456,7 @@ class LoadAction extends AbstractAction
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		// System.out.println("SaveAction performed!");
+		// System.out.println("LoadAction performed!");
 		try
 		{
 			component.loadGrid();
@@ -461,5 +465,25 @@ class LoadAction extends AbstractAction
 		{
 			System.out.println("No Grid found!");
 		}
+	}
+}
+
+class RedrawAction extends AbstractAction
+{
+	private static final long	serialVersionUID	= 1L;
+	private GridDraw			component;
+
+	public RedrawAction(GridDraw component)
+	{
+		super();
+		this.component = component;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		// System.out.println("RedrawAction performed!");
+
+		component.repaint();
 	}
 }

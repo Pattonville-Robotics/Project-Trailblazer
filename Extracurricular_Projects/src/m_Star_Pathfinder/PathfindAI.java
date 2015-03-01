@@ -202,7 +202,7 @@ public class PathfindAI implements Runnable
 		grid.setPaths(paths);
 	}
 
-	public static void optimizePaths(Graphics g, Grid grid, int i)
+	public static void testCollision(Graphics g, Grid grid, int i)
 	{
 		System.out.println("Does the first line segment (("
 				+ grid.getSquareCopy(grid.getPaths().get(0).getPoint(0)).getXCenter()
@@ -220,6 +220,10 @@ public class PathfindAI implements Runnable
 								.getYCenter()), g));
 
 		grid.paintLine(g, grid.getPaths().get(0).getPoint(0), grid.getPaths().get(0).getPoint(i));
+	}
+
+	public static void optimizePaths(Grid grid)
+	{
 	}
 
 	@Override
