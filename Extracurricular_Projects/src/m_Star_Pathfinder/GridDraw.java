@@ -25,35 +25,34 @@ public class GridDraw extends JComponent
 {
 	private static final long	serialVersionUID	= 1L;
 	private static Kryo			kryo				= new Kryo();
-	private static Grid			grid;
-	private static JFrame		frame;
-	private static GridDraw		component;
-	private static JMenuBar		menuBar;
-	private static JMenu		help;
-	private static JMenuItem	help1, help2, help3, help4, help5, help6, help7;
-	private boolean				drawPaths			= false;
+	private Grid				grid;
+	private JFrame				frame;
+	private JMenuBar			menuBar;
+	private JMenu				help;
+	private JMenuItem			help1, help2, help3, help4, help5, help6, help7;
+	private boolean				drawPaths			= true;
 
 	public static void main(String[] args)
 	{
-		setupDisplay();
-		setupIOMapping();
-		frame.setVisible(true);
+		GridDraw gridDraw = new GridDraw();
+		gridDraw.init();
+		gridDraw.setupDisplay();
+		gridDraw.setupIOMapping();
+		gridDraw.frame.setVisible(true);
 	}
 
 	public GridDraw()
 	{
 		super();
-		init();
 	}
 
-	public static void setupDisplay()
+	public void setupDisplay()
 	{
 		frame = new JFrame("window");
-		frame.setBounds(20, 20, 700, 700);
+		frame.setBounds(0, 0, 690, 690);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		component = new GridDraw();
-		component.setBackground(Color.WHITE);
-		frame.getContentPane().add(component);
+		this.setBackground(Color.WHITE);
+		frame.getContentPane().add(this);
 
 		help = new JMenu("Help");
 
@@ -79,67 +78,67 @@ public class GridDraw extends JComponent
 		frame.setJMenuBar(menuBar);
 	}
 
-	public static void setupIOMapping()
+	public void setupIOMapping()
 	{
-		MouseCycleListener mouseCycleListener = new MouseCycleListener(grid, component);
+		MouseCycleListener mouseCycleListener = new MouseCycleListener(grid, this);
 
-		component.addMouseListener(mouseCycleListener);
+		this.addMouseListener(mouseCycleListener);
 
-		UpAction upAction = new UpAction(grid, component);
-		DownAction downAction = new DownAction(grid, component);
-		LeftAction leftAction = new LeftAction(grid, component);
-		RightAction rightAction = new RightAction(grid, component);
-		RotateClockWiseAction rotateClockWiseAction = new RotateClockWiseAction(grid, component);
-		RotateCounterClockWiseAction rotateCounterClockWiseAction = new RotateCounterClockWiseAction(grid, component);
-		TogglePathsAction togglePathsAction = new TogglePathsAction(grid, component);
-		CalculatePathsAction calculatePathsAction = new CalculatePathsAction(grid, component);
-		SaveAction saveAction = new SaveAction(component);
-		LoadAction loadAction = new LoadAction(component);
-		RedrawAction redrawAction = new RedrawAction(component);
-		OptimizeAction optimizeAction = new OptimizeAction(grid, component);
+		UpAction upAction = new UpAction(grid, this);
+		DownAction downAction = new DownAction(grid, this);
+		LeftAction leftAction = new LeftAction(grid, this);
+		RightAction rightAction = new RightAction(grid, this);
+		RotateClockWiseAction rotateClockWiseAction = new RotateClockWiseAction(grid, this);
+		RotateCounterClockWiseAction rotateCounterClockWiseAction = new RotateCounterClockWiseAction(grid, this);
+		TogglePathsAction togglePathsAction = new TogglePathsAction(grid, this);
+		CalculatePathsAction calculatePathsAction = new CalculatePathsAction(grid, this);
+		SaveAction saveAction = new SaveAction(this);
+		LoadAction loadAction = new LoadAction(this);
+		RedrawAction redrawAction = new RedrawAction(this);
+		OptimizeAction optimizeAction = new OptimizeAction(grid, this);
 
-		component.getInputMap().put(KeyStroke.getKeyStroke("UP"), "upAction");
-		component.getActionMap().put("upAction", upAction);
+		this.getInputMap().put(KeyStroke.getKeyStroke("UP"), "upAction");
+		this.getActionMap().put("upAction", upAction);
 
-		component.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "downAction");
-		component.getActionMap().put("downAction", downAction);
+		this.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "downAction");
+		this.getActionMap().put("downAction", downAction);
 
-		component.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "leftAction");
-		component.getActionMap().put("leftAction", leftAction);
+		this.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "leftAction");
+		this.getActionMap().put("leftAction", leftAction);
 
-		component.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "rightAction");
-		component.getActionMap().put("rightAction", rightAction);
+		this.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "rightAction");
+		this.getActionMap().put("rightAction", rightAction);
 
-		component.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "rotateClockWiseAction");
-		component.getActionMap().put("rotateClockWiseAction", rotateClockWiseAction);
+		this.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "rotateClockWiseAction");
+		this.getActionMap().put("rotateClockWiseAction", rotateClockWiseAction);
 
-		component.getInputMap().put(KeyStroke.getKeyStroke("control ENTER"), "rotateCounterClockWiseAction");
-		component.getActionMap().put("rotateCounterClockWiseAction", rotateCounterClockWiseAction);
+		this.getInputMap().put(KeyStroke.getKeyStroke("control ENTER"), "rotateCounterClockWiseAction");
+		this.getActionMap().put("rotateCounterClockWiseAction", rotateCounterClockWiseAction);
 
-		component.getInputMap().put(KeyStroke.getKeyStroke("P"), "togglePathsAction");
-		component.getActionMap().put("togglePathsAction", togglePathsAction);
+		this.getInputMap().put(KeyStroke.getKeyStroke("P"), "togglePathsAction");
+		this.getActionMap().put("togglePathsAction", togglePathsAction);
 
-		component.getInputMap().put(KeyStroke.getKeyStroke("R"), "calculatePathsAction");
-		component.getActionMap().put("calculatePathsAction", calculatePathsAction);
+		this.getInputMap().put(KeyStroke.getKeyStroke("R"), "calculatePathsAction");
+		this.getActionMap().put("calculatePathsAction", calculatePathsAction);
 
-		component.getInputMap().put(KeyStroke.getKeyStroke("control R"), "redrawAction");
-		component.getActionMap().put("redrawAction", redrawAction);
+		this.getInputMap().put(KeyStroke.getKeyStroke("control R"), "redrawAction");
+		this.getActionMap().put("redrawAction", redrawAction);
 
-		component.getInputMap().put(KeyStroke.getKeyStroke("S"), "saveAction");
-		component.getActionMap().put("saveAction", saveAction);
+		this.getInputMap().put(KeyStroke.getKeyStroke("S"), "saveAction");
+		this.getActionMap().put("saveAction", saveAction);
 
-		component.getInputMap().put(KeyStroke.getKeyStroke("L"), "loadAction");
-		component.getActionMap().put("loadAction", loadAction);
+		this.getInputMap().put(KeyStroke.getKeyStroke("L"), "loadAction");
+		this.getActionMap().put("loadAction", loadAction);
 
-		component.getInputMap().put(KeyStroke.getKeyStroke("O"), "optimizeAction");
-		component.getActionMap().put("optimizeAction", optimizeAction);
+		this.getInputMap().put(KeyStroke.getKeyStroke("O"), "optimizeAction");
+		this.getActionMap().put("optimizeAction", optimizeAction);
 
 	}
 
 	@Override
 	public void paintComponent(Graphics g)
 	{
-		// System.out.println("Began drawing to the screen.");
+		System.out.println("Began drawing to the screen.");
 		grid.paint(g);
 		// System.out.println("Lowest next to start: " +
 		// grid.getLowestAdjacentSquares(grid.getFinishPoint()));
@@ -164,8 +163,10 @@ public class GridDraw extends JComponent
 				{
 					grid.paintPointSet(g, grid.getPaths().get(i).getArray());
 				}
+				System.out.println(i + " out of " + grid.getPaths().size() + " paths have been drawn.");
 			}
 		}
+		PathfindAI.identifyNodes(grid, g);
 		// System.out.println("Finished drawing " + grid.getPaths().size() +
 		// " paths to the screen.");
 		// System.out.println("Each path is " +
@@ -176,13 +177,6 @@ public class GridDraw extends JComponent
 	{
 		try
 		{
-			/*
-			 * FileOutputStream fileOut = new FileOutputStream("grid.data");
-			 * ObjectOutputStream objOut = new ObjectOutputStream(fileOut);
-			 * 
-			 * objOut.writeObject(grid); objOut.close();
-			 */
-
 			Output output = new Output(new FileOutputStream("grid.data"));
 			kryo.writeObject(output, grid);
 			output.close();
@@ -243,6 +237,7 @@ public class GridDraw extends JComponent
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			System.out.println("File not found. Began generating new data.");
 			grid = new Grid(16, 16, 40, 40);
 			grid.setSquareContents(new Point(1, 2), SquareType.START);
@@ -262,10 +257,10 @@ public class GridDraw extends JComponent
 			grid.setSquareContents(new Point(8, 10), SquareType.HAZARD);
 			grid.setSquareContents(new Point(9, 11), SquareType.HAZARD);
 			grid.setSquareContents(new Point(3, 1), SquareType.HAZARD);
-			System.out.println(grid.getDistance(grid.getStartPoint()));
 
 			PathfindAI.computeDistance(grid, grid.getStartPoint());
 			PathfindAI.computePaths(grid);
+			PathfindAI.optimizePaths(grid);
 
 			System.out.println("Finished generating new data. Begin caching.");
 			cacheGrid();
@@ -594,15 +589,18 @@ class MouseCycleListener implements MouseListener
 	public void mouseReleased(MouseEvent e)
 	{
 		grid.setHighlightedSquare(e.getX() / grid.getSquareWidth(), e.getY() / grid.getSquareHeight());
-		if (e.getButton() == MouseEvent.BUTTON1)
-			grid.rotateHighlightedSquare(true);
-		else if (e.getButton() == MouseEvent.BUTTON3)
-			grid.rotateHighlightedSquare(false);
-		else
+		if (grid.testSetHighlightedSquare(e.getX() / grid.getSquareWidth(), e.getY() / grid.getSquareHeight()))
 		{
+			if (e.getButton() == MouseEvent.BUTTON1)
+				grid.rotateHighlightedSquare(true);
+			else if (e.getButton() == MouseEvent.BUTTON3)
+				grid.rotateHighlightedSquare(false);
+			else
+			{
+			}
+			PathfindAI.computeDistance(grid, grid.getStartPoint());
+			component.disablePaths();
+			component.repaint();
 		}
-		PathfindAI.computeDistance(grid, grid.getStartPoint());
-		component.disablePaths();
-		component.repaint();
 	}
 }

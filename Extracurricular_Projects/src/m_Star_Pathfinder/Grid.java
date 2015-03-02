@@ -13,10 +13,11 @@ public class Grid implements Serializable
 	private static final long		serialVersionUID	= 1L;
 
 	private GridSquare[][]			grid;
-	private Point					startPoint, finishPoint, furthestPoint, highlightedPoint;
+	// private GridDraw gridDraw;
+	private int						highlightThickness	= 2;
 	private ArrayList<VertexMap>	paths;
 	private int						squareWidth, squareHeight;
-	private int						highlightThickness	= 2;
+	private Point					startPoint, finishPoint, furthestPoint, highlightedPoint;
 
 	public Grid(GridSquare[][] grid)
 	{
@@ -33,6 +34,7 @@ public class Grid implements Serializable
 
 		this.squareWidth = squareWidth;
 		this.squareHeight = squareHeight;
+		// this.gridDraw = gridDraw;
 
 		for (int row = 0; row < grid.length; row++)
 		{
@@ -41,11 +43,6 @@ public class Grid implements Serializable
 				this.setSquare(new GridSquare(this, SquareType.EMPTY, column * squareWidth, row * squareHeight, squareWidth, squareHeight), row, column);
 			}
 		}
-	}
-
-	public GridSquare[][] getGrid()
-	{
-		return grid;
 	}
 
 	public boolean canAccess(Point p)
@@ -61,59 +58,22 @@ public class Grid implements Serializable
 		return true;
 	}
 
-	public void setGrid(GridSquare[][] grid)
+	public boolean collidesWithHazard(Point p1, Point p2)
 	{
-		this.grid = grid;
-	}
+		Line2D.Double line = new Line2D.Double(p1.x + .5, p1.y + .5, p2.x + .5, p2.y + .5);
 
-	public void setPaths(ArrayList<VertexMap> v)
-	{
-		this.paths = v;
-	}
+		for (int y = 0; y < grid.length; y++)
+		{
+			for (int x = 0; x < grid[y].length; x++)
+			{
+				if (this.getSquare(new Point(x, y)).getContents() == SquareType.HAZARD)
+				{
+					if (this.getSquare(new Point(x, y)).getBounds().intersectsLine(line)) { return true; }
+				}
+			}
+		}
 
-	public ArrayList<VertexMap> getPaths()
-	{
-		return paths;
-	}
-
-	private GridSquare getSquare(Point p)
-	{
-		return grid[p.y][p.x];
-	}
-
-	public GridSquare getSquareCopy(Point p)
-	{
-		return grid[p.y][p.x].clone();
-	}
-
-	public void setSquare(GridSquare gridSquare, int row, int column)
-	{
-		grid[row][column] = gridSquare;
-	}
-
-	public void setStartPoint(Point p)
-	{
-		startPoint = p;
-	}
-
-	public Point getStartPoint()
-	{
-		return startPoint;
-	}
-
-	public Point getFinishPoint()
-	{
-		return finishPoint;
-	}
-
-	public Point getFurthestPoint()
-	{
-		return furthestPoint;
-	}
-
-	public void setFurthestPoint(Point p)
-	{
-		furthestPoint = p;
+		return false;
 	}
 
 	public void findFurthestPoint()
@@ -137,9 +97,77 @@ public class Grid implements Serializable
 		furthestPoint = p;
 	}
 
+	public int getDistance(Point p)
+	{
+		return this.getSquare(p).getDistance();
+	}
+
+	public Point getFinishPoint()
+	{
+		return finishPoint;
+	}
+
+	public Point getFurthestPoint()
+	{
+		return furthestPoint;
+	}
+
+	public GridSquare[][] getGrid()
+	{
+		return grid;
+	}
+
+	/*
+	 * public GridDraw getGridDraw() { return gridDraw; }
+	 */
+
 	public Point getHighlightedPoint()
 	{
 		return highlightedPoint;
+	}
+
+	public ArrayList<Point> getLowestAdjacentSquares(Point p)
+	{
+		ArrayList<Point> adjacent = new ArrayList<Point>();
+		final int[] xMod = new int[] { 1, -1, 0, 0 };
+		final int[] yMod = new int[] { 0, 0, 1, -1 };
+
+		for (int i = 0; i < xMod.length; i++)
+		{
+			Point possiblePoint = new Point(p.x + xMod[i], p.y + yMod[i]);
+			if (this.canAccess(possiblePoint) && this.getSquareCopy(possiblePoint).getDistance() == this.getDistance(p) - 1)
+			// If it exists and is a lower value than the center
+			{
+				adjacent.add(new Point(p.x + xMod[i], p.y + yMod[i]));
+			}
+		}
+
+		return adjacent;
+	}
+
+	public ArrayList<VertexMap> getPaths()
+	{
+		return paths;
+	}
+
+	public GridSquare getSquareCopy(Point p)
+	{
+		return grid[p.y][p.x].clone();
+	}
+
+	public int getSquareHeight()
+	{
+		return squareHeight;
+	}
+
+	public int getSquareWidth()
+	{
+		return squareWidth;
+	}
+
+	public Point getStartPoint()
+	{
+		return startPoint;
 	}
 
 	public void moveHighlightedSquare(int direction)
@@ -173,6 +201,92 @@ public class Grid implements Serializable
 		}
 	}
 
+	public void paint(Graphics g)
+	{
+		for (int row = 0; row < grid.length; row++)
+		{
+			for (int column = 0; column < grid[row].length; column++)
+			{
+				this.getSquare(new Point(column, row)).paint(g);
+			}
+		}
+
+		g.setColor(new Color(0, 63, 255));
+		for (int i = 0; i <= highlightThickness; i++)
+		{
+			g.drawRect(highlightedPoint.x * squareWidth - i, highlightedPoint.y * squareHeight - i, squareWidth + 2 * i, squareHeight + 2 * i);
+		}
+	}
+
+	public void paintLine(Graphics g, Point p1, Point p2)
+	{
+		// g.setColor(new Color(255, 0, 0));
+		g.drawLine(this.getSquare(p1).getXCenter(), this.getSquare(p1).getYCenter(), this.getSquare(p2).getXCenter(), this.getSquare(p2).getYCenter());
+	}
+
+	public void paintPointSet(Graphics g, Point[] points)
+	{
+		for (int i = 0; i < points.length - 1; i++)
+		{
+			paintLine(g, points[i], points[i + 1]);
+		}
+	}
+
+	public void paintRectangle(Graphics g, Rectangle2D r)
+	{
+		g.drawRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
+	}
+
+	public void rotateHighlightedSquare(boolean clockWise)
+	{
+		if (clockWise)
+		{
+			switch (this.getSquare(highlightedPoint).getContents())
+			{
+			case EMPTY:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.HAZARD);
+				break;
+			case HAZARD:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.START);
+				break;
+			case START:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.FINISH);
+				break;
+			case FINISH:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.EMPTY);
+				break;
+			}
+		}
+		else
+		{
+			switch (this.getSquare(highlightedPoint).getContents())
+			{
+			case EMPTY:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.FINISH);
+				break;
+			case HAZARD:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.EMPTY);
+				break;
+			case START:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.HAZARD);
+				break;
+			case FINISH:
+				this.setSquareContents(new Point(highlightedPoint), SquareType.START);
+				break;
+			}
+		}
+	}
+
+	public void setFurthestPoint(Point p)
+	{
+		furthestPoint = p;
+	}
+
+	public void setGrid(GridSquare[][] grid)
+	{
+		this.grid = grid;
+	}
+
 	public void setHighlightedSquare(int x, int y)
 	{
 		if (x >= 0 && x < grid[0].length && y >= 0 && y < grid.length)
@@ -181,13 +295,18 @@ public class Grid implements Serializable
 		}
 		else
 		{
-			System.out.println("X or Y out of bounds!");
+			// System.out.println("X or Y out of bounds!");
 		}
 	}
 
-	public int getDistance(Point p)
+	public void setPaths(ArrayList<VertexMap> v)
 	{
-		return this.getSquare(p).getDistance();
+		this.paths = v;
+	}
+
+	public void setSquare(GridSquare gridSquare, int row, int column)
+	{
+		grid[row][column] = gridSquare;
 	}
 
 	public void setSquareContents(Point p, SquareType contents)
@@ -251,133 +370,25 @@ public class Grid implements Serializable
 		}
 	}
 
-	public int getSquareHeight()
+	public void setStartPoint(Point p)
 	{
-		return squareHeight;
+		startPoint = p;
 	}
 
-	public int getSquareWidth()
+	public boolean testSetHighlightedSquare(int x, int y)
 	{
-		return squareWidth;
-	}
-
-	public void rotateHighlightedSquare(boolean clockWise)
-	{
-		if (clockWise)
+		if (x >= 0 && x < grid[0].length && y >= 0 && y < grid.length)
 		{
-			switch (this.getSquare(highlightedPoint).getContents())
-			{
-			case EMPTY:
-				this.setSquareContents(new Point(highlightedPoint), SquareType.HAZARD);
-				break;
-			case HAZARD:
-				this.setSquareContents(new Point(highlightedPoint), SquareType.START);
-				break;
-			case START:
-				this.setSquareContents(new Point(highlightedPoint), SquareType.FINISH);
-				break;
-			case FINISH:
-				this.setSquareContents(new Point(highlightedPoint), SquareType.EMPTY);
-				break;
-			}
+			return true;
 		}
 		else
 		{
-			switch (this.getSquare(highlightedPoint).getContents())
-			{
-			case EMPTY:
-				this.setSquareContents(new Point(highlightedPoint), SquareType.FINISH);
-				break;
-			case HAZARD:
-				this.setSquareContents(new Point(highlightedPoint), SquareType.EMPTY);
-				break;
-			case START:
-				this.setSquareContents(new Point(highlightedPoint), SquareType.HAZARD);
-				break;
-			case FINISH:
-				this.setSquareContents(new Point(highlightedPoint), SquareType.START);
-				break;
-			}
+			return false;
 		}
 	}
 
-	public void paintLine(Graphics g, Point p1, Point p2)
+	private GridSquare getSquare(Point p)
 	{
-		// g.setColor(new Color(255, 0, 0));
-		g.drawLine(this.getSquare(p1).getXCenter(), this.getSquare(p1).getYCenter(), this.getSquare(p2).getXCenter(), this.getSquare(p2).getYCenter());
-	}
-
-	public void paintPointSet(Graphics g, Point[] points)
-	{
-		for (int i = 0; i < points.length - 1; i++)
-		{
-			paintLine(g, points[i], points[i + 1]);
-		}
-	}
-
-	public void paintRectangle(Graphics g, Rectangle2D r)
-	{
-		g.drawRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
-	}
-
-	public ArrayList<Point> getLowestAdjacentSquares(Point p)
-	{
-		ArrayList<Point> adjacent = new ArrayList<Point>();
-		final int[] xMod = new int[] { 1, -1, 0, 0 };
-		final int[] yMod = new int[] { 0, 0, 1, -1 };
-
-		for (int i = 0; i < xMod.length; i++)
-		{
-			Point possiblePoint = new Point(p.x + xMod[i], p.y + yMod[i]);
-			if (this.canAccess(possiblePoint) && this.getSquareCopy(possiblePoint).getDistance() == this.getDistance(p) - 1)
-			// If it exists and is a lower value than the center
-			{
-				adjacent.add(new Point(p.x + xMod[i], p.y + yMod[i]));
-			}
-		}
-
-		return adjacent;
-	}
-
-	public boolean collidesWithHazard(Point p1, Point p2)
-	{
-		Line2D.Double line = new Line2D.Double(p1.x + .5, p1.y + .5, p2.x + .5, p2.y + .5);
-
-		for (int y = 0; y < grid.length; y++)
-		{
-			for (int x = 0; x < grid[y].length; x++)
-			{
-				if (this.getSquare(new Point(x, y)).getContents() == SquareType.HAZARD)
-				{
-					if (this.getSquare(new Point(x, y)).getBounds().intersectsLine(line))
-					{
-						// this.paintRectangle(g, this.getSquare(new Point(x,
-						// y)).getBounds());
-						// System.out.println("Collides with: " +
-						// this.getSquare(new Point(x, y)).getBounds());
-						return true;
-					}
-				}
-			}
-		}
-
-		return false;
-	}
-
-	public void paint(Graphics g)
-	{
-		for (int row = 0; row < grid.length; row++)
-		{
-			for (int column = 0; column < grid[row].length; column++)
-			{
-				this.getSquare(new Point(column, row)).paint(g);
-			}
-		}
-
-		g.setColor(new Color(0, 63, 255));
-		for (int i = 0; i <= highlightThickness; i++)
-		{
-			g.drawRect(highlightedPoint.x * squareWidth - i, highlightedPoint.y * squareHeight - i, squareWidth + 2 * i, squareHeight + 2 * i);
-		}
+		return grid[p.y][p.x];
 	}
 }

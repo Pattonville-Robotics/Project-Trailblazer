@@ -1,5 +1,7 @@
 package m_Star_Pathfinder;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Point;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -111,84 +113,54 @@ public class PathfindAI implements Runnable
 
 				ArrayList<Point> adjacent = grid.getLowestAdjacentSquares(paths.get(i).getLastPoint());
 
-				if (adjacent.size() == 1)
+				switch (adjacent.size())
 				{
-					// System.out.println(paths.get(i) + " gets point " +
-					// adjacent.get(0) + "added."); // DEBUG
-
+				case 1:
 					paths.get(i).addPoint(adjacent.get(0));
-				}
-				else if (adjacent.size() == 2)
-				{
-					VertexMap altMap = paths.get(i).clone();
-
-					// System.out.println(paths.get(i) + " gets point " +
-					// adjacent.get(0) + "added."); // DEBUG
-
-					paths.get(i).addPoint(adjacent.get(0));
-					altMap.addPoint(adjacent.get(1));
-
-					// System.out.println(altMap + " gets point " +
-					// adjacent.get(1) + "added."); // DEBUG
-
-					paths.add(altMap);
-					i--;
-				}
-				else if (adjacent.size() == 3)
-				{
-					System.out.println("Oh baby, a triple!");
+					break;
+				case 2:
 					VertexMap altMap1 = paths.get(i).clone();
+					paths.get(i).addPoint(adjacent.get(0));
+					altMap1.addPoint(adjacent.get(1));
+					paths.add(altMap1);
+					i--;
+					break;
+				case 3:
+					System.out.println("Oh baby, a triple!");
+					altMap1 = paths.get(i).clone();
 					VertexMap altMap2 = paths.get(i).clone();
-
-					// System.out.println(paths.get(i) + " gets point " +
-					// adjacent.get(0) + "added."); // DEBUG
-
 					paths.get(i).addPoint(adjacent.get(0));
 					altMap1.addPoint(adjacent.get(1));
 					altMap2.addPoint(adjacent.get(2));
-
-					// System.out.println(altMap + " gets point " +
-					// adjacent.get(1) + "added."); // DEBUG
-
 					paths.add(altMap1);
 					paths.add(altMap2);
 					i--;
-				}
-				else if (adjacent.size() == 4)
-				{
+					break;
+				case 4:
 					System.out.println("Mum, get the camera!");
-					VertexMap altMap1 = paths.get(i).clone();
-					VertexMap altMap2 = paths.get(i).clone();
+					altMap1 = paths.get(i).clone();
+					altMap2 = paths.get(i).clone();
 					VertexMap altMap3 = paths.get(i).clone();
-
-					// System.out.println(paths.get(i) + " gets point " +
-					// adjacent.get(0) + "added."); // DEBUG
-
 					paths.get(i).addPoint(adjacent.get(0));
 					altMap1.addPoint(adjacent.get(1));
 					altMap2.addPoint(adjacent.get(2));
 					altMap3.addPoint(adjacent.get(3));
-
-					// System.out.println(altMap + " gets point " +
-					// adjacent.get(1) + "added."); // DEBUG
-
 					paths.add(altMap1);
 					paths.add(altMap2);
 					paths.add(altMap3);
 					i--;
-				}
-				else if (adjacent.size() == 0)
-				{
+					break;
+				case 0:
 					// allZero = true;
 					numZero++;
 					// System.out.println("Found zero adjacent lower squares");
 					// //
-				}
-				else
-				{
+					break;
+				default:
 					// allZero = true;
 					numZero++;
 					System.out.println("Less than 0 or more than 2 adjacent points were returned! This is a sign of something bad!"); // DEBUG
+					break;
 				}
 			}
 			System.out.println(numZero + " paths out of " + paths.size() + " paths have finished.");
@@ -252,6 +224,46 @@ public class PathfindAI implements Runnable
 		newMap.addPoint(map.getLastPoint());
 
 		return newMap;
+	}
+
+	public static void identifyNodes(Grid grid, Graphics g)
+	{
+		int[] xVarianceDiagonal = new int[] { -1, 1, 1, -1 };
+		int[] yVarianceDiagonal = new int[] { -1, -1, 1, 1 };
+
+		ArrayList<Point> nodes = new ArrayList<Point>();
+
+		for (int x = 0; x < grid.getGrid().length; x++)
+		{
+			for (int y = 0; y < grid.getGrid()[x].length; y++)
+			{
+				if (grid.getSquareCopy(new Point(x, y)).getContents() == SquareType.HAZARD)
+				{
+					for (int i = 0; i < xVarianceDiagonal.length && i < yVarianceDiagonal.length; i++)
+					{
+						if (grid.canAccess(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]))
+								&& grid.getSquareCopy(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i])).getContents() == SquareType.EMPTY)
+						{
+							if (grid.getSquareCopy(new Point(x + xVarianceDiagonal[i], y)).getContents() == SquareType.EMPTY
+									&& grid.getSquareCopy(new Point(x, y + yVarianceDiagonal[i])).getContents() == SquareType.EMPTY)
+								nodes.add(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]));
+						}
+					}
+				}
+			}
+		}
+
+		g.setColor(new Color(255, 255, 0));
+		for (Point p : nodes)
+		{
+			g.fillOval(p.x * grid.getSquareWidth() + grid.getSquareWidth() / 4, p.y * grid.getSquareHeight() + grid.getSquareHeight() / 4,
+					grid.getSquareWidth() / 2, grid.getSquareHeight() / 2);
+		}
+
+		for (Point p1 : nodes)
+			for (Point p2 : nodes)
+				grid.collidesWithHazard(p1, p2);
+
 	}
 
 	@Override
