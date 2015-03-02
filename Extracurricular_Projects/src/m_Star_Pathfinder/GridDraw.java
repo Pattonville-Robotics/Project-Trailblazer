@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
@@ -47,7 +49,7 @@ public class GridDraw extends JComponent
 	public static void setupDisplay()
 	{
 		frame = new JFrame("window");
-		frame.setBounds(50, 50, 700, 700);
+		frame.setBounds(20, 20, 700, 700);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		component = new GridDraw();
 		component.setBackground(Color.WHITE);
@@ -79,6 +81,10 @@ public class GridDraw extends JComponent
 
 	public static void setupIOMapping()
 	{
+		MouseCycleListener mouseCycleListener = new MouseCycleListener(grid, component);
+
+		component.addMouseListener(mouseCycleListener);
+
 		UpAction upAction = new UpAction(grid, component);
 		DownAction downAction = new DownAction(grid, component);
 		LeftAction leftAction = new LeftAction(grid, component);
@@ -127,6 +133,7 @@ public class GridDraw extends JComponent
 
 		component.getInputMap().put(KeyStroke.getKeyStroke("O"), "optimizeAction");
 		component.getActionMap().put("optimizeAction", optimizeAction);
+
 	}
 
 	@Override
@@ -144,7 +151,8 @@ public class GridDraw extends JComponent
 			for (int i = 0; i < grid.getPaths().size(); i++)
 			{
 				grid.paintPointSet(g, grid.getPaths().get(i).getArray());
-				System.out.println("Distance of path " + i + " is " + grid.getPaths().get(i).getTotalDistance());
+				// System.out.println("Distance of path " + i + " is " +
+				// grid.getPaths().get(i).getTotalDistance());
 			}
 
 			g.setColor(new Color(0, 255, 255));
@@ -546,6 +554,55 @@ class OptimizeAction extends AbstractAction
 		// System.out.println("OptimizeAction performed!");
 
 		PathfindAI.optimizePaths(grid);
+		component.repaint();
+	}
+}
+
+class MouseCycleListener implements MouseListener
+{
+	private Grid		grid;
+	private GridDraw	component;
+
+	public MouseCycleListener(Grid grid, GridDraw component)
+	{
+		super();
+		this.grid = grid;
+		this.component = component;
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e)
+	{
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e)
+	{
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e)
+	{
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e)
+	{
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e)
+	{
+		grid.setHighlightedSquare(e.getX() / grid.getSquareWidth(), e.getY() / grid.getSquareHeight());
+		if (e.getButton() == MouseEvent.BUTTON1)
+			grid.rotateHighlightedSquare(true);
+		else if (e.getButton() == MouseEvent.BUTTON3)
+			grid.rotateHighlightedSquare(false);
+		else
+		{
+		}
+		PathfindAI.computeDistance(grid, grid.getStartPoint());
+		component.disablePaths();
 		component.repaint();
 	}
 }

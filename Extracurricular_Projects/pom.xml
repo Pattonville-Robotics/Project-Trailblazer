@@ -25,5 +25,10 @@
 			<artifactId>kryo</artifactId>
 			<version>3.0.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.flowpowered</groupId>
+			<artifactId>flow-noise</artifactId>
+			<version>1.0.0</version>
+		</dependency>
 	</dependencies>
 </project>

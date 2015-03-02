@@ -173,6 +173,18 @@ public class Grid implements Serializable
 		}
 	}
 
+	public void setHighlightedSquare(int x, int y)
+	{
+		if (x >= 0 && x < grid[0].length && y >= 0 && y < grid.length)
+		{
+			highlightedPoint = new Point(x, y);
+		}
+		else
+		{
+			System.out.println("X or Y out of bounds!");
+		}
+	}
+
 	public int getDistance(Point p)
 	{
 		return this.getSquare(p).getDistance();
