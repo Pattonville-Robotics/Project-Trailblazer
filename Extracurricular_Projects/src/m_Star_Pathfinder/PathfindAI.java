@@ -11,28 +11,21 @@ import java.util.List;
 
 public class PathfindAI implements Runnable
 {
-	public PathfindAI()
+	public static void computeDistance(final Grid grid, final Point start)
 	{
-		System.out.println("y u do dis?");
-	}
-
-	public static void computeDistance(Grid grid, Point start)
-	{
-		List<Point> points = new ArrayList<Point>(grid.getGrid().length * 4);
-		AbstractSet<Point> pointSet = new HashSet<Point>((int) Math.pow(grid.getGrid().length, 2));
+		final List<Point> points = new ArrayList<Point>(grid.getGrid().length * 4);
+		final AbstractSet<Point> pointSet = new HashSet<Point>((int) Math.pow(grid.getGrid().length, 2));
 		points.add(start);
 		boolean noMoreLeft = false;
 		int distance = 0;
 		while (!noMoreLeft)
 		{
 			for (int i = 0; i < points.size(); i++)
-			{
 				// System.out.println("Setting distance of: (" + points.get(i).x
 				// + ", " + points.get(i).y + ")");
 				grid.setSquareDistance(points.get(i), distance);
-			}
 
-			List<Point> newPoints = new ArrayList<Point>();
+			final List<Point> newPoints = new ArrayList<Point>();
 			int numFailedCells = 0;
 
 			final int[] xMod = new int[] { 1, -1, 0, 0 };
@@ -45,7 +38,7 @@ public class PathfindAI implements Runnable
 				int numFailed = 0;
 				for (int j = 0; j < xMod.length; j++)
 				{
-					Point prospectivePoint = new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j]);
+					final Point prospectivePoint = new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j]);
 					if (grid.canAccess(prospectivePoint)
 							&& (grid.getSquareCopy(prospectivePoint).getContents() == SquareType.EMPTY || grid.getSquareCopy(prospectivePoint).getContents() == SquareType.FINISH))
 					// If it's not outside the grid and is an empty square
@@ -62,15 +55,11 @@ public class PathfindAI implements Runnable
 						// Add it to the new list
 					}
 					else
-					{
 						numFailed++;
-					}
 				}
 
-				if (numFailed == 4) // If all four sides failed to be set
-				{
-					numFailedCells++; // This cell completely failed
-				}
+				if (numFailed == 4) numFailedCells++; // This cell completely
+														// failed
 			}
 			// System.out.println(distance);
 			distance++;
@@ -78,20 +67,17 @@ public class PathfindAI implements Runnable
 			 * System.out.println(Arrays.toString(points.toArray()));
 			 * System.out.println(Arrays.toString(newPoints.toArray()));
 			 */
-			if (numFailedCells == points.size() || points.size() == 0)
-			// If all cells completely failed
-			{
-				noMoreLeft = true; // End looping
-			}
+			if (numFailedCells == points.size() || points.size() == 0) noMoreLeft = true; // End
+																							// looping
 			points.clear();
 			points.addAll(newPoints);
 			grid.findFurthestPoint();
 		}
 	}
 
-	public static void computePaths(Grid grid)
+	public static void computePaths(final Grid grid)
 	{
-		ArrayList<VertexMap> paths = new ArrayList<VertexMap>();
+		final ArrayList<VertexMap> paths = new ArrayList<VertexMap>();
 		paths.add(new VertexMap());
 		paths.get(0).addPoint(grid.getFinishPoint());
 		// System.out.println(paths);
@@ -111,7 +97,7 @@ public class PathfindAI implements Runnable
 				// grid.getLowestAdjacentSquares(paths.get(i).getLastPoint()));
 				// // DEBUG
 
-				ArrayList<Point> adjacent = grid.getLowestAdjacentSquares(paths.get(i).getLastPoint());
+				final ArrayList<Point> adjacent = grid.getLowestAdjacentSquares(paths.get(i).getLastPoint());
 
 				switch (adjacent.size())
 				{
@@ -140,7 +126,7 @@ public class PathfindAI implements Runnable
 					System.out.println("Mum, get the camera!");
 					altMap1 = paths.get(i).clone();
 					altMap2 = paths.get(i).clone();
-					VertexMap altMap3 = paths.get(i).clone();
+					final VertexMap altMap3 = paths.get(i).clone();
 					paths.get(i).addPoint(adjacent.get(0));
 					altMap1.addPoint(adjacent.get(1));
 					altMap2.addPoint(adjacent.get(2));
@@ -164,45 +150,50 @@ public class PathfindAI implements Runnable
 				}
 			}
 			System.out.println(numZero + " paths out of " + paths.size() + " paths have finished.");
-			if (numZero == paths.size())
-			{
-				allZero = true;
-			}
-			// progressFromFinish++;
-			// System.out.println(progressFromFinish); // DEBUG
+			if (numZero == paths.size()) allZero = true;
 		}
 
 		for (int i = 0; i < paths.size(); i++)
-		{
 			paths.get(i).reverseList();
-		}
 
 		grid.setPaths(paths);
 	}
 
-	public static void optimizePaths(Grid grid)
+	public static void identifyNodes(final Grid grid, final Graphics g)
 	{
-		ArrayList<VertexMap> paths = grid.getPaths();
-		ArrayList<VertexMap> newPaths = new ArrayList<VertexMap>(paths.size());
+		final int[] xVarianceDiagonal = new int[] { -1, 1, 1, -1 };
+		final int[] yVarianceDiagonal = new int[] { -1, -1, 1, 1 };
 
-		for (int i = 0; i < paths.size(); i++)
-		{
-			System.out.println("Progress: " + i + " / " + paths.size());
-			newPaths.add(optimizePath(grid, paths.get(i)));
-		}
-		Collections.sort(newPaths);
-		grid.setPaths(newPaths);
+		final ArrayList<Point> nodes = new ArrayList<Point>();
+
+		for (int x = 0; x < grid.getGrid().length; x++)
+			for (int y = 0; y < grid.getGrid()[x].length; y++)
+				if (grid.getSquareCopy(new Point(x, y)).getContents() == SquareType.HAZARD)
+					for (int i = 0; i < xVarianceDiagonal.length && i < yVarianceDiagonal.length; i++)
+						if (grid.canAccess(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]))
+								&& grid.getSquareCopy(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i])).getContents() == SquareType.EMPTY)
+							if (grid.getSquareCopy(new Point(x + xVarianceDiagonal[i], y)).getContents() == SquareType.EMPTY
+									&& grid.getSquareCopy(new Point(x, y + yVarianceDiagonal[i])).getContents() == SquareType.EMPTY)
+								nodes.add(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]));
+
+		g.setColor(new Color(255, 255, 0));
+		for (final Point p : nodes)
+			g.fillOval(p.x * grid.getSquareWidth() + grid.getSquareWidth() / 4, p.y * grid.getSquareHeight() + grid.getSquareHeight() / 4,
+					grid.getSquareWidth() / 2, grid.getSquareHeight() / 2);
+
+		for (final Point p1 : nodes)
+			for (final Point p2 : nodes)
+				grid.collidesWithHazard(p1, p2);
+
 	}
 
-	public static VertexMap optimizePath(Grid grid, VertexMap map)
+	public static VertexMap optimizePath(final Grid grid, final VertexMap map)
 	{
-		VertexMap newMap = new VertexMap();
+		final VertexMap newMap = new VertexMap();
 		newMap.addPoint(map.getPoint(0));
 
 		for (int i = 0; i < map.size(); i++)
-		{
 			for (int j = i; j < map.size(); j++)
-			{
 				// System.out.println("Point " + map.getPoint(i) + " to " +
 				// map.getPoint(j) + " intersect status: "
 				// + grid.collidesWithHazard(map.getPoint(i), map.getPoint(j)));
@@ -219,51 +210,28 @@ public class PathfindAI implements Runnable
 
 					break;
 				}
-			}
-		}
 		newMap.addPoint(map.getLastPoint());
 
 		return newMap;
 	}
 
-	public static void identifyNodes(Grid grid, Graphics g)
+	public static void optimizePaths(final Grid grid)
 	{
-		int[] xVarianceDiagonal = new int[] { -1, 1, 1, -1 };
-		int[] yVarianceDiagonal = new int[] { -1, -1, 1, 1 };
+		final ArrayList<VertexMap> paths = grid.getPaths();
+		final ArrayList<VertexMap> newPaths = new ArrayList<VertexMap>(paths.size());
 
-		ArrayList<Point> nodes = new ArrayList<Point>();
-
-		for (int x = 0; x < grid.getGrid().length; x++)
+		for (int i = 0; i < paths.size(); i++)
 		{
-			for (int y = 0; y < grid.getGrid()[x].length; y++)
-			{
-				if (grid.getSquareCopy(new Point(x, y)).getContents() == SquareType.HAZARD)
-				{
-					for (int i = 0; i < xVarianceDiagonal.length && i < yVarianceDiagonal.length; i++)
-					{
-						if (grid.canAccess(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]))
-								&& grid.getSquareCopy(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i])).getContents() == SquareType.EMPTY)
-						{
-							if (grid.getSquareCopy(new Point(x + xVarianceDiagonal[i], y)).getContents() == SquareType.EMPTY
-									&& grid.getSquareCopy(new Point(x, y + yVarianceDiagonal[i])).getContents() == SquareType.EMPTY)
-								nodes.add(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]));
-						}
-					}
-				}
-			}
+			System.out.println("Progress: " + i + " / " + paths.size());
+			newPaths.add(PathfindAI.optimizePath(grid, paths.get(i)));
 		}
+		Collections.sort(newPaths);
+		grid.setPaths(newPaths);
+	}
 
-		g.setColor(new Color(255, 255, 0));
-		for (Point p : nodes)
-		{
-			g.fillOval(p.x * grid.getSquareWidth() + grid.getSquareWidth() / 4, p.y * grid.getSquareHeight() + grid.getSquareHeight() / 4,
-					grid.getSquareWidth() / 2, grid.getSquareHeight() / 2);
-		}
-
-		for (Point p1 : nodes)
-			for (Point p2 : nodes)
-				grid.collidesWithHazard(p1, p2);
-
+	public PathfindAI()
+	{
+		System.out.println("y u do dis?");
 	}
 
 	@Override
