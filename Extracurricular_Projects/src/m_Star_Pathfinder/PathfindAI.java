@@ -1,7 +1,8 @@
 package m_Star_Pathfinder;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.GradientPaint;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -100,6 +101,7 @@ public class PathfindAI implements Runnable
 				final ArrayList<Point> adjacent = grid.getLowestAdjacentSquares(paths.get(i).getLastPoint());
 
 				switch (adjacent.size())
+				// These handle the different methods of path diverging
 				{
 				case 1:
 					paths.get(i).addPoint(adjacent.get(0));
@@ -159,12 +161,12 @@ public class PathfindAI implements Runnable
 		grid.setPaths(paths);
 	}
 
-	public static void identifyNodes(final Grid grid, final Graphics g)
+	public static void identifyNodes(final Grid grid, final Graphics2D g)
 	{
 		final int[] xVarianceDiagonal = new int[] { -1, 1, 1, -1 };
 		final int[] yVarianceDiagonal = new int[] { -1, -1, 1, 1 };
 
-		final ArrayList<Point> nodes = new ArrayList<Point>();
+		final ArrayList<PathNode> nodes = new ArrayList<PathNode>();
 
 		for (int x = 0; x < grid.getGrid().length; x++)
 			for (int y = 0; y < grid.getGrid()[x].length; y++)
@@ -174,16 +176,29 @@ public class PathfindAI implements Runnable
 								&& grid.getSquareCopy(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i])).getContents() == SquareType.EMPTY
 								&& grid.getSquareCopy(new Point(x + xVarianceDiagonal[i], y)).getContents() == SquareType.EMPTY
 								&& grid.getSquareCopy(new Point(x, y + yVarianceDiagonal[i])).getContents() == SquareType.EMPTY)
-							nodes.add(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]));
+							nodes.add(new PathNode(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]));
 
-		g.setColor(new Color(255, 255, 0));
-		for (final Point p : nodes)
-			g.fillOval(p.x * grid.getSquareWidth() + grid.getSquareWidth() / 4, p.y * grid.getSquareHeight() + grid.getSquareHeight() / 4,
-					grid.getSquareWidth() / 2, grid.getSquareHeight() / 2);
+		nodes.add(new PathNode(grid.getStartPoint()));
+		nodes.add(new PathNode(grid.getFinishPoint()));
 
-		for (final Point p1 : nodes)
-			for (final Point p2 : nodes)
-				grid.collidesWithHazard(p1, p2);
+		g.setColor(new Color(0, 255, 255));
+		for (final PathNode p : nodes)
+		{
+			g.fillOval(p.getNode().x * grid.getSquareWidth() + grid.getSquareWidth() * 3 / 8, p.getNode().y * grid.getSquareHeight() + grid.getSquareHeight()
+					* 3 / 8, grid.getSquareWidth() / 4, grid.getSquareHeight() / 4);
+		}
+
+		for (int i = 0; i < nodes.size(); i++)
+			for (int j = 0; j < nodes.size(); j++)
+				if (i != j && !grid.collidesWithHazard(nodes.get(i).getNode(), nodes.get(j).getNode())
+						&& grid.getSquareCopy(nodes.get(i).getNode()).getDistance() > grid.getSquareCopy(nodes.get(j).getNode()).getDistance())
+				{
+					nodes.get(i).addDirectedEdge(nodes.get(j).getNode());
+					g.setPaint(new GradientPaint(nodes.get(i).getNode().x * grid.getSquareWidth(), nodes.get(i).getNode().y * grid.getSquareHeight(),
+							new Color(0, 0, 255), nodes.get(j).getNode().x * grid.getSquareWidth(), nodes.get(j).getNode().y * grid.getSquareHeight(),
+							new Color(0, 255, 0)));
+					grid.paintLine(g, nodes.get(i).getNode(), nodes.get(j).getNode());
+				}
 
 	}
 

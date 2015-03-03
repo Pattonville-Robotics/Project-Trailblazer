@@ -2,6 +2,7 @@ package m_Star_Pathfinder;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
@@ -34,7 +35,7 @@ public class GridDraw extends JComponent
 		gridDraw.frame.setVisible(true);
 	}
 
-	private boolean	drawPaths	= true;
+	private boolean	drawPaths	= false;
 	private JFrame	frame;
 	private Grid	grid;
 	private JMenu	help;
@@ -110,8 +111,8 @@ public class GridDraw extends JComponent
 			this.grid.setSquareContents(new Point(3, 1), SquareType.HAZARD);
 
 			PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
-			PathfindAI.computePaths(this.grid);
-			PathfindAI.optimizePaths(this.grid);
+			// PathfindAI.computePaths(this.grid);
+			// PathfindAI.optimizePaths(this.grid);
 
 			System.out.println("Finished generating new data. Begin caching.");
 			this.cacheGrid();
@@ -141,6 +142,7 @@ public class GridDraw extends JComponent
 	@Override
 	public void paintComponent(final Graphics g)
 	{
+		Graphics2D g2d = (Graphics2D) g;
 		// System.out.println("Began drawing to the screen.");
 		this.grid.paint(g);
 		// System.out.println("Lowest next to start: " +
@@ -164,7 +166,7 @@ public class GridDraw extends JComponent
 				System.out.println(i + " out of " + this.grid.getPaths().size() + " paths have been drawn.");
 			}
 		}
-		PathfindAI.identifyNodes(this.grid, g);
+		PathfindAI.identifyNodes(this.grid, g2d);
 		// System.out.println("Finished drawing " + grid.getPaths().size() +
 		// " paths to the screen.");
 		// System.out.println("Each path is " +
