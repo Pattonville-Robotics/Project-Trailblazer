@@ -24,6 +24,18 @@ public class Grid implements Serializable
 		this.grid = grid;
 	}
 
+	/**
+	 * Constructs a new {@code Grid} object with the specified parameters.
+	 * 
+	 * @param width
+	 *            - The number of squares horizontally
+	 * @param height
+	 *            - The number of squares vertically
+	 * @param squareWidth
+	 *            - The width (in pixels) of each square
+	 * @param squareHeight
+	 *            - The height (in pixels) of each square
+	 */
 	public Grid(final int width, final int height, final int squareWidth, final int squareHeight)
 	{
 		this.grid = new GridSquare[height][width];
@@ -41,6 +53,12 @@ public class Grid implements Serializable
 				this.setSquare(new GridSquare(this, SquareType.EMPTY, column * squareWidth, row * squareHeight, squareWidth, squareHeight), row, column);
 	}
 
+	/**
+	 * @param p
+	 *            - The point to be checked.
+	 * @return A {@code boolean} value describing if the specified point can be
+	 *         accessed in the internal array.
+	 */
 	public boolean canAccess(final Point p)
 	{
 		try

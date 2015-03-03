@@ -171,10 +171,10 @@ public class PathfindAI implements Runnable
 				if (grid.getSquareCopy(new Point(x, y)).getContents() == SquareType.HAZARD)
 					for (int i = 0; i < xVarianceDiagonal.length && i < yVarianceDiagonal.length; i++)
 						if (grid.canAccess(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]))
-								&& grid.getSquareCopy(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i])).getContents() == SquareType.EMPTY)
-							if (grid.getSquareCopy(new Point(x + xVarianceDiagonal[i], y)).getContents() == SquareType.EMPTY
-									&& grid.getSquareCopy(new Point(x, y + yVarianceDiagonal[i])).getContents() == SquareType.EMPTY)
-								nodes.add(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]));
+								&& grid.getSquareCopy(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i])).getContents() == SquareType.EMPTY
+								&& grid.getSquareCopy(new Point(x + xVarianceDiagonal[i], y)).getContents() == SquareType.EMPTY
+								&& grid.getSquareCopy(new Point(x, y + yVarianceDiagonal[i])).getContents() == SquareType.EMPTY)
+							nodes.add(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]));
 
 		g.setColor(new Color(255, 255, 0));
 		for (final Point p : nodes)
