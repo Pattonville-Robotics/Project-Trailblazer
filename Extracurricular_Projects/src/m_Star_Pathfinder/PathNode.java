@@ -7,7 +7,7 @@ public class PathNode
 {
 	private Point				node;
 	// Can only go to lower squares with visibility
-	private ArrayList<Point>	directedEdges	= new ArrayList<Point>();
+	private ArrayList<PathNode>	directedEdges	= new ArrayList<PathNode>();
 
 	public PathNode(Point node)
 	{
@@ -29,17 +29,17 @@ public class PathNode
 		this.node = node;
 	}
 
-	public ArrayList<Point> getDirectedEdges()
+	public ArrayList<PathNode> getDirectedEdges()
 	{
 		return directedEdges;
 	}
 
-	public void setDirectedEdges(ArrayList<Point> directedEdges)
+	public void setDirectedEdges(ArrayList<PathNode> directedEdges)
 	{
 		this.directedEdges = directedEdges;
 	}
 
-	public void addDirectedEdge(Point edge)
+	public void addDirectedEdge(PathNode edge)
 	{
 		directedEdges.add(edge);
 	}

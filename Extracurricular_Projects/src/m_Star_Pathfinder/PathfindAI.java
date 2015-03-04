@@ -193,7 +193,7 @@ public class PathfindAI implements Runnable
 				if (i != j && !grid.collidesWithHazard(nodes.get(i).getNode(), nodes.get(j).getNode())
 						&& grid.getSquareCopy(nodes.get(i).getNode()).getDistance() > grid.getSquareCopy(nodes.get(j).getNode()).getDistance())
 				{
-					nodes.get(i).addDirectedEdge(nodes.get(j).getNode());
+					nodes.get(i).addDirectedEdge(nodes.get(j));
 					g.setPaint(new GradientPaint(nodes.get(i).getNode().x * grid.getSquareWidth(), nodes.get(i).getNode().y * grid.getSquareHeight(),
 							new Color(0, 0, 255), nodes.get(j).getNode().x * grid.getSquareWidth(), nodes.get(j).getNode().y * grid.getSquareHeight(),
 							new Color(0, 255, 0)));
