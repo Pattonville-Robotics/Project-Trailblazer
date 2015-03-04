@@ -142,6 +142,7 @@ public class GridDraw extends JComponent
 	@Override
 	public void paintComponent(final Graphics g)
 	{
+		long startTime = System.nanoTime();
 		Graphics2D g2d = (Graphics2D) g;
 		// System.out.println("Began drawing to the screen.");
 		this.grid.paint(g);
@@ -171,6 +172,9 @@ public class GridDraw extends JComponent
 		// " paths to the screen.");
 		// System.out.println("Each path is " +
 		// grid.getPaths().get(0).getTotalDistance() + " units long.");
+		g.setColor(new Color(63, 255, 127));
+		g.drawString("FPS: " + (1 / ((double) (System.nanoTime() - startTime) / 1000000000)), 20, 20);
+		repaint();
 	}
 
 	public void setupDisplay()
@@ -184,7 +188,7 @@ public class GridDraw extends JComponent
 		this.help = new JMenu("Help");
 
 		this.help1 = new JMenuItem("You can use the arrow keys to select a square to modify.");
-		this.help2 = new JMenuItem("Use \"ENTER\" and \"CTRL + ENTER\" to cycle through possible square contents.");
+		this.help2 = new JMenuItem("Use \"ENTER\" and \"SHIFT + ENTER\" to cycle through possible square contents.");
 		this.help3 = new JMenuItem("Pressing \"P\" will toggle calculation and drawing of paths. Be forewarned: this can take a long time on slower hardware!");
 		this.help4 = new JMenuItem("To save and load Grids, use the \"S\" and \"L\" keys.");
 		this.help5 = new JMenuItem("Press \"R\" to recalculate the paths without toggling them and \"CTRL + R\" to redraw the screen.");
@@ -239,7 +243,7 @@ public class GridDraw extends JComponent
 		this.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), "rotateClockWiseAction");
 		this.getActionMap().put("rotateClockWiseAction", rotateClockWiseAction);
 
-		this.getInputMap().put(KeyStroke.getKeyStroke("control ENTER"), "rotateCounterClockWiseAction");
+		this.getInputMap().put(KeyStroke.getKeyStroke("shift ENTER"), "rotateCounterClockWiseAction");
 		this.getActionMap().put("rotateCounterClockWiseAction", rotateCounterClockWiseAction);
 
 		this.getInputMap().put(KeyStroke.getKeyStroke("P"), "togglePathsAction");

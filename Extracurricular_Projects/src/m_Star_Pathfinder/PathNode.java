@@ -2,6 +2,7 @@ package m_Star_Pathfinder;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class PathNode
 {
@@ -44,6 +45,19 @@ public class PathNode
 		directedEdges.add(edge);
 	}
 
+	@Override
+	public boolean equals(Object o)
+	{
+		return (o instanceof PathNode) && ((PathNode) o).getNode().equals(this.node) && ((PathNode) o).getDirectedEdges().equals(this.getDirectedEdges());
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Arrays.hashCode(new Object[] { node, directedEdges });
+	}
+
+	@Override
 	public String toString()
 	{
 		return "PathNode at (" + node.x + ", " + node.y + ") links to " + directedEdges;

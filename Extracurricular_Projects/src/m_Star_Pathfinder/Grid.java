@@ -18,6 +18,17 @@ public class Grid implements Serializable
 	private ArrayList<VertexMap>	paths;
 	private int						squareWidth, squareHeight;
 	private Point					startPoint, finishPoint, furthestPoint, highlightedPoint;
+	private ArrayList<PathNode>		nodes;
+
+	public ArrayList<PathNode> getNodes()
+	{
+		return nodes;
+	}
+
+	public void setNodes(ArrayList<PathNode> nodes)
+	{
+		this.nodes = nodes;
+	}
 
 	public Grid(final GridSquare[][] grid)
 	{

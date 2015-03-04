@@ -161,12 +161,16 @@ public class PathfindAI implements Runnable
 		grid.setPaths(paths);
 	}
 
-	public static void identifyNodes(final Grid grid, final Graphics2D g)
+	public static void identifyNodes(final Grid grid, final Graphics2D g2d)
 	{
 		final int[] xVarianceDiagonal = new int[] { -1, 1, 1, -1 };
 		final int[] yVarianceDiagonal = new int[] { -1, -1, 1, 1 };
 
 		final ArrayList<PathNode> nodes = new ArrayList<PathNode>();
+		final HashSet<PathNode> nodeSet = new HashSet<PathNode>();
+
+		nodes.add(new PathNode(grid.getFinishPoint()));
+		nodeSet.add(new PathNode(grid.getFinishPoint()));
 
 		for (int x = 0; x < grid.getGrid().length; x++)
 			for (int y = 0; y < grid.getGrid()[x].length; y++)
@@ -174,32 +178,45 @@ public class PathfindAI implements Runnable
 					for (int i = 0; i < xVarianceDiagonal.length && i < yVarianceDiagonal.length; i++)
 						if (grid.canAccess(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]))
 								&& grid.getSquareCopy(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i])).getContents() == SquareType.EMPTY
-								&& grid.getSquareCopy(new Point(x + xVarianceDiagonal[i], y)).getContents() == SquareType.EMPTY
-								&& grid.getSquareCopy(new Point(x, y + yVarianceDiagonal[i])).getContents() == SquareType.EMPTY)
+								&& grid.getSquareCopy(new Point(x + xVarianceDiagonal[i], y)).getContents() != SquareType.HAZARD
+								&& grid.getSquareCopy(new Point(x, y + yVarianceDiagonal[i])).getContents() != SquareType.HAZARD
+								&& !nodeSet.contains(new PathNode(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i])))
+						{
 							nodes.add(new PathNode(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]));
+							nodeSet.add(new PathNode(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]));
+						}
+		if (!nodeSet.contains(new PathNode(grid.getStartPoint())))
+		{
+			nodes.add(new PathNode(grid.getStartPoint()));
+			nodeSet.add(new PathNode(grid.getStartPoint()));
+		}
 
-		nodes.add(new PathNode(grid.getStartPoint()));
-		nodes.add(new PathNode(grid.getFinishPoint()));
-
-		g.setColor(new Color(0, 255, 255));
+		g2d.setColor(new Color(0, 255, 255));
 		for (final PathNode p : nodes)
 		{
-			g.fillOval(p.getNode().x * grid.getSquareWidth() + grid.getSquareWidth() * 3 / 8, p.getNode().y * grid.getSquareHeight() + grid.getSquareHeight()
+			g2d.fillOval(p.getNode().x * grid.getSquareWidth() + grid.getSquareWidth() * 3 / 8, p.getNode().y * grid.getSquareHeight() + grid.getSquareHeight()
 					* 3 / 8, grid.getSquareWidth() / 4, grid.getSquareHeight() / 4);
 		}
 
 		for (int i = 0; i < nodes.size(); i++)
 			for (int j = 0; j < nodes.size(); j++)
 				if (i != j && !grid.collidesWithHazard(nodes.get(i).getNode(), nodes.get(j).getNode())
-						&& grid.getSquareCopy(nodes.get(i).getNode()).getDistance() > grid.getSquareCopy(nodes.get(j).getNode()).getDistance())
+						&& grid.getSquareCopy(nodes.get(i).getNode()).getDistance() >= grid.getSquareCopy(nodes.get(j).getNode()).getDistance())
 				{
 					nodes.get(i).addDirectedEdge(nodes.get(j));
-					g.setPaint(new GradientPaint(nodes.get(i).getNode().x * grid.getSquareWidth(), nodes.get(i).getNode().y * grid.getSquareHeight(),
+					g2d.setPaint(new GradientPaint(nodes.get(i).getNode().x * grid.getSquareWidth(), nodes.get(i).getNode().y * grid.getSquareHeight(),
 							new Color(0, 0, 255), nodes.get(j).getNode().x * grid.getSquareWidth(), nodes.get(j).getNode().y * grid.getSquareHeight(),
 							new Color(0, 255, 0)));
-					grid.paintLine(g, nodes.get(i).getNode(), nodes.get(j).getNode());
+					grid.paintLine(g2d, nodes.get(i).getNode(), nodes.get(j).getNode());
 				}
+		grid.setNodes(nodes);
 
+	}
+
+	public static void connectNodes(final Grid grid, final Graphics2D g2d)
+	// The first node is always the finish point and the last is always the
+	// start
+	{
 	}
 
 	public static VertexMap optimizePath(final Grid grid, final VertexMap map)
