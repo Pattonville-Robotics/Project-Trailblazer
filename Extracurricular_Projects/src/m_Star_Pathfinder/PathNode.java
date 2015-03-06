@@ -60,6 +60,7 @@ public class PathNode
 	@Override
 	public String toString()
 	{
-		return "PathNode at (" + this.node.x + ", " + this.node.y + ") links to " + this.directedEdges;
+
+		return "PathNode at (" + this.node.x + ", " + this.node.y + ")";
 	}
 }

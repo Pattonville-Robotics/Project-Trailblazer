@@ -84,10 +84,11 @@ public class GridDraw extends JComponent
 	}
 
 	private boolean	drawPaths	= false;
+	private boolean	drawNodes	= false;
 	private JFrame	frame;
 	private Grid	grid;
 	private JMenu	help;
-	private JMenuItem	help1, help2, help3, help4, help5, help6, help7;
+	private JMenuItem	help1, help2, help3, help4, help5, help6, help7, help8;
 	private final Kryo	kryo	= new Kryo();
 
 	private JMenuBar	menuBar;
@@ -124,9 +125,24 @@ public class GridDraw extends JComponent
 		this.drawPaths = true;
 	}
 
+	public void disableNodes()
+	{
+		this.drawNodes = false;
+	}
+
+	public void enableNodes()
+	{
+		this.drawNodes = true;
+	}
+
 	public boolean getDrawPaths()
 	{
 		return this.drawPaths;
+	}
+
+	public boolean getDrawNodes()
+	{
+		return this.drawNodes;
 	}
 
 	public void init()
@@ -174,9 +190,9 @@ public class GridDraw extends JComponent
 		/*
 		 * FileInputStream fileIn = new FileInputStream("grid.data");
 		 * ObjectInputStream objIn = new ObjectInputStream(fileIn);
-		 *
+		 * 
 		 * Object obj = objIn.readObject(); objIn.close();
-		 *
+		 * 
 		 * if (obj instanceof Grid) { grid = (Grid) obj; }
 		 */
 
@@ -202,7 +218,7 @@ public class GridDraw extends JComponent
 		if (this.drawPaths)
 		{
 			for (int i = 0; i < this.grid.getPaths().size(); i++)
-				this.grid.paintPointSet(g, this.grid.getPaths().get(i).getArray());
+				this.grid.paintPointSet(g2d, this.grid.getPaths().get(i).getArray());
 			// System.out.println("Distance of path " + i + " is " +
 			// grid.getPaths().get(i).getTotalDistance());
 
@@ -211,25 +227,32 @@ public class GridDraw extends JComponent
 			final double lowestDistance = this.grid.getPaths().get(0).getTotalDistance();
 			for (int i = 0; i < this.grid.getPaths().size(); i++)
 			{
-				if (this.grid.getPaths().get(i).getTotalDistance() == lowestDistance) this.grid.paintPointSet(g, this.grid.getPaths().get(i).getArray());
+				if (this.grid.getPaths().get(i).getTotalDistance() == lowestDistance) this.grid.paintPointSet(g2d, this.grid.getPaths().get(i).getArray());
 				System.out.println(i + " out of " + this.grid.getPaths().size() + " paths have been drawn.");
 			}
 		}
-		PathfindAI.identifyNodes(this.grid, g2d);
-		PathfindAI.connectNodes(grid, g2d);
 		// System.out.println("Finished drawing " + grid.getPaths().size() +
 		// " paths to the screen.");
 		// System.out.println("Each path is " +
 		// grid.getPaths().get(0).getTotalDistance() + " units long.");
+		if (this.drawNodes)
+		{
+			PathfindAI.identifyNodes(grid);
+			PathfindAI.connectNodes(grid);
+			grid.paintNodes(g2d);
+			grid.paintPointSet(g2d, grid.getPathNodeMap().getPointArray());
+		}
+
 		g.setColor(new Color(63, 255, 255));
 		g.drawString("FPS: " + 1 / ((double) (System.nanoTime() - startTime) / 1000000000), 20, 20);
 		this.repaint();
+
 	}
 
 	public void setupDisplay()
 	{
 		this.frame = new JFrame("window");
-		this.frame.setBounds(0, 0, 690, 690);
+		this.frame.setBounds(0, 0, 720, 720);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBackground(Color.WHITE);
 		this.frame.getContentPane().add(this);
@@ -242,7 +265,8 @@ public class GridDraw extends JComponent
 		this.help4 = new JMenuItem("To save and load Grids, use the \"S\" and \"L\" keys.");
 		this.help5 = new JMenuItem("Press \"R\" to recalculate the paths without toggling them and \"CTRL + R\" to redraw the screen.");
 		this.help6 = new JMenuItem("Press \"O\" to optimize the calculated paths.");
-		this.help7 = new JMenuItem(
+		this.help7 = new JMenuItem("Use the \"N\" button to toggle high-speed calculation.");
+		this.help8 = new JMenuItem(
 				"The green square is start, the blue square is finish, the purple squares are walls, and the numbers are the distance to the start.");
 
 		this.help.add(this.help1);
@@ -252,6 +276,7 @@ public class GridDraw extends JComponent
 		this.help.add(this.help5);
 		this.help.add(this.help6);
 		this.help.add(this.help7);
+		this.help.add(this.help8);
 		this.menuBar = new JMenuBar();
 		this.menuBar.add(this.help);
 
@@ -271,6 +296,7 @@ public class GridDraw extends JComponent
 		final RotateClockWiseAction rotateClockWiseAction = new RotateClockWiseAction(this.grid, this);
 		final RotateCounterClockWiseAction rotateCounterClockWiseAction = new RotateCounterClockWiseAction(this.grid, this);
 		final TogglePathsAction togglePathsAction = new TogglePathsAction(this.grid, this);
+		final ToggleNodesAction toggleNodesAction = new ToggleNodesAction(this.grid, this);
 		final CalculatePathsAction calculatePathsAction = new CalculatePathsAction(this.grid, this);
 		final SaveAction saveAction = new SaveAction(this);
 		final LoadAction loadAction = new LoadAction(this);
@@ -298,6 +324,9 @@ public class GridDraw extends JComponent
 		this.getInputMap().put(KeyStroke.getKeyStroke("P"), "togglePathsAction");
 		this.getActionMap().put("togglePathsAction", togglePathsAction);
 
+		this.getInputMap().put(KeyStroke.getKeyStroke("N"), "toggleNodesAction");
+		this.getActionMap().put("toggleNodesAction", toggleNodesAction);
+
 		this.getInputMap().put(KeyStroke.getKeyStroke("R"), "calculatePathsAction");
 		this.getActionMap().put("calculatePathsAction", calculatePathsAction);
 
@@ -318,6 +347,11 @@ public class GridDraw extends JComponent
 	public void togglePaths()
 	{
 		this.drawPaths = !this.drawPaths;
+	}
+
+	public void toggleNodes()
+	{
+		this.drawNodes = !this.drawNodes;
 	}
 }
 
@@ -581,6 +615,34 @@ class TogglePathsAction extends AbstractAction
 		}
 
 		this.component.togglePaths();
+		this.component.repaint();
+	}
+}
+
+class ToggleNodesAction extends AbstractAction
+{
+	private static final long	serialVersionUID	= 1L;
+	private final GridDraw		component;
+	private final Grid			grid;
+
+	public ToggleNodesAction(final Grid grid, final GridDraw component)
+	{
+		super();
+		this.grid = grid;
+		this.component = component;
+	}
+
+	@Override
+	public void actionPerformed(final ActionEvent e)
+	{
+		// System.out.println("ToggleNodesAction performed!");
+		if (!this.component.getDrawNodes())
+		{
+			PathfindAI.identifyNodes(grid);
+			PathfindAI.connectNodes(grid);
+		}
+
+		this.component.toggleNodes();
 		this.component.repaint();
 	}
 }

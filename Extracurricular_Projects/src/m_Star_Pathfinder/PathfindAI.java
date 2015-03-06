@@ -1,6 +1,5 @@
 package m_Star_Pathfinder;
 
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -63,7 +62,8 @@ public class PathfindAI implements Runnable
 			// System.out.println(distance);
 			distance++;
 			/*
-			 * System.out.println(Arrays.toString(points.toArray())); System.out.println(Arrays.toString(newPoints.toArray()));
+			 * System.out.println(Arrays.toString(points.toArray()));
+			 * System.out.println(Arrays.toString(newPoints.toArray()));
 			 */
 			if (numFailedCells == points.size() || points.size() == 0) noMoreLeft = true; // End
 			// looping
@@ -158,19 +158,19 @@ public class PathfindAI implements Runnable
 		grid.setPaths(paths);
 	}
 
-	public static void connectNodes(final Grid grid, final Graphics2D g2d)
+	public static void connectNodes(final Grid grid)
 	// The first node is always the finish point and the last is always the
 	// start
 	{
 		PathNodeMap map = new PathNodeMap();
 		PathNode current = grid.getNodes().get(0);
 
-		while (grid.getSquareCopy(current.getNode()).getDistance() != 0)
+		while (current.getDirectedEdges().size() != 0)
 		{
 			int bestIndex = 0;
 			for (int i = 0; i < current.getDirectedEdges().size(); i++)
 			{
-				if (grid.getSquareCopy(current.getDirectedEdges().get(i).getNode()).getDistance() < grid.getSquareCopy(
+				if (grid.getSquareCopy(current.getDirectedEdges().get(i).getNode()).getDistance() <= grid.getSquareCopy(
 						current.getDirectedEdges().get(bestIndex).getNode()).getDistance())
 				{
 					bestIndex = i;
@@ -179,9 +179,11 @@ public class PathfindAI implements Runnable
 			map.addPoint(current);
 			current = current.getDirectedEdges().get(bestIndex);
 		}
+		map.addPoint(current);
+		grid.setPathNodeMap(map);
 	}
 
-	public static void identifyNodes(final Grid grid, final Graphics2D g2d)
+	public static void identifyNodes(final Grid grid)
 	{
 		final int[] xVarianceDiagonal = new int[] { -1, 1, 1, -1 };
 		final int[] yVarianceDiagonal = new int[] { -1, -1, 1, 1 };
@@ -209,16 +211,13 @@ public class PathfindAI implements Runnable
 		nodeSet.add(new PathNode(grid.getStartPoint()));
 
 		grid.setNodes(nodes);
-
-		/*
-		 * g2d.setColor(new Color(0, 255, 255)); for (final PathNode p : nodes) g2d.fillOval(p.getNode().x * grid.getSquareWidth() + grid.getSquareWidth() * 3 /
-		 * 8, p.getNode().y * grid.getSquareHeight() + grid.getSquareHeight() * 3 / 8, grid.getSquareWidth() / 4, grid.getSquareHeight() / 4); for (int i = 0; i
-		 * < nodes.size(); i++) for (int j = 0; j < nodes.size(); j++) if (i != j && !grid.collidesWithHazard(nodes.get(i).getNode(), nodes.get(j).getNode()) &&
-		 * grid.getSquareCopy(nodes.get(i).getNode()).getDistance() >= grid.getSquareCopy(nodes.get(j).getNode()).getDistance()) {
-		 * nodes.get(i).addDirectedEdge(nodes.get(j)); g2d.setPaint(new GradientPaint(nodes.get(i).getNode().x * grid.getSquareWidth(), nodes.get(i).getNode().y
-		 * * grid.getSquareHeight(), new Color(0, 0, 255), nodes.get(j).getNode().x * grid.getSquareWidth(), nodes.get(j).getNode().y * grid.getSquareHeight(),
-		 * new Color(0, 255, 0))); grid.paintLine(g2d, nodes.get(i).getNode(), nodes.get(j).getNode()); }
-		 */
+		for (int i = 0; i < nodes.size(); i++)
+			for (int j = 0; j < nodes.size(); j++)
+				if (i != j && !grid.collidesWithHazard(nodes.get(i).getNode(), nodes.get(j).getNode())
+						&& grid.getSquareCopy(nodes.get(i).getNode()).getDistance() > grid.getSquareCopy(nodes.get(j).getNode()).getDistance())
+				{
+					nodes.get(i).addDirectedEdge(nodes.get(j));
+				}
 
 	}
 

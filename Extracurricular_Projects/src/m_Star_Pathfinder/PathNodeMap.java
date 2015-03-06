@@ -53,6 +53,18 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 		return this.points.toArray(result);
 	}
 
+	public Point[] getPointArray()
+	{
+		LinkedList<Point> newPoints = new LinkedList<Point>();
+		for (PathNode p : points)
+		{
+			newPoints.add(p.getNode());
+		}
+		Point[] returnPoints = new Point[newPoints.size()];
+
+		return newPoints.toArray(returnPoints);
+	}
+
 	public static double getDistance(final Point p1, final Point p2)
 	{
 		return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
@@ -126,6 +138,11 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 	@Override
 	public String toString()
 	{
-		return this.points.toString();
+		StringBuilder s = new StringBuilder();
+		for (PathNode p : points)
+		{
+			s.append(p.getNode().toString() + " ");
+		}
+		return s.toString();
 	}
 }

@@ -1,7 +1,9 @@
 package m_Star_Pathfinder;
 
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
@@ -19,6 +21,7 @@ public class Grid implements Serializable
 	private int						squareWidth, squareHeight;
 	private Point					startPoint, finishPoint, furthestPoint, highlightedPoint;
 	private ArrayList<PathNode>		nodes;
+	private PathNodeMap				pathNodeMap;
 
 	public Grid(final GridSquare[][] grid)
 	{
@@ -71,6 +74,16 @@ public class Grid implements Serializable
 			return false;
 		}
 		return true;
+	}
+
+	public PathNodeMap getPathNodeMap()
+	{
+		return pathNodeMap;
+	}
+
+	public void setPathNodeMap(PathNodeMap pathNodeMap)
+	{
+		this.pathNodeMap = pathNodeMap;
 	}
 
 	public boolean collidesWithHazard(final Point p1, final Point p2)
@@ -216,10 +229,14 @@ public class Grid implements Serializable
 		g.drawLine(this.getSquare(p1).getXCenter(), this.getSquare(p1).getYCenter(), this.getSquare(p2).getXCenter(), this.getSquare(p2).getYCenter());
 	}
 
-	public void paintPointSet(final Graphics g, final Point[] points)
+	public void paintPointSet(final Graphics2D g2d, final Point[] points)
 	{
 		for (int i = 0; i < points.length - 1; i++)
-			this.paintLine(g, points[i], points[i + 1]);
+		{
+			g2d.setPaint(new GradientPaint(points[i].x * this.getSquareWidth(), points[i].y * this.getSquareHeight(), new Color(0, 0, 255), points[i + 1].x
+					* this.getSquareWidth(), points[i + 1].y * this.getSquareHeight(), new Color(0, 255, 0)));
+			this.paintLine(g2d, points[i], points[i + 1]);
+		}
 	}
 
 	public void paintRectangle(final Graphics g, final Rectangle2D r)
@@ -346,6 +363,14 @@ public class Grid implements Serializable
 	public void setStartPoint(final Point p)
 	{
 		this.startPoint = p;
+	}
+
+	public void paintNodes(Graphics2D g2d)
+	{
+		g2d.setColor(new Color(0, 255, 255));
+		for (final PathNode p : nodes)
+			g2d.fillOval(p.getNode().x * this.getSquareWidth() + this.getSquareWidth() * 3 / 8, p.getNode().y * this.getSquareHeight() + this.getSquareHeight()
+					* 3 / 8, this.getSquareWidth() / 4, this.getSquareHeight() / 4);
 	}
 
 	public boolean testSetHighlightedSquare(final int x, final int y)
