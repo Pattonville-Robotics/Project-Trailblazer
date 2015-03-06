@@ -20,16 +20,6 @@ public class Grid implements Serializable
 	private Point					startPoint, finishPoint, furthestPoint, highlightedPoint;
 	private ArrayList<PathNode>		nodes;
 
-	public ArrayList<PathNode> getNodes()
-	{
-		return nodes;
-	}
-
-	public void setNodes(ArrayList<PathNode> nodes)
-	{
-		this.nodes = nodes;
-	}
-
 	public Grid(final GridSquare[][] grid)
 	{
 		this.grid = grid;
@@ -37,7 +27,7 @@ public class Grid implements Serializable
 
 	/**
 	 * Constructs a new {@code Grid} object with the specified parameters.
-	 * 
+	 *
 	 * @param width
 	 *            - The number of squares horizontally
 	 * @param height
@@ -129,10 +119,6 @@ public class Grid implements Serializable
 		return this.grid;
 	}
 
-	/*
-	 * public GridDraw getGridDraw() { return gridDraw; }
-	 */
-
 	public Point getHighlightedPoint()
 	{
 		return this.highlightedPoint;
@@ -154,9 +140,23 @@ public class Grid implements Serializable
 		return adjacent;
 	}
 
+	/*
+	 * public GridDraw getGridDraw() { return gridDraw; }
+	 */
+
+	public ArrayList<PathNode> getNodes()
+	{
+		return this.nodes;
+	}
+
 	public ArrayList<VertexMap> getPaths()
 	{
 		return this.paths;
+	}
+
+	private GridSquare getSquare(final Point p)
+	{
+		return this.grid[p.y][p.x];
 	}
 
 	public GridSquare getSquareCopy(final Point p)
@@ -283,6 +283,11 @@ public class Grid implements Serializable
 		}
 	}
 
+	public void setNodes(final ArrayList<PathNode> nodes)
+	{
+		this.nodes = nodes;
+	}
+
 	public void setPaths(final ArrayList<VertexMap> v)
 	{
 		this.paths = v;
@@ -349,10 +354,5 @@ public class Grid implements Serializable
 			return true;
 		else
 			return false;
-	}
-
-	private GridSquare getSquare(final Point p)
-	{
-		return this.grid[p.y][p.x];
 	}
 }

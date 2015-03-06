@@ -53,7 +53,7 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 		return this.points.toArray(result);
 	}
 
-	public double getDistance(final Point p1, final Point p2)
+	public static double getDistance(final Point p1, final Point p2)
 	{
 		return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
 	}
@@ -102,7 +102,7 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 		double sum = 0;
 
 		for (int i = 0; i < this.points.size() - 1; i++)
-			sum += this.getDistance(this.points.get(i), this.points.get(i + 1));
+			sum += VertexMap.getDistance(this.points.get(i), this.points.get(i + 1));
 
 		return sum;
 	}

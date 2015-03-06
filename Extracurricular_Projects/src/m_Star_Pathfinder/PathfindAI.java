@@ -1,7 +1,5 @@
 package m_Star_Pathfinder;
 
-import java.awt.Color;
-import java.awt.GradientPaint;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.AbstractSet;
@@ -60,16 +58,15 @@ public class PathfindAI implements Runnable
 				}
 
 				if (numFailed == 4) numFailedCells++; // This cell completely
-														// failed
+				// failed
 			}
 			// System.out.println(distance);
 			distance++;
 			/*
-			 * System.out.println(Arrays.toString(points.toArray()));
-			 * System.out.println(Arrays.toString(newPoints.toArray()));
+			 * System.out.println(Arrays.toString(points.toArray())); System.out.println(Arrays.toString(newPoints.toArray()));
 			 */
 			if (numFailedCells == points.size() || points.size() == 0) noMoreLeft = true; // End
-																							// looping
+			// looping
 			points.clear();
 			points.addAll(newPoints);
 			grid.findFurthestPoint();
@@ -147,7 +144,7 @@ public class PathfindAI implements Runnable
 				default:
 					// allZero = true;
 					numZero++;
-					System.out.println("Less than 0 or more than 2 adjacent points were returned! This is a sign of something bad!"); // DEBUG
+					System.out.println("Less than 0 or more than 4 adjacent points were returned! This is a sign of something bad!"); // DEBUG
 					break;
 				}
 			}
@@ -159,6 +156,29 @@ public class PathfindAI implements Runnable
 			paths.get(i).reverseList();
 
 		grid.setPaths(paths);
+	}
+
+	public static void connectNodes(final Grid grid, final Graphics2D g2d)
+	// The first node is always the finish point and the last is always the
+	// start
+	{
+		PathNodeMap map = new PathNodeMap();
+		PathNode current = grid.getNodes().get(0);
+
+		while (grid.getSquareCopy(current.getNode()).getDistance() != 0)
+		{
+			int bestIndex = 0;
+			for (int i = 0; i < current.getDirectedEdges().size(); i++)
+			{
+				if (grid.getSquareCopy(current.getDirectedEdges().get(i).getNode()).getDistance() < grid.getSquareCopy(
+						current.getDirectedEdges().get(bestIndex).getNode()).getDistance())
+				{
+					bestIndex = i;
+				}
+			}
+			map.addPoint(current);
+			current = current.getDirectedEdges().get(bestIndex);
+		}
 	}
 
 	public static void identifyNodes(final Grid grid, final Graphics2D g2d)
@@ -185,38 +205,21 @@ public class PathfindAI implements Runnable
 							nodes.add(new PathNode(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]));
 							nodeSet.add(new PathNode(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]));
 						}
-		if (!nodeSet.contains(new PathNode(grid.getStartPoint())))
-		{
-			nodes.add(new PathNode(grid.getStartPoint()));
-			nodeSet.add(new PathNode(grid.getStartPoint()));
-		}
+		nodes.add(new PathNode(grid.getStartPoint()));
+		nodeSet.add(new PathNode(grid.getStartPoint()));
 
-		g2d.setColor(new Color(0, 255, 255));
-		for (final PathNode p : nodes)
-		{
-			g2d.fillOval(p.getNode().x * grid.getSquareWidth() + grid.getSquareWidth() * 3 / 8, p.getNode().y * grid.getSquareHeight() + grid.getSquareHeight()
-					* 3 / 8, grid.getSquareWidth() / 4, grid.getSquareHeight() / 4);
-		}
-
-		for (int i = 0; i < nodes.size(); i++)
-			for (int j = 0; j < nodes.size(); j++)
-				if (i != j && !grid.collidesWithHazard(nodes.get(i).getNode(), nodes.get(j).getNode())
-						&& grid.getSquareCopy(nodes.get(i).getNode()).getDistance() >= grid.getSquareCopy(nodes.get(j).getNode()).getDistance())
-				{
-					nodes.get(i).addDirectedEdge(nodes.get(j));
-					g2d.setPaint(new GradientPaint(nodes.get(i).getNode().x * grid.getSquareWidth(), nodes.get(i).getNode().y * grid.getSquareHeight(),
-							new Color(0, 0, 255), nodes.get(j).getNode().x * grid.getSquareWidth(), nodes.get(j).getNode().y * grid.getSquareHeight(),
-							new Color(0, 255, 0)));
-					grid.paintLine(g2d, nodes.get(i).getNode(), nodes.get(j).getNode());
-				}
 		grid.setNodes(nodes);
 
-	}
+		/*
+		 * g2d.setColor(new Color(0, 255, 255)); for (final PathNode p : nodes) g2d.fillOval(p.getNode().x * grid.getSquareWidth() + grid.getSquareWidth() * 3 /
+		 * 8, p.getNode().y * grid.getSquareHeight() + grid.getSquareHeight() * 3 / 8, grid.getSquareWidth() / 4, grid.getSquareHeight() / 4); for (int i = 0; i
+		 * < nodes.size(); i++) for (int j = 0; j < nodes.size(); j++) if (i != j && !grid.collidesWithHazard(nodes.get(i).getNode(), nodes.get(j).getNode()) &&
+		 * grid.getSquareCopy(nodes.get(i).getNode()).getDistance() >= grid.getSquareCopy(nodes.get(j).getNode()).getDistance()) {
+		 * nodes.get(i).addDirectedEdge(nodes.get(j)); g2d.setPaint(new GradientPaint(nodes.get(i).getNode().x * grid.getSquareWidth(), nodes.get(i).getNode().y
+		 * * grid.getSquareHeight(), new Color(0, 0, 255), nodes.get(j).getNode().x * grid.getSquareWidth(), nodes.get(j).getNode().y * grid.getSquareHeight(),
+		 * new Color(0, 255, 0))); grid.paintLine(g2d, nodes.get(i).getNode(), nodes.get(j).getNode()); }
+		 */
 
-	public static void connectNodes(final Grid grid, final Graphics2D g2d)
-	// The first node is always the finish point and the last is always the
-	// start
-	{
 	}
 
 	public static VertexMap optimizePath(final Grid grid, final VertexMap map)

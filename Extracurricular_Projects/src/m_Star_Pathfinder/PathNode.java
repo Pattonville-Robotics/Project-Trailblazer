@@ -10,56 +10,56 @@ public class PathNode
 	// Can only go to lower squares with visibility
 	private ArrayList<PathNode>	directedEdges	= new ArrayList<PathNode>();
 
-	public PathNode(Point node)
-	{
-		this.node = node;
-	}
-
-	public PathNode(int x, int y)
+	public PathNode(final int x, final int y)
 	{
 		this.node = new Point(x, y);
 	}
 
-	public Point getNode()
-	{
-		return node;
-	}
-
-	public void setNode(Point node)
+	public PathNode(final Point node)
 	{
 		this.node = node;
 	}
 
-	public ArrayList<PathNode> getDirectedEdges()
+	public void addDirectedEdge(final PathNode edge)
 	{
-		return directedEdges;
-	}
-
-	public void setDirectedEdges(ArrayList<PathNode> directedEdges)
-	{
-		this.directedEdges = directedEdges;
-	}
-
-	public void addDirectedEdge(PathNode edge)
-	{
-		directedEdges.add(edge);
+		this.directedEdges.add(edge);
 	}
 
 	@Override
-	public boolean equals(Object o)
+	public boolean equals(final Object o)
 	{
-		return (o instanceof PathNode) && ((PathNode) o).getNode().equals(this.node) && ((PathNode) o).getDirectedEdges().equals(this.getDirectedEdges());
+		return o instanceof PathNode && ((PathNode) o).getNode().equals(this.node) && ((PathNode) o).getDirectedEdges().equals(this.getDirectedEdges());
+	}
+
+	public ArrayList<PathNode> getDirectedEdges()
+	{
+		return this.directedEdges;
+	}
+
+	public Point getNode()
+	{
+		return this.node;
 	}
 
 	@Override
 	public int hashCode()
 	{
-		return Arrays.hashCode(new Object[] { node, directedEdges });
+		return Arrays.hashCode(new Object[] { this.node, this.directedEdges });
+	}
+
+	public void setDirectedEdges(final ArrayList<PathNode> directedEdges)
+	{
+		this.directedEdges = directedEdges;
+	}
+
+	public void setNode(final Point node)
+	{
+		this.node = node;
 	}
 
 	@Override
 	public String toString()
 	{
-		return "PathNode at (" + node.x + ", " + node.y + ") links to " + directedEdges;
+		return "PathNode at (" + this.node.x + ", " + this.node.y + ") links to " + this.directedEdges;
 	}
 }

@@ -22,6 +22,54 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
+class CalculatePathsAction extends AbstractAction
+{
+	private static final long	serialVersionUID	= 1L;
+	private final GridDraw		component;
+	private final Grid			grid;
+
+	public CalculatePathsAction(final Grid grid, final GridDraw component)
+	{
+		super();
+		this.grid = grid;
+		this.component = component;
+	}
+
+	@Override
+	public void actionPerformed(final ActionEvent e)
+	{
+		// System.out.println("CalculatePathsAction performed!");
+		PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
+		PathfindAI.computePaths(this.grid);
+
+		this.component.repaint();
+	}
+}
+
+class DownAction extends AbstractAction
+{
+	private static final long	serialVersionUID	= 1L;
+	private final GridDraw		component;
+	private final Grid			grid;
+
+	public DownAction(final Grid grid, final GridDraw component)
+	{
+		super();
+		this.grid = grid;
+		this.component = component;
+	}
+
+	@Override
+	public void actionPerformed(final ActionEvent e)
+	{
+		// System.out.println("DownAction performed!");
+		this.grid.moveHighlightedSquare(1);
+		PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
+		this.component.repaint();
+	}
+
+}
+
 public class GridDraw extends JComponent
 {
 	private static final long	serialVersionUID	= 1L;
@@ -126,9 +174,9 @@ public class GridDraw extends JComponent
 		/*
 		 * FileInputStream fileIn = new FileInputStream("grid.data");
 		 * ObjectInputStream objIn = new ObjectInputStream(fileIn);
-		 * 
+		 *
 		 * Object obj = objIn.readObject(); objIn.close();
-		 * 
+		 *
 		 * if (obj instanceof Grid) { grid = (Grid) obj; }
 		 */
 
@@ -142,8 +190,8 @@ public class GridDraw extends JComponent
 	@Override
 	public void paintComponent(final Graphics g)
 	{
-		long startTime = System.nanoTime();
-		Graphics2D g2d = (Graphics2D) g;
+		final long startTime = System.nanoTime();
+		final Graphics2D g2d = (Graphics2D) g;
 		// System.out.println("Began drawing to the screen.");
 		this.grid.paint(g);
 		// System.out.println("Lowest next to start: " +
@@ -168,13 +216,14 @@ public class GridDraw extends JComponent
 			}
 		}
 		PathfindAI.identifyNodes(this.grid, g2d);
+		PathfindAI.connectNodes(grid, g2d);
 		// System.out.println("Finished drawing " + grid.getPaths().size() +
 		// " paths to the screen.");
 		// System.out.println("Each path is " +
 		// grid.getPaths().get(0).getTotalDistance() + " units long.");
-		g.setColor(new Color(63, 255, 127));
-		g.drawString("FPS: " + (1 / ((double) (System.nanoTime() - startTime) / 1000000000)), 20, 20);
-		repaint();
+		g.setColor(new Color(63, 255, 255));
+		g.drawString("FPS: " + 1 / ((double) (System.nanoTime() - startTime) / 1000000000), 20, 20);
+		this.repaint();
 	}
 
 	public void setupDisplay()
@@ -270,54 +319,6 @@ public class GridDraw extends JComponent
 	{
 		this.drawPaths = !this.drawPaths;
 	}
-}
-
-class CalculatePathsAction extends AbstractAction
-{
-	private static final long	serialVersionUID	= 1L;
-	private final GridDraw		component;
-	private final Grid			grid;
-
-	public CalculatePathsAction(final Grid grid, final GridDraw component)
-	{
-		super();
-		this.grid = grid;
-		this.component = component;
-	}
-
-	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		// System.out.println("CalculatePathsAction performed!");
-		PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
-		PathfindAI.computePaths(this.grid);
-
-		this.component.repaint();
-	}
-}
-
-class DownAction extends AbstractAction
-{
-	private static final long	serialVersionUID	= 1L;
-	private final GridDraw		component;
-	private final Grid			grid;
-
-	public DownAction(final Grid grid, final GridDraw component)
-	{
-		super();
-		this.grid = grid;
-		this.component = component;
-	}
-
-	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		// System.out.println("DownAction performed!");
-		this.grid.moveHighlightedSquare(1);
-		PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
-		this.component.repaint();
-	}
-
 }
 
 class LeftAction extends AbstractAction
