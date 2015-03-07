@@ -188,8 +188,7 @@ public class GridDraw extends JComponent
 	{
 		System.out.println("Began reading in data file.");
 		/*
-		 * FileInputStream fileIn = new FileInputStream("grid.data");
-		 * ObjectInputStream objIn = new ObjectInputStream(fileIn);
+		 * FileInputStream fileIn = new FileInputStream("grid.data"); ObjectInputStream objIn = new ObjectInputStream(fileIn);
 		 * 
 		 * Object obj = objIn.readObject(); objIn.close();
 		 * 
@@ -217,19 +216,16 @@ public class GridDraw extends JComponent
 
 		if (this.drawPaths)
 		{
-			for (int i = 0; i < this.grid.getPaths().size(); i++)
-				this.grid.paintPointSet(g2d, this.grid.getPaths().get(i).getArray());
+			// for (int i = 0; i < this.grid.getPaths().size(); i++)
+			// this.grid.paintPointSet(g2d, this.grid.getPaths().get(i).getArray());
 			// System.out.println("Distance of path " + i + " is " +
 			// grid.getPaths().get(i).getTotalDistance());
 
 			g.setColor(new Color(0, 255, 255));
 
-			final double lowestDistance = this.grid.getPaths().get(0).getTotalDistance();
-			for (int i = 0; i < this.grid.getPaths().size(); i++)
-			{
-				if (this.grid.getPaths().get(i).getTotalDistance() == lowestDistance) this.grid.paintPointSet(g2d, this.grid.getPaths().get(i).getArray());
-				System.out.println(i + " out of " + this.grid.getPaths().size() + " paths have been drawn.");
-			}
+			this.grid.paintPointSet(g2d, this.grid.getPaths().get(0).getArray());
+			// System.out.println(i + " out of " + this.grid.getPaths().size() + " paths have been drawn.");
+
 		}
 		// System.out.println("Finished drawing " + grid.getPaths().size() +
 		// " paths to the screen.");
