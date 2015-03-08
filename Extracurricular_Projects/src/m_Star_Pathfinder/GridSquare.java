@@ -73,6 +73,11 @@ public class GridSquare implements Cloneable, Serializable
 		return new Point(this.x, this.y);
 	}
 
+	public double getRadialDistance()
+	{
+		return Math.sqrt(Math.pow(this.x - this.superGrid.getStartPoint().x, 2) + Math.pow(this.y - this.superGrid.getStartPoint().y, 2));
+	}
+
 	public Grid getSuperGrid()
 	{
 		return this.superGrid;

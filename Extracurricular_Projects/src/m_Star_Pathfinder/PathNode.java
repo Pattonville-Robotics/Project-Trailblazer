@@ -6,9 +6,9 @@ import java.util.Arrays;
 
 public class PathNode
 {
-	private Point				node;
 	// Can only go to lower squares with visibility
 	private ArrayList<PathNode>	directedEdges	= new ArrayList<PathNode>();
+	private Point				node;
 
 	public PathNode(final int x, final int y)
 	{

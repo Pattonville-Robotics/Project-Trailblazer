@@ -7,7 +7,13 @@ import java.util.LinkedList;
 
 public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializable
 {
-	private static final long		serialVersionUID	= 1L;
+	private static final long	serialVersionUID	= 1L;
+
+	public static double getDistance(final Point p1, final Point p2)
+	{
+		return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+	}
+
 	private LinkedList<PathNode>	points;
 
 	public PathNodeMap()
@@ -53,23 +59,6 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 		return this.points.toArray(result);
 	}
 
-	public Point[] getPointArray()
-	{
-		LinkedList<Point> newPoints = new LinkedList<Point>();
-		for (PathNode p : points)
-		{
-			newPoints.add(p.getNode());
-		}
-		Point[] returnPoints = new Point[newPoints.size()];
-
-		return newPoints.toArray(returnPoints);
-	}
-
-	public static double getDistance(final Point p1, final Point p2)
-	{
-		return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
-	}
-
 	public PathNode getLastPoint()
 	{
 		return this.points.get(this.points.size() - 1);
@@ -91,6 +80,16 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 			System.out.println("Tried to get point at " + i + ", but the size of the array is only " + this.points.size() + "!");
 			return this.getPoint(i - 1);
 		}
+	}
+
+	public Point[] getPointArray()
+	{
+		final LinkedList<Point> newPoints = new LinkedList<Point>();
+		for (final PathNode p : this.points)
+			newPoints.add(p.getNode());
+		final Point[] returnPoints = new Point[newPoints.size()];
+
+		return newPoints.toArray(returnPoints);
 	}
 
 	public LinkedList<PathNode> getReverseList()
@@ -138,11 +137,9 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 	@Override
 	public String toString()
 	{
-		StringBuilder s = new StringBuilder();
-		for (PathNode p : points)
-		{
+		final StringBuilder s = new StringBuilder();
+		for (final PathNode p : this.points)
 			s.append(p.getNode().toString() + " ");
-		}
 		return s.toString();
 	}
 }

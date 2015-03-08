@@ -8,6 +8,12 @@ import java.util.LinkedList;
 public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 {
 	private static final long	serialVersionUID	= 1L;
+
+	public static double getDistance(final Point p1, final Point p2)
+	{
+		return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+	}
+
 	private LinkedList<Point>	points;
 
 	public VertexMap()
@@ -51,11 +57,6 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 	{
 		final Point[] result = new Point[this.points.size()];
 		return this.points.toArray(result);
-	}
-
-	public static double getDistance(final Point p1, final Point p2)
-	{
-		return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
 	}
 
 	public Point getLastPoint()

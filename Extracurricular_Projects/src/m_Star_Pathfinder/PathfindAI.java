@@ -1,5 +1,6 @@
 package m_Star_Pathfinder;
 
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class PathfindAI implements Runnable
 					final Point prospectivePoint = new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j]);
 					if (grid.canAccess(prospectivePoint)
 							&& (grid.getSquareCopy(prospectivePoint).getContents() == SquareType.EMPTY || grid.getSquareCopy(prospectivePoint).getContents() == SquareType.FINISH))
-					// If it's not outside the grid and is an empty square
+						// If it's not outside the grid and is an empty square
 					{
 						if (!pointSet.contains(new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j])))
 						{
@@ -62,8 +63,7 @@ public class PathfindAI implements Runnable
 			// System.out.println(distance);
 			distance++;
 			/*
-			 * System.out.println(Arrays.toString(points.toArray()));
-			 * System.out.println(Arrays.toString(newPoints.toArray()));
+			 * System.out.println(Arrays.toString(points.toArray())); System.out.println(Arrays.toString(newPoints.toArray()));
 			 */
 			if (numFailedCells == points.size() || points.size() == 0) noMoreLeft = true; // End
 			// looping
@@ -158,24 +158,53 @@ public class PathfindAI implements Runnable
 		grid.setPaths(paths);
 	}
 
+	public static void connectAllNodes(final Grid grid, final Graphics2D g2d)
+	{
+		final ArrayList<PathNodeMap> maps = new ArrayList<PathNodeMap>();
+		maps.add(new PathNodeMap());
+		maps.get(0).addPoint(grid.getNodes().get(0));
+
+		while (true)
+		{
+			// System.out.println(maps.size());
+			for (int i = 0; i < maps.size(); i++)
+				if (maps.get(i).getLastPoint().getDirectedEdges().size() != 0)
+				{
+					// System.out.println("i = " + i);
+					for (int j = 1; j < maps.get(i).getLastPoint().getDirectedEdges().size(); j++)
+					{
+						maps.add(maps.get(i).clone());
+						maps.get(maps.size() - 1).addPoint(maps.get(i).getLastPoint().getDirectedEdges().get(j));
+						// System.out.println(maps.get(maps.size() - 1) + " had point " + maps.get(i).getLastPoint().getDirectedEdges().get(j) + " added.");
+					}
+					maps.get(i).addPoint(maps.get(i).getLastPoint().getDirectedEdges().get(0));
+					// System.out.println(maps.get(i) + " had point " + maps.get(i).getPoint(maps.get(i).size() - 2).getDirectedEdges().get(0) + " added.");
+				}
+			int numFinished = 0;
+
+			for (final PathNodeMap p : maps)
+				if (grid.getSquareCopy(p.getLastPoint().getNode()).getDistance() == 0) numFinished++;
+
+			if (numFinished == maps.size()) break;
+		}
+
+		Collections.sort(maps);
+		grid.setPathNodeMaps(maps);
+	}
+
 	public static void connectNodes(final Grid grid)
 	// The first node is always the finish point and the last is always the
 	// start
 	{
-		PathNodeMap map = new PathNodeMap();
+		final PathNodeMap map = new PathNodeMap();
 		PathNode current = grid.getNodes().get(0);
 
 		while (current.getDirectedEdges().size() != 0)
 		{
 			int bestIndex = 0;
 			for (int i = 0; i < current.getDirectedEdges().size(); i++)
-			{
 				if (grid.getSquareCopy(current.getDirectedEdges().get(i).getNode()).getDistance() <= grid.getSquareCopy(
-						current.getDirectedEdges().get(bestIndex).getNode()).getDistance())
-				{
-					bestIndex = i;
-				}
-			}
+						current.getDirectedEdges().get(bestIndex).getNode()).getDistance()) bestIndex = i;
 			map.addPoint(current);
 			current = current.getDirectedEdges().get(bestIndex);
 		}
@@ -214,10 +243,8 @@ public class PathfindAI implements Runnable
 		for (int i = 0; i < nodes.size(); i++)
 			for (int j = 0; j < nodes.size(); j++)
 				if (i != j && !grid.collidesWithHazard(nodes.get(i).getNode(), nodes.get(j).getNode())
-						&& grid.getSquareCopy(nodes.get(i).getNode()).getDistance() > grid.getSquareCopy(nodes.get(j).getNode()).getDistance())
-				{
+				&& grid.getSquareCopy(nodes.get(i).getNode()).getDistance() > grid.getSquareCopy(nodes.get(j).getNode()).getDistance())
 					nodes.get(i).addDirectedEdge(nodes.get(j));
-				}
 
 	}
 

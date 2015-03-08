@@ -17,11 +17,12 @@ public class Grid implements Serializable
 	private GridSquare[][]			grid;
 	// private GridDraw gridDraw;
 	private final int				highlightThickness	= 2;
+	private ArrayList<PathNode>		nodes;
+	private PathNodeMap				pathNodeMap;
+	private ArrayList<PathNodeMap>	pathNodeMaps;
 	private ArrayList<VertexMap>	paths;
 	private int						squareWidth, squareHeight;
 	private Point					startPoint, finishPoint, furthestPoint, highlightedPoint;
-	private ArrayList<PathNode>		nodes;
-	private PathNodeMap				pathNodeMap;
 
 	public Grid(final GridSquare[][] grid)
 	{
@@ -60,8 +61,7 @@ public class Grid implements Serializable
 	/**
 	 * @param p
 	 *            - The point to be checked.
-	 * @return A {@code boolean} value describing if the specified point can be
-	 *         accessed in the internal array.
+	 * @return A {@code boolean} value describing if the specified point can be accessed in the internal array.
 	 */
 	public boolean canAccess(final Point p)
 	{
@@ -74,16 +74,6 @@ public class Grid implements Serializable
 			return false;
 		}
 		return true;
-	}
-
-	public PathNodeMap getPathNodeMap()
-	{
-		return pathNodeMap;
-	}
-
-	public void setPathNodeMap(PathNodeMap pathNodeMap)
-	{
-		this.pathNodeMap = pathNodeMap;
 	}
 
 	public boolean collidesWithHazard(final Point p1, final Point p2)
@@ -153,13 +143,19 @@ public class Grid implements Serializable
 		return adjacent;
 	}
 
-	/*
-	 * public GridDraw getGridDraw() { return gridDraw; }
-	 */
-
 	public ArrayList<PathNode> getNodes()
 	{
 		return this.nodes;
+	}
+
+	public PathNodeMap getPathNodeMap()
+	{
+		return this.pathNodeMap;
+	}
+
+	public ArrayList<PathNodeMap> getPathNodeMaps()
+	{
+		return this.pathNodeMaps;
 	}
 
 	public ArrayList<VertexMap> getPaths()
@@ -167,10 +163,9 @@ public class Grid implements Serializable
 		return this.paths;
 	}
 
-	private GridSquare getSquare(final Point p)
-	{
-		return this.grid[p.y][p.x];
-	}
+	/*
+	 * public GridDraw getGridDraw() { return gridDraw; }
+	 */
 
 	public GridSquare getSquareCopy(final Point p)
 	{
@@ -227,6 +222,14 @@ public class Grid implements Serializable
 	{
 		// g.setColor(new Color(255, 0, 0));
 		g.drawLine(this.getSquare(p1).getXCenter(), this.getSquare(p1).getYCenter(), this.getSquare(p2).getXCenter(), this.getSquare(p2).getYCenter());
+	}
+
+	public void paintNodes(final Graphics2D g2d)
+	{
+		g2d.setColor(new Color(0, 255, 255));
+		for (final PathNode p : this.nodes)
+			g2d.fillOval(p.getNode().x * this.getSquareWidth() + this.getSquareWidth() * 3 / 8, p.getNode().y * this.getSquareHeight() + this.getSquareHeight()
+					* 3 / 8, this.getSquareWidth() / 4, this.getSquareHeight() / 4);
 	}
 
 	public void paintPointSet(final Graphics2D g2d, final Point[] points)
@@ -305,6 +308,16 @@ public class Grid implements Serializable
 		this.nodes = nodes;
 	}
 
+	public void setPathNodeMap(final PathNodeMap pathNodeMap)
+	{
+		this.pathNodeMap = pathNodeMap;
+	}
+
+	public void setPathNodeMaps(final ArrayList<PathNodeMap> pathNodeMaps)
+	{
+		this.pathNodeMaps = pathNodeMaps;
+	}
+
 	public void setPaths(final ArrayList<VertexMap> v)
 	{
 		this.paths = v;
@@ -365,19 +378,16 @@ public class Grid implements Serializable
 		this.startPoint = p;
 	}
 
-	public void paintNodes(Graphics2D g2d)
-	{
-		g2d.setColor(new Color(0, 255, 255));
-		for (final PathNode p : nodes)
-			g2d.fillOval(p.getNode().x * this.getSquareWidth() + this.getSquareWidth() * 3 / 8, p.getNode().y * this.getSquareHeight() + this.getSquareHeight()
-					* 3 / 8, this.getSquareWidth() / 4, this.getSquareHeight() / 4);
-	}
-
 	public boolean testSetHighlightedSquare(final int x, final int y)
 	{
 		if (x >= 0 && x < this.grid[0].length && y >= 0 && y < this.grid.length)
 			return true;
 		else
 			return false;
+	}
+
+	private GridSquare getSquare(final Point p)
+	{
+		return this.grid[p.y][p.x];
 	}
 }
