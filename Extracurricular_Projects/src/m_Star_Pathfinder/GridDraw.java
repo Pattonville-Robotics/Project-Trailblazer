@@ -23,8 +23,9 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 //TODO Reduce source code size; only include needed things
-//TODO Make GridMaker application to make custom grids
+//TODO Make GridMaker application or functionality to make custom sized grids
 //TODO Design easier interface for code and movement
+//TODO Merge actionListeners to reduce inner classes
 
 public class GridDraw extends JComponent
 {
@@ -39,14 +40,26 @@ public class GridDraw extends JComponent
 		gridDraw.frame.setVisible(true);
 	}
 
-	private boolean	drawNodes	= false;
-	private boolean	drawPaths	= false;
+	private boolean	drawNodes			= false;
+	private boolean	drawBalencedNodes	= false;
+	private boolean	drawPaths			= false;
+	private boolean	drawDirection		= false;
+
+	public boolean getDrawDirection()
+	{
+		return drawDirection;
+	}
+
+	public void setDrawDirection(boolean drawDirection)
+	{
+		this.drawDirection = drawDirection;
+	}
+
 	private JFrame	frame;
 	private Grid	grid;
-	private JMenu	help;
+	private JMenu	file, help;
 	private JMenuItem	help1, help2, help3, help4, help5, help6, help7, help8;
 	private final Kryo	kryo	= new Kryo();
-
 	private JMenuBar	menuBar;
 
 	public GridDraw()
@@ -89,6 +102,11 @@ public class GridDraw extends JComponent
 	public void enablePaths()
 	{
 		this.drawPaths = true;
+	}
+
+	public boolean getDrawBalencedNodes()
+	{
+		return this.drawBalencedNodes;
 	}
 
 	public boolean getDrawNodes()
@@ -143,13 +161,6 @@ public class GridDraw extends JComponent
 	public void loadGrid() throws Exception
 	{
 		System.out.println("Began reading in data file.");
-		/*
-		 * FileInputStream fileIn = new FileInputStream("grid.data"); ObjectInputStream objIn = new ObjectInputStream(fileIn);
-		 *
-		 * Object obj = objIn.readObject(); objIn.close();
-		 *
-		 * if (obj instanceof Grid) { grid = (Grid) obj; }
-		 */
 
 		final Input input = new Input(new FileInputStream("grid.data"));
 		this.grid = this.kryo.readObject(input, Grid.class);
@@ -164,45 +175,46 @@ public class GridDraw extends JComponent
 		final long startTime = System.nanoTime();
 		final Graphics2D g2d = (Graphics2D) g;
 		// System.out.println("Began drawing to the screen.");
-		this.grid.paint(g);
+		this.grid.paint(g2d);
 		// System.out.println("Lowest next to start: " +
 		// grid.getLowestAdjacentSquares(grid.getFinishPoint()));
 
-		g.setColor(new Color(255, 0, 0));
-
-		if (this.drawPaths)
+		if (this.getDrawPaths())
 		{
-			// for (int i = 0; i < this.grid.getPaths().size(); i++)
-			// this.grid.paintPointSet(g2d, this.grid.getPaths().get(i).getArray());
-			// System.out.println("Distance of path " + i + " is " +
-			// grid.getPaths().get(i).getTotalDistance());
-
-			g.setColor(new Color(0, 255, 255));
-
-			this.grid.paintPointSet(g2d, this.grid.getPaths().get(0).getArray());
-			// System.out.println(i + " out of " + this.grid.getPaths().size() + " paths have been drawn.");
-
+			g2d.setColor(new Color(255, 255, 0));
+			this.grid.paintPointSet(g2d, this.grid.getPaths().get(0).getArray(), this.getDrawDirection(), 0, 0);
 		}
-		// System.out.println("Finished drawing " + grid.getPaths().size() +
-		// " paths to the screen.");
-		// System.out.println("Each path is " +
-		// grid.getPaths().get(0).getTotalDistance() + " units long.");
-		if (this.drawNodes)
+		if (this.getDrawNodes())
 		{
-			PathfindAI.identifyNodes(this.grid);
-			PathfindAI.connectAllNodes(this.grid, g2d);
+			if (!this.getDrawBalencedNodes()) this.grid.paintNodes(g2d);
+			g2d.setColor(new Color(255, 0, 255));
+			this.grid.paintPointSet(g2d, this.grid.getPathNodeMap().getPointArray(), this.getDrawDirection(), 1, 1);
+		}
+		if (this.getDrawBalencedNodes())
+		{
 			this.grid.paintNodes(g2d);
-
-			/*
-			 * for (PathNodeMap m : grid.getPathNodeMaps()) { grid.paintPointSet(g2d, m.getPointArray()); }
-			 */
-
-			this.grid.paintPointSet(g2d, this.grid.getPathNodeMaps().get(0).getPointArray());
+			g2d.setColor(new Color(0, 255, 255));
+			this.grid.paintPointSet(g2d, this.grid.getPathNodeMaps().get(0).getPointArray(), this.getDrawDirection(), -1, -1);
 		}
 
-		g.setColor(new Color(255, 63, 63));
-		g.drawString(String.format("FPS: %06.2f", 1 / ((double) (System.nanoTime() - startTime) / 1000000000)), 20, this.getHeight() - 20);
+		g2d.setColor(new Color(255, 63, 63));
+		g2d.drawString(String.format("FPS: %06.2f", 1 / ((double) (System.nanoTime() - startTime) / 1000000000)), 5, this.getHeight() - 5);
 		this.repaint();
+	}
+
+	public void setDrawBalencedNodes(final boolean drawBalencedNodes)
+	{
+		this.drawBalencedNodes = drawBalencedNodes;
+	}
+
+	public void setDrawNodes(final boolean drawNodes)
+	{
+		this.drawNodes = drawNodes;
+	}
+
+	public void setDrawPaths(final boolean drawPaths)
+	{
+		this.drawPaths = drawPaths;
 	}
 
 	public void setupDisplay()
@@ -214,6 +226,7 @@ public class GridDraw extends JComponent
 		this.frame.getContentPane().add(this);
 
 		this.help = new JMenu("Help");
+		this.file = new JMenu("File");
 
 		this.help1 = new JMenuItem("You can use the arrow keys to select a square to modify.");
 		this.help2 = new JMenuItem("Use \"ENTER\" and \"SHIFT + ENTER\" to cycle through possible square contents.");
@@ -224,7 +237,6 @@ public class GridDraw extends JComponent
 		this.help7 = new JMenuItem("Use the \"N\" button to toggle high-speed calculation.");
 		this.help8 = new JMenuItem(
 				"The green square is start, the blue square is finish, the purple squares are walls, and the numbers are the distance to the start.");
-
 		this.help.add(this.help1);
 		this.help.add(this.help2);
 		this.help.add(this.help3);
@@ -233,7 +245,9 @@ public class GridDraw extends JComponent
 		this.help.add(this.help6);
 		this.help.add(this.help7);
 		this.help.add(this.help8);
+
 		this.menuBar = new JMenuBar();
+		this.menuBar.add(this.file);
 		this.menuBar.add(this.help);
 
 		this.frame.setJMenuBar(this.menuBar);
@@ -245,19 +259,21 @@ public class GridDraw extends JComponent
 
 		this.addMouseListener(mouseCycleListener);
 
-		final UpAction upAction = new UpAction(this.grid, this);
-		final DownAction downAction = new DownAction(this.grid, this);
-		final LeftAction leftAction = new LeftAction(this.grid, this);
-		final RightAction rightAction = new RightAction(this.grid, this);
-		final RotateClockWiseAction rotateClockWiseAction = new RotateClockWiseAction(this.grid, this);
-		final RotateCounterClockWiseAction rotateCounterClockWiseAction = new RotateCounterClockWiseAction(this.grid, this);
-		final TogglePathsAction togglePathsAction = new TogglePathsAction(this.grid, this);
-		final ToggleNodesAction toggleNodesAction = new ToggleNodesAction(this.grid, this);
-		final CalculatePathsAction calculatePathsAction = new CalculatePathsAction(this.grid, this);
-		final SaveAction saveAction = new SaveAction(this);
-		final LoadAction loadAction = new LoadAction(this);
-		final RedrawAction redrawAction = new RedrawAction(this);
-		final OptimizeAction optimizeAction = new OptimizeAction(this.grid, this);
+		final KeyPressActions upAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.UP);
+		final KeyPressActions downAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.DOWN);
+		final KeyPressActions leftAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.LEFT);
+		final KeyPressActions rightAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.RIGHT);
+		final KeyPressActions rotateClockWiseAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.ENTER);
+		final KeyPressActions rotateCounterClockWiseAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.SHIFT_ENTER);
+		final KeyPressActions togglePathsAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.P);
+		final KeyPressActions toggleNodesAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.N);
+		final KeyPressActions toggleBalencedNodesAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.B);
+		final KeyPressActions calculatePathsAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.R);
+		final KeyPressActions saveAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.S);
+		final KeyPressActions loadAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.L);
+		final KeyPressActions redrawAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.CONTROL_R);
+		final KeyPressActions optimizeAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.O);
+		final KeyPressActions toggleDrawDirectionAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.C);
 
 		this.getInputMap().put(KeyStroke.getKeyStroke("UP"), "upAction");
 		this.getActionMap().put("upAction", upAction);
@@ -283,6 +299,9 @@ public class GridDraw extends JComponent
 		this.getInputMap().put(KeyStroke.getKeyStroke("N"), "toggleNodesAction");
 		this.getActionMap().put("toggleNodesAction", toggleNodesAction);
 
+		this.getInputMap().put(KeyStroke.getKeyStroke("B"), "toggleBalencedNodesAction");
+		this.getActionMap().put("toggleBalencedNodesAction", toggleBalencedNodesAction);
+
 		this.getInputMap().put(KeyStroke.getKeyStroke("R"), "calculatePathsAction");
 		this.getActionMap().put("calculatePathsAction", calculatePathsAction);
 
@@ -298,113 +317,173 @@ public class GridDraw extends JComponent
 		this.getInputMap().put(KeyStroke.getKeyStroke("O"), "optimizeAction");
 		this.getActionMap().put("optimizeAction", optimizeAction);
 
-	}
+		this.getInputMap().put(KeyStroke.getKeyStroke("C"), "toggleDrawDirectionAction");
+		this.getActionMap().put("toggleDrawDirectionAction", toggleDrawDirectionAction);
 
-	public void toggleNodes()
-	{
-		this.drawNodes = !this.drawNodes;
-	}
-
-	public void togglePaths()
-	{
-		this.drawPaths = !this.drawPaths;
 	}
 }
 
-class CalculatePathsAction extends AbstractAction
+class KeyPressActions extends AbstractAction
 {
+	public static enum actionSource
+	{
+		UP, DOWN, LEFT, RIGHT, ENTER, SHIFT_ENTER, P, N, B, R, CONTROL_R, S, L, O, C
+	}
+
 	private static final long	serialVersionUID	= 1L;
 	private final GridDraw		component;
 	private final Grid			grid;
 
-	public CalculatePathsAction(final Grid grid, final GridDraw component)
+	private final actionSource	source;
+
+	public KeyPressActions(final Grid grid, final GridDraw component, final actionSource source)
 	{
 		super();
 		this.grid = grid;
 		this.component = component;
+		this.source = source;
 	}
 
 	@Override
 	public void actionPerformed(final ActionEvent e)
 	{
-		// System.out.println("CalculatePathsAction performed!");
-		PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
-		PathfindAI.computePaths(this.grid);
-
-		this.component.repaint();
-	}
-}
-
-class DownAction extends AbstractAction
-{
-	private static final long	serialVersionUID	= 1L;
-	private final GridDraw		component;
-	private final Grid			grid;
-
-	public DownAction(final Grid grid, final GridDraw component)
-	{
-		super();
-		this.grid = grid;
-		this.component = component;
-	}
-
-	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		// System.out.println("DownAction performed!");
-		this.grid.moveHighlightedSquare(1);
-		PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
-		this.component.repaint();
-	}
-
-}
-
-class LeftAction extends AbstractAction
-{
-	private static final long	serialVersionUID	= 1L;
-	private final GridDraw		component;
-	private final Grid			grid;
-
-	public LeftAction(final Grid grid, final GridDraw component)
-	{
-		super();
-		this.grid = grid;
-		this.component = component;
-	}
-
-	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		// System.out.println("LeftAction performed!");
-		this.grid.moveHighlightedSquare(2);
-		// PathfindAI.computeDistance(grid, grid.getStartPoint());
-		this.component.repaint();
-	}
-
-}
-
-class LoadAction extends AbstractAction
-{
-	private static final long	serialVersionUID	= 1L;
-	private final GridDraw		component;
-
-	public LoadAction(final GridDraw component)
-	{
-		super();
-		this.component = component;
-	}
-
-	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		// System.out.println("LoadAction performed!");
-		try
+		switch (this.source)
 		{
-			this.component.loadGrid();
-		}
-		catch (final Exception e1)
-		{
-			System.out.println("No Grid found!");
+		case UP:
+			// System.out.println("UpAction performed!");
+			this.grid.moveHighlightedSquare(0);
+			// PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
+			this.component.repaint();
+			break;
+		case DOWN:
+			// System.out.println("DownAction performed!");
+			this.grid.moveHighlightedSquare(1);
+			// PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
+			this.component.repaint();
+			break;
+		case LEFT:
+			// System.out.println("LeftAction performed!");
+			this.grid.moveHighlightedSquare(2);
+			// PathfindAI.computeDistance(grid, grid.getStartPoint());
+			this.component.repaint();
+			break;
+		case RIGHT:
+			// System.out.println("RightAction performed!");
+			this.grid.moveHighlightedSquare(3);
+			// PathfindAI.computeDistance(grid, grid.getStartPoint());
+			this.component.repaint();
+			break;
+		case ENTER:
+			// System.out.println("RotateAction performed!");
+			this.grid.rotateHighlightedSquare(true);
+			PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
+
+			if (this.component.getDrawPaths())
+			{
+				PathfindAI.computePaths(this.grid);
+				PathfindAI.optimizePaths(this.grid);
+			}
+			if (this.component.getDrawNodes())
+			{
+				PathfindAI.identifyNodes(this.grid);
+				PathfindAI.connectNodes(this.grid);
+			}
+			if (this.component.getDrawBalencedNodes())
+			{
+				PathfindAI.identifyNodes(this.grid);
+				PathfindAI.connectAllNodes(this.grid);
+			}
+			this.component.repaint();
+			break;
+		case SHIFT_ENTER:
+			// System.out.println("RotateAction performed!");
+			this.grid.rotateHighlightedSquare(false);
+			PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
+
+			if (this.component.getDrawPaths())
+			{
+				PathfindAI.computePaths(this.grid);
+				PathfindAI.optimizePaths(this.grid);
+			}
+			if (this.component.getDrawNodes())
+			{
+				PathfindAI.identifyNodes(this.grid);
+				PathfindAI.connectNodes(this.grid);
+			}
+			if (this.component.getDrawBalencedNodes())
+			{
+				PathfindAI.identifyNodes(this.grid);
+				PathfindAI.connectAllNodes(this.grid);
+			}
+			this.component.repaint();
+			break;
+		case P:
+			// System.out.println("TogglePathsAction performed!");
+			if (!this.component.getDrawPaths())
+			{
+				PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
+				PathfindAI.computePaths(this.grid);
+				PathfindAI.optimizePaths(this.grid);
+			}
+			this.component.setDrawPaths(!this.component.getDrawPaths());
+			this.component.repaint();
+			break;
+		case B:
+			// System.out.println("ToggleNodesAction performed!");
+			if (!this.component.getDrawBalencedNodes())
+			{
+				PathfindAI.identifyNodes(this.grid);
+				PathfindAI.connectAllNodes(this.grid);
+			}
+			this.component.setDrawBalencedNodes(!this.component.getDrawBalencedNodes());
+			this.component.repaint();
+			break;
+		case N:
+			// System.out.println("ToggleBalencedNodesAction performed!");
+			if (!this.component.getDrawNodes())
+			{
+				PathfindAI.identifyNodes(this.grid);
+				PathfindAI.connectNodes(this.grid);
+			}
+			this.component.setDrawNodes(!this.component.getDrawNodes());
+			this.component.repaint();
+			break;
+		case R:
+			// System.out.println("CalculatePathsAction performed!");
+			PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
+			PathfindAI.computePaths(this.grid);
+			this.component.repaint();
+			break;
+		case CONTROL_R:
+			// System.out.println("RedrawAction performed!");
+			this.component.repaint();
+			break;
+		case S:
+			// System.out.println("SaveAction performed!");
+			this.component.cacheGrid();
+			break;
+		case L:
+			// System.out.println("LoadAction performed!");
+			try
+			{
+				this.component.loadGrid();
+			}
+			catch (final Exception e1)
+			{
+				System.out.println("No Grid found!");
+			}
+			break;
+		case O:
+			// System.out.println("OptimizeAction performed!");
+			PathfindAI.optimizePaths(this.grid);
+			this.component.repaint();
+			break;
+		case C:
+			this.component.setDrawDirection(!this.component.getDrawDirection());
+			this.component.repaint();
+			break;
+		default:
+			throw new IllegalArgumentException("Bad source received!");
 		}
 	}
 }
@@ -454,226 +533,24 @@ class MouseCycleListener implements MouseListener
 			else
 			{
 			}
+
 			PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
-			this.component.disablePaths();
-			this.component.disableNodes();
+			if (this.component.getDrawPaths())
+			{
+				PathfindAI.computePaths(this.grid);
+				PathfindAI.optimizePaths(this.grid);
+			}
+			if (this.component.getDrawNodes())
+			{
+				PathfindAI.identifyNodes(this.grid);
+				PathfindAI.connectNodes(this.grid);
+			}
+			if (this.component.getDrawBalencedNodes())
+			{
+				PathfindAI.identifyNodes(this.grid);
+				PathfindAI.connectAllNodes(this.grid);
+			}
 			this.component.repaint();
 		}
 	}
-}
-
-class OptimizeAction extends AbstractAction
-{
-	private static final long	serialVersionUID	= 1L;
-	private final GridDraw		component;
-	private final Grid			grid;
-
-	public OptimizeAction(final Grid grid, final GridDraw component)
-	{
-		super();
-		this.component = component;
-		this.grid = grid;
-	}
-
-	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		// System.out.println("OptimizeAction performed!");
-
-		PathfindAI.optimizePaths(this.grid);
-		this.component.repaint();
-	}
-}
-
-class RedrawAction extends AbstractAction
-{
-	private static final long	serialVersionUID	= 1L;
-	private final GridDraw		component;
-
-	public RedrawAction(final GridDraw component)
-	{
-		super();
-		this.component = component;
-	}
-
-	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		// System.out.println("RedrawAction performed!");
-
-		this.component.repaint();
-	}
-}
-
-class RightAction extends AbstractAction
-{
-	private static final long	serialVersionUID	= 1L;
-	private final GridDraw		component;
-	private final Grid			grid;
-
-	public RightAction(final Grid grid, final GridDraw component)
-	{
-		super();
-		this.grid = grid;
-		this.component = component;
-	}
-
-	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		// System.out.println("RightAction performed!");
-		this.grid.moveHighlightedSquare(3);
-		// PathfindAI.computeDistance(grid, grid.getStartPoint());
-		this.component.repaint();
-	}
-
-}
-
-class RotateClockWiseAction extends AbstractAction
-{
-	private static final long	serialVersionUID	= 1L;
-	private final GridDraw		component;
-	private final Grid			grid;
-
-	public RotateClockWiseAction(final Grid grid, final GridDraw component)
-	{
-		super();
-		this.grid = grid;
-		this.component = component;
-	}
-
-	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		// System.out.println("RotateAction performed!");
-		this.grid.rotateHighlightedSquare(true);
-		PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
-		this.component.disablePaths();
-		this.component.disableNodes();
-		this.component.repaint();
-	}
-}
-
-class RotateCounterClockWiseAction extends AbstractAction
-{
-	private static final long	serialVersionUID	= 1L;
-	private final GridDraw		component;
-	private final Grid			grid;
-
-	public RotateCounterClockWiseAction(final Grid grid, final GridDraw component)
-	{
-		super();
-		this.grid = grid;
-		this.component = component;
-	}
-
-	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		// System.out.println("RotateAction performed!");
-		this.grid.rotateHighlightedSquare(false);
-		PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
-		this.component.disablePaths();
-		this.component.disableNodes();
-		this.component.repaint();
-	}
-}
-
-class SaveAction extends AbstractAction
-{
-	private static final long	serialVersionUID	= 1L;
-	private final GridDraw		component;
-
-	public SaveAction(final GridDraw component)
-	{
-		super();
-		this.component = component;
-	}
-
-	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		// System.out.println("SaveAction performed!");
-		this.component.cacheGrid();
-	}
-}
-
-class ToggleNodesAction extends AbstractAction
-{
-	private static final long	serialVersionUID	= 1L;
-	private final GridDraw		component;
-	private final Grid			grid;
-
-	public ToggleNodesAction(final Grid grid, final GridDraw component)
-	{
-		super();
-		this.grid = grid;
-		this.component = component;
-	}
-
-	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		// System.out.println("ToggleNodesAction performed!");
-		if (!this.component.getDrawNodes())
-		{
-			PathfindAI.identifyNodes(this.grid);
-			PathfindAI.connectNodes(this.grid);
-		}
-
-		this.component.toggleNodes();
-		this.component.repaint();
-	}
-}
-
-class TogglePathsAction extends AbstractAction
-{
-	private static final long	serialVersionUID	= 1L;
-	private final GridDraw		component;
-	private final Grid			grid;
-
-	public TogglePathsAction(final Grid grid, final GridDraw component)
-	{
-		super();
-		this.grid = grid;
-		this.component = component;
-	}
-
-	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		// System.out.println("TogglePathsAction performed!");
-		if (!this.component.getDrawPaths())
-		{
-			PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
-			PathfindAI.computePaths(this.grid);
-		}
-
-		this.component.togglePaths();
-		this.component.repaint();
-	}
-}
-
-class UpAction extends AbstractAction
-{
-	private static final long	serialVersionUID	= 1L;
-	private final GridDraw		component;
-	private final Grid			grid;
-
-	public UpAction(final Grid grid, final GridDraw component)
-	{
-		super();
-		this.grid = grid;
-		this.component = component;
-	}
-
-	@Override
-	public void actionPerformed(final ActionEvent e)
-	{
-		// System.out.println("UpAction performed!");
-		this.grid.moveHighlightedSquare(0);
-		PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
-		this.component.repaint();
-	}
-
 }

@@ -1,6 +1,5 @@
 package m_Star_Pathfinder;
 
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -63,7 +62,8 @@ public class PathfindAI implements Runnable
 			// System.out.println(distance);
 			distance++;
 			/*
-			 * System.out.println(Arrays.toString(points.toArray())); System.out.println(Arrays.toString(newPoints.toArray()));
+			 * System.out.println(Arrays.toString(points.toArray()));
+			 * System.out.println(Arrays.toString(newPoints.toArray()));
 			 */
 			if (numFailedCells == points.size() || points.size() == 0) noMoreLeft = true; // End
 			// looping
@@ -158,7 +158,7 @@ public class PathfindAI implements Runnable
 		grid.setPaths(paths);
 	}
 
-	public static void connectAllNodes(final Grid grid, final Graphics2D g2d)
+	public static void connectAllNodes(final Grid grid)
 	{
 		final ArrayList<PathNodeMap> maps = new ArrayList<PathNodeMap>();
 		maps.add(new PathNodeMap());
@@ -175,10 +175,15 @@ public class PathfindAI implements Runnable
 					{
 						maps.add(maps.get(i).clone());
 						maps.get(maps.size() - 1).addPoint(maps.get(i).getLastPoint().getDirectedEdges().get(j));
-						// System.out.println(maps.get(maps.size() - 1) + " had point " + maps.get(i).getLastPoint().getDirectedEdges().get(j) + " added.");
+						// System.out.println(maps.get(maps.size() - 1) +
+						// " had point " +
+						// maps.get(i).getLastPoint().getDirectedEdges().get(j)
+						// + " added.");
 					}
 					maps.get(i).addPoint(maps.get(i).getLastPoint().getDirectedEdges().get(0));
-					// System.out.println(maps.get(i) + " had point " + maps.get(i).getPoint(maps.get(i).size() - 2).getDirectedEdges().get(0) + " added.");
+					// System.out.println(maps.get(i) + " had point " +
+					// maps.get(i).getPoint(maps.get(i).size() -
+					// 2).getDirectedEdges().get(0) + " added.");
 				}
 			int numFinished = 0;
 
