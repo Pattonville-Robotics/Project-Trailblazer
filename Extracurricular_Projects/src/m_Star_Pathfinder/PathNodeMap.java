@@ -18,7 +18,7 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 
 	public PathNodeMap()
 	{
-		this.points = new LinkedList<PathNode>();// Test
+		this.points = new LinkedList<PathNode>();
 	}
 
 	public PathNodeMap(final LinkedList<PathNode> points)

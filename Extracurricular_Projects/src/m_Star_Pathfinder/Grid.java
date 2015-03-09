@@ -16,7 +16,7 @@ public class Grid implements Serializable
 
 	private GridSquare[][]			grid;
 	// private GridDraw gridDraw;
-	private final int				highlightThickness	= 2;
+	private int						highlightThickness	= 2;
 	private ArrayList<PathNode>		nodes;
 	private PathNodeMap				pathNodeMap;
 	private ArrayList<PathNodeMap>	pathNodeMaps;
@@ -61,8 +61,7 @@ public class Grid implements Serializable
 	/**
 	 * @param p
 	 *            - The point to be checked.
-	 * @return A {@code boolean} value describing if the specified point can be
-	 *         accessed in the internal array.
+	 * @return A {@code boolean} value describing if the specified point can be accessed in the internal array.
 	 */
 	public boolean canAccess(final Point p)
 	{
@@ -164,19 +163,14 @@ public class Grid implements Serializable
 		return this.paths;
 	}
 
-	/*
-	 * public GridDraw getGridDraw() { return gridDraw; }
-	 */
-
-	private GridSquare getSquare(final Point p)
-	{
-		return this.grid[p.y][p.x];
-	}
-
 	public GridSquare getSquareCopy(final Point p)
 	{
 		return this.grid[p.y][p.x].clone();
 	}
+
+	/*
+	 * public GridDraw getGridDraw() { return gridDraw; }
+	 */
 
 	public int getSquareHeight()
 	{
@@ -224,14 +218,12 @@ public class Grid implements Serializable
 					this.squareHeight + 2 * i);
 	}
 
-	public void paintLine(final Graphics2D g2d, final Point p1, final Point p2, boolean drawDirection, int xVar, int yVar)
+	public void paintLine(final Graphics2D g2d, final Point p1, final Point p2, final boolean drawDirection, final int xVar, final int yVar)
 	{
 		// g.setColor(new Color(255, 0, 0));
 		if (drawDirection)
-		{
 			g2d.setPaint(new GradientPaint(p1.x * this.getSquareWidth(), p1.y * this.getSquareHeight(), new Color(0, 0, 255), p2.x * this.getSquareWidth(),
 					p2.y * this.getSquareHeight(), new Color(0, 255, 0)));
-		}
 		g2d.drawLine(this.getSquare(p1).getXCenter() + xVar, this.getSquare(p1).getYCenter() + yVar, this.getSquare(p2).getXCenter() + xVar, this.getSquare(p2)
 				.getYCenter() + yVar);
 	}
@@ -241,19 +233,17 @@ public class Grid implements Serializable
 		g2d.setColor(new Color(204, 0, 102));
 		for (final PathNode p : this.nodes)
 		{
-			int shade = (int) (191 * (this.getSquareCopy(p.getNode()).getDistance() / (double) this.getSquareCopy(this.getFurthestPoint()).getDistance()));
+			final int shade = (int) (191 * (this.getSquareCopy(p.getNode()).getDistance() / (double) this.getSquareCopy(this.getFurthestPoint()).getDistance()));
 			g2d.setColor(new Color(shade + 64, shade + 64, shade));
 			g2d.fillOval(p.getNode().x * this.getSquareWidth() + this.getSquareWidth() * 3 / 8, p.getNode().y * this.getSquareHeight() + this.getSquareHeight()
 					* 3 / 8, this.getSquareWidth() / 4, this.getSquareHeight() / 4);
 		}
 	}
 
-	public void paintPointSet(final Graphics2D g2d, final Point[] points, boolean drawDirection, int xVar, int yVar)
+	public void paintPointSet(final Graphics2D g2d, final Point[] points, final boolean drawDirection, final int xVar, final int yVar)
 	{
 		for (int i = 0; i < points.length - 1; i++)
-		{
 			this.paintLine(g2d, points[i], points[i + 1], drawDirection, xVar, yVar);
-		}
 	}
 
 	public void paintRectangle(final Graphics g, final Rectangle2D r)
@@ -337,6 +327,22 @@ public class Grid implements Serializable
 		this.paths = v;
 	}
 
+	public void setSelf(final Grid newGrid)
+	{
+		this.grid = newGrid.grid;
+		this.highlightThickness = newGrid.highlightThickness;
+		this.nodes = newGrid.nodes;
+		this.pathNodeMap = newGrid.pathNodeMap;
+		this.pathNodeMaps = newGrid.pathNodeMaps;
+		this.paths = newGrid.paths;
+		this.squareWidth = newGrid.squareWidth;
+		this.squareHeight = newGrid.squareHeight;
+		this.startPoint = newGrid.startPoint;
+		this.finishPoint = newGrid.finishPoint;
+		this.furthestPoint = newGrid.furthestPoint;
+		this.highlightedPoint = newGrid.highlightedPoint;
+	}
+
 	public void setSquare(final GridSquare gridSquare, final int row, final int column)
 	{
 		this.grid[row][column] = gridSquare;
@@ -398,5 +404,10 @@ public class Grid implements Serializable
 			return true;
 		else
 			return false;
+	}
+
+	private GridSquare getSquare(final Point p)
+	{
+		return this.grid[p.y][p.x];
 	}
 }

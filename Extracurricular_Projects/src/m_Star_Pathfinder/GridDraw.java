@@ -1,17 +1,25 @@
 package m_Star_Pathfinder;
 
 import java.awt.Color;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.net.URISyntaxException;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -25,7 +33,6 @@ import com.esotericsoftware.kryo.io.Output;
 //TODO Reduce source code size; only include needed things
 //TODO Make GridMaker application or functionality to make custom sized grids
 //TODO Design easier interface for code and movement
-//TODO Merge actionListeners to reduce inner classes
 
 public class GridDraw extends JComponent
 {
@@ -35,52 +42,54 @@ public class GridDraw extends JComponent
 	{
 		final GridDraw gridDraw = new GridDraw();
 		gridDraw.init();
-		gridDraw.setupDisplay();
 		gridDraw.setupIOMapping();
+		gridDraw.setupDisplay();
 		gridDraw.frame.setVisible(true);
+		gridDraw.menuBar.setBackground(new Color(47, 79, 79));
+		gridDraw.file.setBackground(new Color(47, 79, 79));
+		gridDraw.help.setBackground(new Color(47, 79, 79));
+		gridDraw.newFile.setBackground(new Color(47, 79, 79));
+		gridDraw.openFile.setBackground(new Color(47, 79, 79));
+		gridDraw.saveFile.setBackground(new Color(47, 79, 79));
 	}
 
-	private boolean	drawNodes			= false;
 	private boolean	drawBalencedNodes	= false;
-	private boolean	drawPaths			= false;
 	private boolean	drawDirection		= false;
+	private boolean	drawNodes			= false;
+	private boolean	drawPaths			= false;
 
-	public boolean getDrawDirection()
-	{
-		return drawDirection;
-	}
-
-	public void setDrawDirection(boolean drawDirection)
-	{
-		this.drawDirection = drawDirection;
-	}
+	private JMenu	file, help;
 
 	private JFrame	frame;
+
 	private Grid	grid;
-	private JMenu	file, help;
-	private JMenuItem	help1, help2, help3, help4, help5, help6, help7, help8;
+	private JMenuItem	help1, help2, help3, help4, help5, help6, help7, help8, help9, newFile, openFile, saveFile;
 	private final Kryo	kryo	= new Kryo();
 	private JMenuBar	menuBar;
+	File				saveDir	= null;
 
 	public GridDraw()
 	{
 		super();
 	}
 
-	public void cacheGrid()
+	public void cacheGrid(final File file)
 	{
+		Output output = null;
 		try
 		{
-			final Output output = new Output(new FileOutputStream("grid.data"));
+			output = new Output(new FileOutputStream(file));
 			this.kryo.writeObject(output, this.grid);
-			output.close();
-
 			System.out.println("Sucessfully cached data.");
 		}
 		catch (final Exception e1)
 		{
 			e1.printStackTrace();
 			System.out.println("Failed to cache data.");
+		}
+		finally
+		{
+			output.close();
 		}
 	}
 
@@ -109,6 +118,11 @@ public class GridDraw extends JComponent
 		return this.drawBalencedNodes;
 	}
 
+	public boolean getDrawDirection()
+	{
+		return this.drawDirection;
+	}
+
 	public boolean getDrawNodes()
 	{
 		return this.drawNodes;
@@ -123,7 +137,16 @@ public class GridDraw extends JComponent
 	{
 		try
 		{
-			this.loadGrid();
+			this.saveDir = new File(GridDraw.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath() + "//grid.data");
+		}
+		catch (final URISyntaxException e)
+		{
+			e.printStackTrace();
+		}
+
+		try
+		{
+			this.loadGrid(this.saveDir);
 		}
 		catch (final Exception e)
 		{
@@ -153,19 +176,31 @@ public class GridDraw extends JComponent
 			// PathfindAI.optimizePaths(this.grid);
 
 			System.out.println("Finished generating new data. Begin caching.");
-			this.cacheGrid();
+			this.cacheGrid(this.saveDir);
 		}
 		System.out.println("Finished initialization.");
 	}
 
-	public void loadGrid() throws Exception
+	public void loadGrid(final File file)
 	{
 		System.out.println("Began reading in data file.");
-
-		final Input input = new Input(new FileInputStream("grid.data"));
-		this.grid = this.kryo.readObject(input, Grid.class);
-		input.close();
-
+		Input input = null;
+		try
+		{
+			input = new Input(new FileInputStream(file));
+			if (this.grid != null)
+				this.grid.setSelf(this.kryo.readObject(input, Grid.class));
+			else
+				this.grid = this.kryo.readObject(input, Grid.class);
+		}
+		catch (final FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			input.close();
+		}
 		System.out.println("Finished reading in data file.");
 	}
 
@@ -174,26 +209,29 @@ public class GridDraw extends JComponent
 	{
 		final long startTime = System.nanoTime();
 		final Graphics2D g2d = (Graphics2D) g;
+		g2d.setPaint(new GradientPaint(0, 0, new Color(25, 25, 112), this.getWidth(), this.getHeight(), new Color(176, 196, 222)));
+		g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+
 		// System.out.println("Began drawing to the screen.");
 		this.grid.paint(g2d);
 		// System.out.println("Lowest next to start: " +
 		// grid.getLowestAdjacentSquares(grid.getFinishPoint()));
 
+		if (this.getDrawNodes() || this.getDrawBalencedNodes()) this.grid.paintNodes(g2d);
+
 		if (this.getDrawPaths())
 		{
-			g2d.setColor(new Color(255, 255, 0));
+			g2d.setColor(new Color(255, 255, 0)); // Yellow
 			this.grid.paintPointSet(g2d, this.grid.getPaths().get(0).getArray(), this.getDrawDirection(), 0, 0);
 		}
 		if (this.getDrawNodes())
 		{
-			if (!this.getDrawBalencedNodes()) this.grid.paintNodes(g2d);
-			g2d.setColor(new Color(255, 0, 255));
+			g2d.setColor(new Color(255, 0, 255)); // Magenta
 			this.grid.paintPointSet(g2d, this.grid.getPathNodeMap().getPointArray(), this.getDrawDirection(), 1, 1);
 		}
 		if (this.getDrawBalencedNodes())
 		{
-			this.grid.paintNodes(g2d);
-			g2d.setColor(new Color(0, 255, 255));
+			g2d.setColor(new Color(0, 255, 255)); // Cyan
 			this.grid.paintPointSet(g2d, this.grid.getPathNodeMaps().get(0).getPointArray(), this.getDrawDirection(), -1, -1);
 		}
 
@@ -205,6 +243,11 @@ public class GridDraw extends JComponent
 	public void setDrawBalencedNodes(final boolean drawBalencedNodes)
 	{
 		this.drawBalencedNodes = drawBalencedNodes;
+	}
+
+	public void setDrawDirection(final boolean drawDirection)
+	{
+		this.drawDirection = drawDirection;
 	}
 
 	public void setDrawNodes(final boolean drawNodes)
@@ -219,14 +262,33 @@ public class GridDraw extends JComponent
 
 	public void setupDisplay()
 	{
-		this.frame = new JFrame("window");
+		this.frame = new JFrame("[[[INSERT_TITLE_HERE]]]");
 		this.frame.setBounds(0, 0, 720, 720);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBackground(Color.WHITE);
+		this.frame.setBackground(Color.GRAY);
 		this.frame.getContentPane().add(this);
 
 		this.help = new JMenu("Help");
+		this.help.setMnemonic('H');
 		this.file = new JMenu("File");
+		this.file.setMnemonic('F');
+
+		this.newFile = new JMenuItem("New Blank Grid...");
+		this.openFile = new JMenuItem("Open...");
+		this.saveFile = new JMenuItem("Save...");
+		this.newFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		this.openFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		this.saveFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_DOWN_MASK));
+		final KeyPressActions newFileAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.NEW);
+		final KeyPressActions saveFileAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.SAVE_AS);
+		final KeyPressActions openFileAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.OPEN);
+		this.newFile.addActionListener(newFileAction);
+		this.openFile.addActionListener(openFileAction);
+		this.saveFile.addActionListener(saveFileAction);
+		this.file.add(this.newFile);
+		this.file.add(this.openFile);
+		this.file.add(this.saveFile);
 
 		this.help1 = new JMenuItem("You can use the arrow keys to select a square to modify.");
 		this.help2 = new JMenuItem("Use \"ENTER\" and \"SHIFT + ENTER\" to cycle through possible square contents.");
@@ -237,6 +299,9 @@ public class GridDraw extends JComponent
 		this.help7 = new JMenuItem("Use the \"N\" button to toggle high-speed calculation.");
 		this.help8 = new JMenuItem(
 				"The green square is start, the blue square is finish, the purple squares are walls, and the numbers are the distance to the start.");
+		this.help9 = new JMenuItem(
+				"The yellow line is the maximum optimization, the cyan line is an intermediate level of optimization, and the magenta line is a low level of optimization.");
+
 		this.help.add(this.help1);
 		this.help.add(this.help2);
 		this.help.add(this.help3);
@@ -245,6 +310,7 @@ public class GridDraw extends JComponent
 		this.help.add(this.help6);
 		this.help.add(this.help7);
 		this.help.add(this.help8);
+		this.help.add(this.help9);
 
 		this.menuBar = new JMenuBar();
 		this.menuBar.add(this.file);
@@ -327,7 +393,7 @@ class KeyPressActions extends AbstractAction
 {
 	public static enum actionSource
 	{
-		UP, DOWN, LEFT, RIGHT, ENTER, SHIFT_ENTER, P, N, B, R, CONTROL_R, S, L, O, C
+		B, C, CONTROL_R, DOWN, ENTER, L, LEFT, N, NEW, O, OPEN, P, R, RIGHT, S, SAVE_AS, SHIFT_ENTER, UP
 	}
 
 	private static final long	serialVersionUID	= 1L;
@@ -350,31 +416,31 @@ class KeyPressActions extends AbstractAction
 		switch (this.source)
 		{
 		case UP:
-			// System.out.println("UpAction performed!");
+		{
 			this.grid.moveHighlightedSquare(0);
-			// PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
 			this.component.repaint();
 			break;
+		}
 		case DOWN:
-			// System.out.println("DownAction performed!");
+		{
 			this.grid.moveHighlightedSquare(1);
-			// PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
 			this.component.repaint();
 			break;
+		}
 		case LEFT:
-			// System.out.println("LeftAction performed!");
+		{
 			this.grid.moveHighlightedSquare(2);
-			// PathfindAI.computeDistance(grid, grid.getStartPoint());
 			this.component.repaint();
 			break;
+		}
 		case RIGHT:
-			// System.out.println("RightAction performed!");
+		{
 			this.grid.moveHighlightedSquare(3);
-			// PathfindAI.computeDistance(grid, grid.getStartPoint());
 			this.component.repaint();
 			break;
+		}
 		case ENTER:
-			// System.out.println("RotateAction performed!");
+		{
 			this.grid.rotateHighlightedSquare(true);
 			PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
 
@@ -395,8 +461,9 @@ class KeyPressActions extends AbstractAction
 			}
 			this.component.repaint();
 			break;
+		}
 		case SHIFT_ENTER:
-			// System.out.println("RotateAction performed!");
+		{
 			this.grid.rotateHighlightedSquare(false);
 			PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
 
@@ -417,8 +484,9 @@ class KeyPressActions extends AbstractAction
 			}
 			this.component.repaint();
 			break;
+		}
 		case P:
-			// System.out.println("TogglePathsAction performed!");
+		{
 			if (!this.component.getDrawPaths())
 			{
 				PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
@@ -428,8 +496,9 @@ class KeyPressActions extends AbstractAction
 			this.component.setDrawPaths(!this.component.getDrawPaths());
 			this.component.repaint();
 			break;
+		}
 		case B:
-			// System.out.println("ToggleNodesAction performed!");
+		{
 			if (!this.component.getDrawBalencedNodes())
 			{
 				PathfindAI.identifyNodes(this.grid);
@@ -438,8 +507,9 @@ class KeyPressActions extends AbstractAction
 			this.component.setDrawBalencedNodes(!this.component.getDrawBalencedNodes());
 			this.component.repaint();
 			break;
+		}
 		case N:
-			// System.out.println("ToggleBalencedNodesAction performed!");
+		{
 			if (!this.component.getDrawNodes())
 			{
 				PathfindAI.identifyNodes(this.grid);
@@ -448,40 +518,72 @@ class KeyPressActions extends AbstractAction
 			this.component.setDrawNodes(!this.component.getDrawNodes());
 			this.component.repaint();
 			break;
+		}
 		case R:
-			// System.out.println("CalculatePathsAction performed!");
+		{
 			PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
 			PathfindAI.computePaths(this.grid);
 			this.component.repaint();
 			break;
+		}
 		case CONTROL_R:
-			// System.out.println("RedrawAction performed!");
+		{
 			this.component.repaint();
 			break;
+		}
 		case S:
-			// System.out.println("SaveAction performed!");
-			this.component.cacheGrid();
+		{
+			this.component.cacheGrid(this.component.saveDir);
 			break;
+		}
 		case L:
-			// System.out.println("LoadAction performed!");
+		{
 			try
 			{
-				this.component.loadGrid();
+				this.component.loadGrid(this.component.saveDir);
 			}
 			catch (final Exception e1)
 			{
 				System.out.println("No Grid found!");
 			}
 			break;
+		}
 		case O:
-			// System.out.println("OptimizeAction performed!");
+		{
 			PathfindAI.optimizePaths(this.grid);
 			this.component.repaint();
 			break;
+		}
 		case C:
+		{
 			this.component.setDrawDirection(!this.component.getDrawDirection());
 			this.component.repaint();
 			break;
+		}
+		case SAVE_AS:
+		{
+			final JFileChooser save = new JFileChooser(this.component.saveDir);
+
+			final int returnVal = save.showSaveDialog(this.component);
+			if (returnVal == JFileChooser.APPROVE_OPTION)
+			{
+				this.component.saveDir = save.getSelectedFile();
+				this.component.cacheGrid(this.component.saveDir);
+			}
+			break;
+		}
+		case OPEN:
+		{
+			final JFileChooser open = new JFileChooser(this.component.saveDir);
+
+			final int returnVal = open.showOpenDialog(this.component);
+			if (returnVal == JFileChooser.APPROVE_OPTION)
+			{
+				this.component.saveDir = open.getSelectedFile();
+				this.component.loadGrid(this.component.saveDir);
+			}
+			break;
+		}
 		default:
 			throw new IllegalArgumentException("Bad source received!");
 		}
