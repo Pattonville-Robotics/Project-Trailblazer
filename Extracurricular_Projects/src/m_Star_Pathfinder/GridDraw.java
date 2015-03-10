@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.net.URISyntaxException;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
@@ -45,12 +44,6 @@ public class GridDraw extends JComponent
 		gridDraw.setupIOMapping();
 		gridDraw.setupDisplay();
 		gridDraw.frame.setVisible(true);
-		gridDraw.menuBar.setBackground(new Color(47, 79, 79));
-		gridDraw.file.setBackground(new Color(47, 79, 79));
-		gridDraw.help.setBackground(new Color(47, 79, 79));
-		gridDraw.newFile.setBackground(new Color(47, 79, 79));
-		gridDraw.openFile.setBackground(new Color(47, 79, 79));
-		gridDraw.saveFile.setBackground(new Color(47, 79, 79));
 	}
 
 	private boolean	drawBalencedNodes	= false;
@@ -135,14 +128,8 @@ public class GridDraw extends JComponent
 
 	public void init()
 	{
-		try
-		{
-			this.saveDir = new File(GridDraw.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath() + "//grid.data");
-		}
-		catch (final URISyntaxException e)
-		{
-			e.printStackTrace();
-		}
+		this.saveDir = new File(System.getProperty("user.home") + "//grid.data");
+		System.out.println(saveDir.getAbsolutePath());
 
 		try
 		{
@@ -262,7 +249,7 @@ public class GridDraw extends JComponent
 
 	public void setupDisplay()
 	{
-		this.frame = new JFrame("[[[INSERT_TITLE_HERE]]]");
+		this.frame = new JFrame("GridViewer V2.3");
 		this.frame.setBounds(0, 0, 720, 720);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBackground(Color.WHITE);
@@ -335,7 +322,7 @@ public class GridDraw extends JComponent
 		final KeyPressActions toggleNodesAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.N);
 		final KeyPressActions toggleBalencedNodesAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.B);
 		final KeyPressActions calculatePathsAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.R);
-		final KeyPressActions saveAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.S);
+		final KeyPressActions saveAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.CONTROL_S);
 		final KeyPressActions loadAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.L);
 		final KeyPressActions redrawAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.CONTROL_R);
 		final KeyPressActions optimizeAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.O);
@@ -374,7 +361,7 @@ public class GridDraw extends JComponent
 		this.getInputMap().put(KeyStroke.getKeyStroke("control R"), "redrawAction");
 		this.getActionMap().put("redrawAction", redrawAction);
 
-		this.getInputMap().put(KeyStroke.getKeyStroke("S"), "saveAction");
+		this.getInputMap().put(KeyStroke.getKeyStroke("control S"), "saveAction");
 		this.getActionMap().put("saveAction", saveAction);
 
 		this.getInputMap().put(KeyStroke.getKeyStroke("L"), "loadAction");
@@ -393,7 +380,7 @@ class KeyPressActions extends AbstractAction
 {
 	public static enum actionSource
 	{
-		B, C, CONTROL_R, DOWN, ENTER, L, LEFT, N, NEW, O, OPEN, P, R, RIGHT, S, SAVE_AS, SHIFT_ENTER, UP
+		B, C, CONTROL_R, DOWN, ENTER, L, LEFT, N, NEW, O, OPEN, P, R, RIGHT, CONTROL_S, SAVE_AS, SHIFT_ENTER, UP
 	}
 
 	private static final long	serialVersionUID	= 1L;
@@ -531,7 +518,7 @@ class KeyPressActions extends AbstractAction
 			this.component.repaint();
 			break;
 		}
-		case S:
+		case CONTROL_S:
 		{
 			this.component.cacheGrid(this.component.saveDir);
 			break;

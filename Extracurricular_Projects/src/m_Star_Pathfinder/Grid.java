@@ -61,7 +61,8 @@ public class Grid implements Serializable
 	/**
 	 * @param p
 	 *            - The point to be checked.
-	 * @return A {@code boolean} value describing if the specified point can be accessed in the internal array.
+	 * @return A {@code boolean} value describing if the specified point can be
+	 *         accessed in the internal array.
 	 */
 	public boolean canAccess(final Point p)
 	{
@@ -163,14 +164,19 @@ public class Grid implements Serializable
 		return this.paths;
 	}
 
-	public GridSquare getSquareCopy(final Point p)
+	private GridSquare getSquare(final Point p)
 	{
-		return this.grid[p.y][p.x].clone();
+		return this.grid[p.y][p.x];
 	}
 
 	/*
 	 * public GridDraw getGridDraw() { return gridDraw; }
 	 */
+
+	public GridSquare getSquareCopy(final Point p)
+	{
+		return this.grid[p.y][p.x].clone();
+	}
 
 	public int getSquareHeight()
 	{
@@ -404,10 +410,5 @@ public class Grid implements Serializable
 			return true;
 		else
 			return false;
-	}
-
-	private GridSquare getSquare(final Point p)
-	{
-		return this.grid[p.y][p.x];
 	}
 }
