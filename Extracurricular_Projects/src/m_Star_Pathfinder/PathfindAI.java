@@ -227,8 +227,8 @@ public class PathfindAI implements Runnable
 		nodes.add(new PathNode(grid.getFinishPoint()));
 		nodeSet.add(new PathNode(grid.getFinishPoint()));
 
-		for (int x = 0; x < grid.getGrid().length; x++)
-			for (int y = 0; y < grid.getGrid()[x].length; y++)
+		for (int y = 0; y < grid.getGrid().length; y++)
+			for (int x = 0; x < grid.getGrid()[y].length; x++)
 				if (grid.getSquareCopy(new Point(x, y)).getContents() == SquareType.HAZARD)
 					for (int i = 0; i < xVarianceDiagonal.length && i < yVarianceDiagonal.length; i++)
 						if (grid.canAccess(new Point(x + xVarianceDiagonal[i], y + yVarianceDiagonal[i]))

@@ -21,27 +21,14 @@ import javax.swing.event.ChangeListener;
 
 public class NewFileWindow
 {
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(final String[] args)
-	{
-		final NewFileWindow window = new NewFileWindow(null);
-		window.frame.setVisible(true);
-	}
-
 	private JFrame				frame;
 	private GridDraw			superGridDraw;
 	private GridPreviewPanel	previewPanel;
 
-	/**
-	 * Create the application.
-	 */
 	public NewFileWindow(GridDraw superGridDraw)
 	{
-		this.initialize();
 		this.superGridDraw = superGridDraw;
+		this.initialize();
 	}
 
 	public JFrame getFrame()
@@ -49,9 +36,6 @@ public class NewFileWindow
 		return frame;
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize()
 	{
 		this.frame = new JFrame();
@@ -60,7 +44,8 @@ public class NewFileWindow
 		final JSplitPane splitPane = new JSplitPane();
 		this.frame.getContentPane().add(splitPane, BorderLayout.CENTER);
 
-		previewPanel = new GridPreviewPanel(2, 2, 40, 40);
+		previewPanel = new GridPreviewPanel(superGridDraw.getGrid().getGrid()[0].length, superGridDraw.getGrid().getGrid().length, superGridDraw.getGrid()
+				.getSquareWidth(), superGridDraw.getGrid().getSquareHeight());
 		splitPane.setRightComponent(previewPanel);
 
 		final JPanel settingsPanel = new JPanel();
@@ -81,7 +66,7 @@ public class NewFileWindow
 				frame.repaint();
 			}
 		});
-		widthSpinner.setModel(new SpinnerNumberModel(new Integer(4), new Integer(4), null, new Integer(1)));
+		widthSpinner.setModel(new SpinnerNumberModel(new Integer(superGridDraw.getGrid().getGrid()[0].length), new Integer(4), null, new Integer(1)));
 		widthSpinner.setMaximumSize(new Dimension(76, 28));
 		settingsPanel.add(widthSpinner);
 
@@ -98,7 +83,7 @@ public class NewFileWindow
 				frame.repaint();
 			}
 		});
-		heightSpinner.setModel(new SpinnerNumberModel(new Integer(4), new Integer(4), null, new Integer(1)));
+		heightSpinner.setModel(new SpinnerNumberModel(new Integer(superGridDraw.getGrid().getGrid().length), new Integer(4), null, new Integer(1)));
 		heightSpinner.setMaximumSize(new Dimension(76, 28));
 		heightSpinner.setToolTipText("Width");
 		settingsPanel.add(heightSpinner);
@@ -116,7 +101,7 @@ public class NewFileWindow
 				frame.repaint();
 			}
 		});
-		squareWidthSpinner.setModel(new SpinnerNumberModel(new Integer(40), null, null, new Integer(1)));
+		squareWidthSpinner.setModel(new SpinnerNumberModel(new Integer(superGridDraw.getGrid().getSquareWidth()), null, null, new Integer(1)));
 		squareWidthSpinner.setMaximumSize(new Dimension(76, 28));
 		settingsPanel.add(squareWidthSpinner);
 
@@ -133,7 +118,7 @@ public class NewFileWindow
 				frame.repaint();
 			}
 		});
-		squareHeightSpinner.setModel(new SpinnerNumberModel(new Integer(40), null, null, new Integer(1)));
+		squareHeightSpinner.setModel(new SpinnerNumberModel(new Integer(superGridDraw.getGrid().getSquareHeight()), null, null, new Integer(1)));
 		squareHeightSpinner.setMaximumSize(new Dimension(76, 28));
 		settingsPanel.add(squareHeightSpinner);
 
@@ -150,8 +135,11 @@ public class NewFileWindow
 				grid.setSquareContents(new Point(0, 0), SquareType.START);
 				grid.setSquareContents(new Point(3, 3), SquareType.FINISH);
 				PathfindAI.computeDistance(grid, grid.getStartPoint());
-				PathfindAI.computePaths(grid);
 				PathfindAI.optimizePaths(grid);
+				PathfindAI.identifyNodes(grid);
+				PathfindAI.connectNodes(grid);
+				PathfindAI.identifyNodes(grid);
+				PathfindAI.connectAllNodes(grid);
 				superGridDraw.replaceGrid(grid);
 				frame.dispose();
 			}

@@ -1,10 +1,12 @@
 package m_Star_Pathfinder;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
@@ -72,7 +74,7 @@ public class GridDraw extends JComponent
 		try
 		{
 			output = new Output(new FileOutputStream(file));
-			this.kryo.writeObject(output, this.grid);
+			this.kryo.writeObject(output, this.getGrid());
 			System.out.println("Sucessfully cached data.");
 		}
 		catch (final Exception e1)
@@ -139,21 +141,21 @@ public class GridDraw extends JComponent
 		{
 			e.printStackTrace();
 			System.out.println("File not found. Began generating new data.");
-			this.grid = new Grid(16, 16, 40, 40);
-			this.grid.setSquareContents(new Point(1, 2), SquareType.START);
-			this.grid.setSquareContents(new Point(5, 11), SquareType.FINISH);
+			this.setGrid(new Grid(16, 16, 40, 40));
+			this.getGrid().setSquareContents(new Point(1, 2), SquareType.START);
+			this.getGrid().setSquareContents(new Point(5, 11), SquareType.FINISH);
 
-			this.grid.setSquareContents(new Point(3, 2), SquareType.HAZARD);
-			this.grid.setSquareContents(new Point(3, 3), SquareType.HAZARD);
-			this.grid.setSquareContents(new Point(3, 4), SquareType.HAZARD);
-			this.grid.setSquareContents(new Point(2, 5), SquareType.HAZARD);
-			this.grid.setSquareContents(new Point(1, 5), SquareType.HAZARD);
-			this.grid.setSquareContents(new Point(0, 5), SquareType.HAZARD);
-			this.grid.setSquareContents(new Point(4, 6), SquareType.HAZARD);
-			this.grid.setSquareContents(new Point(5, 7), SquareType.HAZARD);
-			this.grid.setSquareContents(new Point(6, 8), SquareType.HAZARD);
+			this.getGrid().setSquareContents(new Point(3, 2), SquareType.HAZARD);
+			this.getGrid().setSquareContents(new Point(3, 3), SquareType.HAZARD);
+			this.getGrid().setSquareContents(new Point(3, 4), SquareType.HAZARD);
+			this.getGrid().setSquareContents(new Point(2, 5), SquareType.HAZARD);
+			this.getGrid().setSquareContents(new Point(1, 5), SquareType.HAZARD);
+			this.getGrid().setSquareContents(new Point(0, 5), SquareType.HAZARD);
+			this.getGrid().setSquareContents(new Point(4, 6), SquareType.HAZARD);
+			this.getGrid().setSquareContents(new Point(5, 7), SquareType.HAZARD);
+			this.getGrid().setSquareContents(new Point(6, 8), SquareType.HAZARD);
 
-			PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
+			PathfindAI.computeDistance(this.getGrid(), this.getGrid().getStartPoint());
 			// PathfindAI.computePaths(this.grid);
 			// PathfindAI.optimizePaths(this.grid);
 
@@ -170,10 +172,10 @@ public class GridDraw extends JComponent
 		try
 		{
 			input = new Input(new FileInputStream(file));
-			if (this.grid != null)
+			if (this.getGrid() != null)
 				this.replaceGrid(this.kryo.readObject(input, Grid.class));
 			else
-				this.grid = this.kryo.readObject(input, Grid.class);
+				this.setGrid(this.kryo.readObject(input, Grid.class));
 		}
 		catch (final FileNotFoundException e)
 		{
@@ -188,7 +190,7 @@ public class GridDraw extends JComponent
 
 	public void replaceGrid(Grid grid)
 	{
-		this.grid.setSelf(grid);
+		this.getGrid().setSelf(grid);
 	}
 
 	@Override
@@ -196,42 +198,45 @@ public class GridDraw extends JComponent
 	{
 		final long startTime = System.nanoTime();
 		final Graphics2D g2d = (Graphics2D) g;
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2d.setPaint(new GradientPaint(0, 0, new Color(25, 25, 112), this.getWidth(), this.getHeight(), new Color(176, 196, 222)));
 		g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
 
 		// System.out.println("Began drawing to the screen.");
-		this.grid.paint(g2d);
+		this.getGrid().paint(g2d);
 		// System.out.println("Lowest next to start: " +
 		// grid.getLowestAdjacentSquares(grid.getFinishPoint()));
 
-		if (this.getDrawNodes() || this.getDrawBalencedNodes()) this.grid.paintNodes(g2d);
+		if (this.getDrawNodes() || this.getDrawBalencedNodes()) this.getGrid().paintNodes(g2d);
 
 		if (this.getDrawPaths())
 		{
 			g2d.setColor(new Color(255, 255, 0)); // Yellow
-			this.grid.paintPointSet(g2d, this.grid.getPaths().get(0).getArray(), this.getDrawDirection(), 0, 0);
+			g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+			this.getGrid().paintPointSet(g2d, this.getGrid().getPaths().get(0).getArray(), this.getDrawDirection(), 0, 0);
 		}
 		if (this.getDrawNodes())
 		{
 			g2d.setColor(new Color(255, 0, 255)); // Magenta
-			this.grid.paintPointSet(g2d, this.grid.getPathNodeMap().getPointArray(), this.getDrawDirection(), 1, 1);
+			g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+			this.getGrid().paintPointSet(g2d, this.getGrid().getPathNodeMap().getPointArray(), this.getDrawDirection(), 2, 2);
 		}
 		if (this.getDrawBalencedNodes())
 		{
 			g2d.setColor(new Color(0, 255, 255)); // Cyan
-			this.grid.paintPointSet(g2d, this.grid.getPathNodeMaps().get(0).getPointArray(), this.getDrawDirection(), -1, -1);
+			g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+			this.getGrid().paintPointSet(g2d, this.getGrid().getPathNodeMaps().get(0).getPointArray(), this.getDrawDirection(), -2, -2);
 		}
 
 		g2d.setColor(new Color(255, 193, 63));
 		try
 		{
 			g2d.drawString(String.format("FPS: %06.2f ; Yellow length: %07.3f; Cyan length: %07.3f; Magenta length: %07.3f",
-					(1 / ((double) (System.nanoTime() - startTime) / 1000000000)), this.grid.getPaths().get(0).getTotalDistance(), this.grid.getPathNodeMaps()
-							.get(0).getTotalDistance(), this.grid.getPathNodeMap().getTotalDistance()), 5, this.getHeight() - 5);
+					(1 / ((double) (System.nanoTime() - startTime) / 1000000000)), this.getGrid().getPaths().get(0).getTotalDistance(), this.getGrid()
+							.getPathNodeMaps().get(0).getTotalDistance(), this.getGrid().getPathNodeMap().getTotalDistance()), 5, this.getHeight() - 5);
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
 		}
 		this.repaint();
 	}
@@ -279,10 +284,10 @@ public class GridDraw extends JComponent
 		this.saveFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		this.saveAsFile
 				.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_DOWN_MASK));
-		final KeyPressActions newFileAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.NEW);
-		final KeyPressActions saveFileAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.CONTROL_S);
-		final KeyPressActions saveAsFileAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.SAVE_AS);
-		final KeyPressActions openFileAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.OPEN);
+		final KeyPressActions newFileAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.NEW);
+		final KeyPressActions saveFileAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.CONTROL_S);
+		final KeyPressActions saveAsFileAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.SAVE_AS);
+		final KeyPressActions openFileAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.OPEN);
 		this.newFile.addActionListener(newFileAction);
 		this.openFile.addActionListener(openFileAction);
 		this.saveFile.addActionListener(saveFileAction);
@@ -323,25 +328,25 @@ public class GridDraw extends JComponent
 
 	public void setupIOMapping()
 	{
-		final MouseCycleListener mouseCycleListener = new MouseCycleListener(this.grid, this);
+		final MouseCycleListener mouseCycleListener = new MouseCycleListener(this.getGrid(), this);
 
 		this.addMouseListener(mouseCycleListener);
 
-		final KeyPressActions upAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.UP);
-		final KeyPressActions downAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.DOWN);
-		final KeyPressActions leftAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.LEFT);
-		final KeyPressActions rightAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.RIGHT);
-		final KeyPressActions rotateClockWiseAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.ENTER);
-		final KeyPressActions rotateCounterClockWiseAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.SHIFT_ENTER);
-		final KeyPressActions togglePathsAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.P);
-		final KeyPressActions toggleNodesAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.N);
-		final KeyPressActions toggleBalencedNodesAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.B);
-		final KeyPressActions calculatePathsAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.R);
-		final KeyPressActions saveAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.CONTROL_S);
-		final KeyPressActions loadAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.L);
-		final KeyPressActions redrawAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.CONTROL_R);
-		final KeyPressActions optimizeAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.O);
-		final KeyPressActions toggleDrawDirectionAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.C);
+		final KeyPressActions upAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.UP);
+		final KeyPressActions downAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.DOWN);
+		final KeyPressActions leftAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.LEFT);
+		final KeyPressActions rightAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.RIGHT);
+		final KeyPressActions rotateClockWiseAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.ENTER);
+		final KeyPressActions rotateCounterClockWiseAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.SHIFT_ENTER);
+		final KeyPressActions togglePathsAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.P);
+		final KeyPressActions toggleNodesAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.N);
+		final KeyPressActions toggleBalencedNodesAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.B);
+		final KeyPressActions calculatePathsAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.R);
+		final KeyPressActions saveAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.CONTROL_S);
+		final KeyPressActions loadAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.L);
+		final KeyPressActions redrawAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.CONTROL_R);
+		final KeyPressActions optimizeAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.O);
+		final KeyPressActions toggleDrawDirectionAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.C);
 
 		this.getInputMap().put(KeyStroke.getKeyStroke("UP"), "upAction");
 		this.getActionMap().put("upAction", upAction);
@@ -388,6 +393,16 @@ public class GridDraw extends JComponent
 		this.getInputMap().put(KeyStroke.getKeyStroke("C"), "toggleDrawDirectionAction");
 		this.getActionMap().put("toggleDrawDirectionAction", toggleDrawDirectionAction);
 
+	}
+
+	public Grid getGrid()
+	{
+		return grid;
+	}
+
+	public void setGrid(Grid grid)
+	{
+		this.grid = grid;
 	}
 }
 
