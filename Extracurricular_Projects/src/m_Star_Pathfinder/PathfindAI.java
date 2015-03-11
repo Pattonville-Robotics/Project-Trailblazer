@@ -11,6 +11,13 @@ public class PathfindAI implements Runnable
 {
 	public static void computeDistance(final Grid grid, final Point start)
 	{
+		for (int y = 0; y < grid.getGrid().length; y++)
+		{
+			for (int x = 0; x < grid.getGrid()[y].length; x++)
+			{
+				grid.setSquareDistance(new Point(x, y), -2);
+			}
+		}
 		final List<Point> points = new ArrayList<Point>(grid.getGrid().length * 4);
 		final AbstractSet<Point> pointSet = new HashSet<Point>((int) Math.pow(grid.getGrid().length, 2));
 		points.add(start);
@@ -19,8 +26,6 @@ public class PathfindAI implements Runnable
 		while (!noMoreLeft)
 		{
 			for (int i = 0; i < points.size(); i++)
-				// System.out.println("Setting distance of: (" + points.get(i).x
-				// + ", " + points.get(i).y + ")");
 				grid.setSquareDistance(points.get(i), distance);
 
 			final List<Point> newPoints = new ArrayList<Point>();
@@ -61,9 +66,6 @@ public class PathfindAI implements Runnable
 			}
 			// System.out.println(distance);
 			distance++;
-			/*
-			 * System.out.println(Arrays.toString(points.toArray())); System.out.println(Arrays.toString(newPoints.toArray()));
-			 */
 			if (numFailedCells == points.size() || points.size() == 0) noMoreLeft = true; // End
 			// looping
 			points.clear();
@@ -87,13 +89,6 @@ public class PathfindAI implements Runnable
 			numZero = 0;
 			for (int i = 0; i < paths.size(); i++)
 			{
-				// System.out.println("i = " + i); // DEBUG
-				// System.out.println("progressFromFinish = " +
-				// progressFromFinish); // DEBUG
-				// System.out.println("lowestAdjacentSquares = " +
-				// grid.getLowestAdjacentSquares(paths.get(i).getLastPoint()));
-				// // DEBUG
-
 				final ArrayList<Point> adjacent = grid.getLowestAdjacentSquares(paths.get(i).getLastPoint());
 
 				switch (adjacent.size())
@@ -174,15 +169,8 @@ public class PathfindAI implements Runnable
 					{
 						maps.add(maps.get(i).clone());
 						maps.get(maps.size() - 1).addPoint(maps.get(i).getLastPoint().getDirectedEdges().get(j));
-						// System.out.println(maps.get(maps.size() - 1) +
-						// " had point " +
-						// maps.get(i).getLastPoint().getDirectedEdges().get(j)
-						// + " added.");
 					}
 					maps.get(i).addPoint(maps.get(i).getLastPoint().getDirectedEdges().get(0));
-					// System.out.println(maps.get(i) + " had point " +
-					// maps.get(i).getPoint(maps.get(i).size() -
-					// 2).getDirectedEdges().get(0) + " added.");
 				}
 			int numFinished = 0;
 

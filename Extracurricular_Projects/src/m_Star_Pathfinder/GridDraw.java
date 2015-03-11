@@ -199,6 +199,7 @@ public class GridDraw extends JComponent
 		final long startTime = System.nanoTime();
 		final Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g2d.setPaint(new GradientPaint(0, 0, new Color(25, 25, 112), this.getWidth(), this.getHeight(), new Color(176, 196, 222)));
 		g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
 
@@ -213,7 +214,15 @@ public class GridDraw extends JComponent
 		{
 			g2d.setColor(new Color(255, 255, 0)); // Yellow
 			g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-			this.getGrid().paintPointSet(g2d, this.getGrid().getPaths().get(0).getArray(), this.getDrawDirection(), 0, 0);
+			double max = this.getGrid().getPaths().get(0).getTotalDistance();
+			for (int i = 0; i < this.getGrid().getPaths().size(); i++)
+			{
+				if (this.getGrid().getPaths().get(i).getTotalDistance() > max)
+				{
+					break;
+				}
+				this.getGrid().paintPointSet(g2d, this.getGrid().getPaths().get(i).getArray(), this.getDrawDirection(), 0, 0);
+			}
 		}
 		if (this.getDrawNodes())
 		{
@@ -225,7 +234,15 @@ public class GridDraw extends JComponent
 		{
 			g2d.setColor(new Color(0, 255, 255)); // Cyan
 			g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-			this.getGrid().paintPointSet(g2d, this.getGrid().getPathNodeMaps().get(0).getPointArray(), this.getDrawDirection(), -2, -2);
+			double max = this.getGrid().getPathNodeMaps().get(0).getTotalDistance();
+			for (int i = 0; i < this.getGrid().getPathNodeMaps().size(); i++)
+			{
+				if (this.getGrid().getPathNodeMaps().get(i).getTotalDistance() > max)
+				{
+					break;
+				}
+				this.getGrid().paintPointSet(g2d, this.getGrid().getPathNodeMaps().get(i).getPointArray(), this.getDrawDirection(), -2, -2);
+			}
 		}
 
 		g2d.setColor(new Color(255, 193, 63));
@@ -263,7 +280,7 @@ public class GridDraw extends JComponent
 
 	public void setupDisplay()
 	{
-		this.frame = new JFrame("GridViewer V3.1415");
+		this.frame = new JFrame("GridViewer V3.14159");
 		this.frame.setBounds(0, 0, 720, 720);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBackground(Color.WHITE);

@@ -65,8 +65,7 @@ public class Grid implements Serializable
 	/**
 	 * @param p
 	 *            - The point to be checked.
-	 * @return A {@code boolean} value describing if the specified point can be
-	 *         accessed in the internal array.
+	 * @return A {@code boolean} value describing if the specified point can be accessed in the internal array.
 	 */
 	public boolean canAccess(final Point p)
 	{
@@ -276,7 +275,7 @@ public class Grid implements Serializable
 				this.setSquareContents(new Point(this.highlightedPoint), SquareType.START);
 				break;
 			case FINISH:
-				this.setSquareContents(new Point(this.highlightedPoint), SquareType.EMPTY);
+				this.setSquareContents(new Point(this.highlightedPoint), SquareType.FINISH);
 				break;
 			}
 		else
@@ -289,10 +288,10 @@ public class Grid implements Serializable
 				this.setSquareContents(new Point(this.highlightedPoint), SquareType.EMPTY);
 				break;
 			case START:
-				this.setSquareContents(new Point(this.highlightedPoint), SquareType.HAZARD);
+				this.setSquareContents(new Point(this.highlightedPoint), SquareType.START);
 				break;
 			case FINISH:
-				this.setSquareContents(new Point(this.highlightedPoint), SquareType.START);
+				this.setSquareContents(new Point(this.highlightedPoint), SquareType.FINISH);
 				break;
 			}
 	}
