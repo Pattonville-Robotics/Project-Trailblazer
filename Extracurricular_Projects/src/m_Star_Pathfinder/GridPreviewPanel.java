@@ -9,7 +9,7 @@ public class GridPreviewPanel extends JPanel
 {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long	serialVersionUID	= 1L;
 
@@ -19,7 +19,7 @@ public class GridPreviewPanel extends JPanel
 
 	private int					numRows, numColumns, squareWidth, squareHeight;
 
-	public GridPreviewPanel(int numRows, int numColumns, int squareWidth, int squareHeight)
+	public GridPreviewPanel(final int numRows, final int numColumns, final int squareWidth, final int squareHeight)
 	{
 		super();
 		this.numRows = numRows;
@@ -28,37 +28,33 @@ public class GridPreviewPanel extends JPanel
 		this.squareHeight = squareHeight;
 	}
 
-	public void setNumRows(int numRows)
+	@Override
+	public void paint(final Graphics g)
 	{
-		this.numRows = numRows;
+		this.getParent().getParent();
+		g.setColor(Color.BLACK);
+		for (int x = 0; x < this.numRows; x++)
+			for (int y = 0; y < this.numColumns; y++)
+				g.drawRect(x * this.squareWidth + 10, y * this.squareHeight + 10, this.squareWidth, this.squareHeight);
 	}
 
-	public void setNumColumns(int numColumns)
+	public void setNumColumns(final int numColumns)
 	{
 		this.numColumns = numColumns;
 	}
 
-	public void setSquareWidth(int squareWidth)
+	public void setNumRows(final int numRows)
 	{
-		this.squareWidth = squareWidth;
+		this.numRows = numRows;
 	}
 
-	public void setSquareHeight(int squareHeight)
+	public void setSquareHeight(final int squareHeight)
 	{
 		this.squareHeight = squareHeight;
 	}
 
-	@Override
-	public void paint(Graphics g)
+	public void setSquareWidth(final int squareWidth)
 	{
-		this.getParent().getParent();
-		g.setColor(Color.BLACK);
-		for (int x = 0; x < numRows; x++)
-		{
-			for (int y = 0; y < numColumns; y++)
-			{
-				g.drawRect(x * squareWidth + 10, y * squareHeight + 10, squareWidth, squareHeight);
-			}
-		}
+		this.squareWidth = squareWidth;
 	}
 }

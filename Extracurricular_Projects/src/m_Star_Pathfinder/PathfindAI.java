@@ -12,12 +12,8 @@ public class PathfindAI implements Runnable
 	public static void computeDistance(final Grid grid, final Point start)
 	{
 		for (int y = 0; y < grid.getGrid().length; y++)
-		{
 			for (int x = 0; x < grid.getGrid()[y].length; x++)
-			{
 				grid.setSquareDistance(new Point(x, y), -2);
-			}
-		}
 		final List<Point> points = new ArrayList<Point>(grid.getGrid().length * 4);
 		final AbstractSet<Point> pointSet = new HashSet<Point>((int) Math.pow(grid.getGrid().length, 2));
 		points.add(start);
@@ -44,7 +40,7 @@ public class PathfindAI implements Runnable
 					final Point prospectivePoint = new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j]);
 					if (grid.canAccess(prospectivePoint)
 							&& (grid.getSquareCopy(prospectivePoint).getContents() == SquareType.EMPTY || grid.getSquareCopy(prospectivePoint).getContents() == SquareType.FINISH))
-					// If it's not outside the grid and is an empty square
+						// If it's not outside the grid and is an empty square
 					{
 						if (!pointSet.contains(new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j])))
 						{
@@ -235,7 +231,7 @@ public class PathfindAI implements Runnable
 		for (int i = 0; i < nodes.size(); i++)
 			for (int j = 0; j < nodes.size(); j++)
 				if (i != j && !grid.collidesWithHazard(nodes.get(i).getNode(), nodes.get(j).getNode())
-						&& grid.getSquareCopy(nodes.get(i).getNode()).getDistance() > grid.getSquareCopy(nodes.get(j).getNode()).getDistance())
+				&& grid.getSquareCopy(nodes.get(i).getNode()).getDistance() > grid.getSquareCopy(nodes.get(j).getNode()).getDistance())
 					nodes.get(i).addDirectedEdge(nodes.get(j));
 
 	}
@@ -249,12 +245,7 @@ public class PathfindAI implements Runnable
 		{
 			int max = 0;
 			for (int j = i; j < map.size(); j++)
-			{
-				if (!grid.collidesWithHazard(map.getPoint(i), map.getPoint(j)))
-				{
-					max = j;
-				}
-			}
+				if (!grid.collidesWithHazard(map.getPoint(i), map.getPoint(j))) max = j;
 			newMap.addPoint(map.getPoint(max));
 			if (i != max) i = max - 1;
 		}
@@ -269,10 +260,8 @@ public class PathfindAI implements Runnable
 		final ArrayList<VertexMap> newPaths = new ArrayList<VertexMap>(paths.size());
 
 		for (int i = 0; i < paths.size(); i++)
-		{
 			// System.out.println("Progress: " + i + " / " + paths.size());
 			newPaths.add(PathfindAI.optimizePath(grid, paths.get(i)));
-		}
 		Collections.sort(newPaths);
 		grid.setPaths(newPaths);
 	}

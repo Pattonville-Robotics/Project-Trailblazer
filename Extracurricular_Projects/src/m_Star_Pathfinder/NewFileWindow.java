@@ -22,10 +22,10 @@ import javax.swing.event.ChangeListener;
 public class NewFileWindow
 {
 	private JFrame				frame;
-	private GridDraw			superGridDraw;
 	private GridPreviewPanel	previewPanel;
+	private final GridDraw		superGridDraw;
 
-	public NewFileWindow(GridDraw superGridDraw)
+	public NewFileWindow(final GridDraw superGridDraw)
 	{
 		this.superGridDraw = superGridDraw;
 		this.initialize();
@@ -33,7 +33,7 @@ public class NewFileWindow
 
 	public JFrame getFrame()
 	{
-		return frame;
+		return this.frame;
 	}
 
 	private void initialize()
@@ -44,9 +44,9 @@ public class NewFileWindow
 		final JSplitPane splitPane = new JSplitPane();
 		this.frame.getContentPane().add(splitPane, BorderLayout.CENTER);
 
-		previewPanel = new GridPreviewPanel(superGridDraw.getGrid().getGrid()[0].length, superGridDraw.getGrid().getGrid().length, superGridDraw.getGrid()
-				.getSquareWidth(), superGridDraw.getGrid().getSquareHeight());
-		splitPane.setRightComponent(previewPanel);
+		this.previewPanel = new GridPreviewPanel(this.superGridDraw.getGrid().getGrid()[0].length, this.superGridDraw.getGrid().getGrid().length,
+				this.superGridDraw.getGrid().getSquareWidth(), this.superGridDraw.getGrid().getSquareHeight());
+		splitPane.setRightComponent(this.previewPanel);
 
 		final JPanel settingsPanel = new JPanel();
 		settingsPanel.setMinimumSize(new Dimension(100, 100));
@@ -60,13 +60,14 @@ public class NewFileWindow
 		final JSpinner widthSpinner = new JSpinner();
 		widthSpinner.addChangeListener(new ChangeListener()
 		{
-			public void stateChanged(ChangeEvent e)
+			@Override
+			public void stateChanged(final ChangeEvent e)
 			{
-				previewPanel.setNumRows((Integer) widthSpinner.getValue());
-				frame.repaint();
+				NewFileWindow.this.previewPanel.setNumRows((Integer) widthSpinner.getValue());
+				NewFileWindow.this.frame.repaint();
 			}
 		});
-		widthSpinner.setModel(new SpinnerNumberModel(new Integer(superGridDraw.getGrid().getGrid()[0].length), new Integer(4), null, new Integer(1)));
+		widthSpinner.setModel(new SpinnerNumberModel(new Integer(this.superGridDraw.getGrid().getGrid()[0].length), new Integer(4), null, new Integer(1)));
 		widthSpinner.setMaximumSize(new Dimension(76, 28));
 		settingsPanel.add(widthSpinner);
 
@@ -77,13 +78,14 @@ public class NewFileWindow
 		final JSpinner heightSpinner = new JSpinner();
 		heightSpinner.addChangeListener(new ChangeListener()
 		{
-			public void stateChanged(ChangeEvent e)
+			@Override
+			public void stateChanged(final ChangeEvent e)
 			{
-				previewPanel.setNumColumns((Integer) heightSpinner.getValue());
-				frame.repaint();
+				NewFileWindow.this.previewPanel.setNumColumns((Integer) heightSpinner.getValue());
+				NewFileWindow.this.frame.repaint();
 			}
 		});
-		heightSpinner.setModel(new SpinnerNumberModel(new Integer(superGridDraw.getGrid().getGrid().length), new Integer(4), null, new Integer(1)));
+		heightSpinner.setModel(new SpinnerNumberModel(new Integer(this.superGridDraw.getGrid().getGrid().length), new Integer(4), null, new Integer(1)));
 		heightSpinner.setMaximumSize(new Dimension(76, 28));
 		heightSpinner.setToolTipText("Width");
 		settingsPanel.add(heightSpinner);
@@ -95,13 +97,14 @@ public class NewFileWindow
 		final JSpinner squareWidthSpinner = new JSpinner();
 		squareWidthSpinner.addChangeListener(new ChangeListener()
 		{
-			public void stateChanged(ChangeEvent e)
+			@Override
+			public void stateChanged(final ChangeEvent e)
 			{
-				previewPanel.setSquareWidth((Integer) squareWidthSpinner.getValue());
-				frame.repaint();
+				NewFileWindow.this.previewPanel.setSquareWidth((Integer) squareWidthSpinner.getValue());
+				NewFileWindow.this.frame.repaint();
 			}
 		});
-		squareWidthSpinner.setModel(new SpinnerNumberModel(new Integer(superGridDraw.getGrid().getSquareWidth()), null, null, new Integer(1)));
+		squareWidthSpinner.setModel(new SpinnerNumberModel(new Integer(this.superGridDraw.getGrid().getSquareWidth()), null, null, new Integer(1)));
 		squareWidthSpinner.setMaximumSize(new Dimension(76, 28));
 		settingsPanel.add(squareWidthSpinner);
 
@@ -112,13 +115,14 @@ public class NewFileWindow
 		final JSpinner squareHeightSpinner = new JSpinner();
 		squareHeightSpinner.addChangeListener(new ChangeListener()
 		{
-			public void stateChanged(ChangeEvent e)
+			@Override
+			public void stateChanged(final ChangeEvent e)
 			{
-				previewPanel.setSquareHeight((Integer) squareHeightSpinner.getValue());
-				frame.repaint();
+				NewFileWindow.this.previewPanel.setSquareHeight((Integer) squareHeightSpinner.getValue());
+				NewFileWindow.this.frame.repaint();
 			}
 		});
-		squareHeightSpinner.setModel(new SpinnerNumberModel(new Integer(superGridDraw.getGrid().getSquareHeight()), null, null, new Integer(1)));
+		squareHeightSpinner.setModel(new SpinnerNumberModel(new Integer(this.superGridDraw.getGrid().getSquareHeight()), null, null, new Integer(1)));
 		squareHeightSpinner.setMaximumSize(new Dimension(76, 28));
 		settingsPanel.add(squareHeightSpinner);
 
@@ -128,9 +132,10 @@ public class NewFileWindow
 		final JButton btnCreate = new JButton("Create");
 		btnCreate.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent e)
+			@Override
+			public void actionPerformed(final ActionEvent e)
 			{
-				Grid grid = new Grid((Integer) widthSpinner.getValue(), (Integer) heightSpinner.getValue(), (Integer) squareWidthSpinner.getValue(),
+				final Grid grid = new Grid((Integer) widthSpinner.getValue(), (Integer) heightSpinner.getValue(), (Integer) squareWidthSpinner.getValue(),
 						(Integer) squareHeightSpinner.getValue());
 				grid.setSquareContents(new Point(0, 0), SquareType.START);
 				grid.setSquareContents(new Point(3, 3), SquareType.FINISH);
@@ -140,8 +145,8 @@ public class NewFileWindow
 				PathfindAI.connectNodes(grid);
 				PathfindAI.identifyNodes(grid);
 				PathfindAI.connectAllNodes(grid);
-				superGridDraw.replaceGrid(grid);
-				frame.dispose();
+				NewFileWindow.this.superGridDraw.replaceGrid(grid);
+				NewFileWindow.this.frame.dispose();
 			}
 		});
 		btnCreate.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -150,9 +155,10 @@ public class NewFileWindow
 		final JButton btnCancel = new JButton("Cancel");
 		btnCancel.addActionListener(new ActionListener()
 		{
-			public void actionPerformed(ActionEvent e)
+			@Override
+			public void actionPerformed(final ActionEvent e)
 			{
-				frame.dispose();
+				NewFileWindow.this.frame.dispose();
 			}
 		});
 		btnCancel.setAlignmentX(Component.CENTER_ALIGNMENT);

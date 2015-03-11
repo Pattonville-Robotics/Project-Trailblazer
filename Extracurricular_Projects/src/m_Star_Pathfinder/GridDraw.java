@@ -128,10 +128,15 @@ public class GridDraw extends JComponent
 		return this.drawPaths;
 	}
 
+	public Grid getGrid()
+	{
+		return this.grid;
+	}
+
 	public void init()
 	{
 		this.saveDir = new File(System.getProperty("user.home") + "//grid.data");
-		System.out.println(saveDir.getAbsolutePath());
+		System.out.println(this.saveDir.getAbsolutePath());
 
 		try
 		{
@@ -188,11 +193,6 @@ public class GridDraw extends JComponent
 		System.out.println("Finished reading in data file.");
 	}
 
-	public void replaceGrid(Grid grid)
-	{
-		this.getGrid().setSelf(grid);
-	}
-
 	@Override
 	public void paintComponent(final Graphics g)
 	{
@@ -214,13 +214,10 @@ public class GridDraw extends JComponent
 		{
 			g2d.setColor(new Color(255, 255, 0)); // Yellow
 			g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-			double max = this.getGrid().getPaths().get(0).getTotalDistance();
+			final double max = this.getGrid().getPaths().get(0).getTotalDistance();
 			for (int i = 0; i < this.getGrid().getPaths().size(); i++)
 			{
-				if (this.getGrid().getPaths().get(i).getTotalDistance() > max)
-				{
-					break;
-				}
+				if (this.getGrid().getPaths().get(i).getTotalDistance() > max) break;
 				this.getGrid().paintPointSet(g2d, this.getGrid().getPaths().get(i).getArray(), this.getDrawDirection(), 0, 0);
 			}
 		}
@@ -234,13 +231,10 @@ public class GridDraw extends JComponent
 		{
 			g2d.setColor(new Color(0, 255, 255)); // Cyan
 			g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-			double max = this.getGrid().getPathNodeMaps().get(0).getTotalDistance();
+			final double max = this.getGrid().getPathNodeMaps().get(0).getTotalDistance();
 			for (int i = 0; i < this.getGrid().getPathNodeMaps().size(); i++)
 			{
-				if (this.getGrid().getPathNodeMaps().get(i).getTotalDistance() > max)
-				{
-					break;
-				}
+				if (this.getGrid().getPathNodeMaps().get(i).getTotalDistance() > max) break;
 				this.getGrid().paintPointSet(g2d, this.getGrid().getPathNodeMaps().get(i).getPointArray(), this.getDrawDirection(), -2, -2);
 			}
 		}
@@ -249,13 +243,18 @@ public class GridDraw extends JComponent
 		try
 		{
 			g2d.drawString(String.format("FPS: %06.2f ; Yellow length: %07.3f; Cyan length: %07.3f; Magenta length: %07.3f",
-					(1 / ((double) (System.nanoTime() - startTime) / 1000000000)), this.getGrid().getPaths().get(0).getTotalDistance(), this.getGrid()
-							.getPathNodeMaps().get(0).getTotalDistance(), this.getGrid().getPathNodeMap().getTotalDistance()), 5, this.getHeight() - 5);
+					1 / ((double) (System.nanoTime() - startTime) / 1000000000), this.getGrid().getPaths().get(0).getTotalDistance(), this.getGrid()
+					.getPathNodeMaps().get(0).getTotalDistance(), this.getGrid().getPathNodeMap().getTotalDistance()), 5, this.getHeight() - 5);
 		}
-		catch (Exception e)
+		catch (final Exception e)
 		{
 		}
 		this.repaint();
+	}
+
+	public void replaceGrid(final Grid grid)
+	{
+		this.getGrid().setSelf(grid);
 	}
 
 	public void setDrawBalencedNodes(final boolean drawBalencedNodes)
@@ -276,6 +275,11 @@ public class GridDraw extends JComponent
 	public void setDrawPaths(final boolean drawPaths)
 	{
 		this.drawPaths = drawPaths;
+	}
+
+	public void setGrid(final Grid grid)
+	{
+		this.grid = grid;
 	}
 
 	public void setupDisplay()
@@ -300,7 +304,7 @@ public class GridDraw extends JComponent
 		this.openFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		this.saveFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		this.saveAsFile
-				.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_DOWN_MASK));
+		.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_DOWN_MASK));
 		final KeyPressActions newFileAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.NEW);
 		final KeyPressActions saveFileAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.CONTROL_S);
 		final KeyPressActions saveAsFileAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.SAVE_AS);
@@ -411,23 +415,13 @@ public class GridDraw extends JComponent
 		this.getActionMap().put("toggleDrawDirectionAction", toggleDrawDirectionAction);
 
 	}
-
-	public Grid getGrid()
-	{
-		return grid;
-	}
-
-	public void setGrid(Grid grid)
-	{
-		this.grid = grid;
-	}
 }
 
 class KeyPressActions extends AbstractAction
 {
 	public static enum actionSource
 	{
-		B, C, CONTROL_R, DOWN, ENTER, L, LEFT, N, NEW, O, OPEN, P, R, RIGHT, CONTROL_S, SAVE_AS, SHIFT_ENTER, UP
+		B, C, CONTROL_R, CONTROL_S, DOWN, ENTER, L, LEFT, N, NEW, O, OPEN, P, R, RIGHT, SAVE_AS, SHIFT_ENTER, UP
 	}
 
 	private static final long	serialVersionUID	= 1L;
@@ -620,7 +614,7 @@ class KeyPressActions extends AbstractAction
 		}
 		case NEW:
 		{
-			final NewFileWindow window = new NewFileWindow(component);
+			final NewFileWindow window = new NewFileWindow(this.component);
 			window.getFrame().setVisible(true);
 			break;
 		}

@@ -51,10 +51,10 @@ public class Grid implements Serializable
 
 		this.squareWidth = squareWidth;
 		this.squareHeight = squareHeight;
-		nodes = new ArrayList<PathNode>();
-		pathNodeMap = new PathNodeMap();
-		pathNodeMaps = new ArrayList<PathNodeMap>();
-		paths = new ArrayList<VertexMap>();
+		this.nodes = new ArrayList<PathNode>();
+		this.pathNodeMap = new PathNodeMap();
+		this.pathNodeMaps = new ArrayList<PathNodeMap>();
+		this.paths = new ArrayList<VertexMap>();
 
 		for (int row = 0; row < this.grid.length; row++)
 			for (int column = 0; column < this.grid[row].length; column++)
@@ -167,19 +167,14 @@ public class Grid implements Serializable
 		return this.paths;
 	}
 
-	private GridSquare getSquare(final Point p)
+	public GridSquare getSquareCopy(final Point p)
 	{
-		return this.grid[p.y][p.x];
+		return this.grid[p.y][p.x].clone();
 	}
 
 	/*
 	 * public GridDraw getGridDraw() { return gridDraw; }
 	 */
-
-	public GridSquare getSquareCopy(final Point p)
-	{
-		return this.grid[p.y][p.x].clone();
-	}
 
 	public int getSquareHeight()
 	{
@@ -413,5 +408,10 @@ public class Grid implements Serializable
 			return true;
 		else
 			return false;
+	}
+
+	private GridSquare getSquare(final Point p)
+	{
+		return this.grid[p.y][p.x];
 	}
 }
