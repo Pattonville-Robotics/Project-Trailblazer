@@ -51,11 +51,15 @@ public class Grid implements Serializable
 
 		this.squareWidth = squareWidth;
 		this.squareHeight = squareHeight;
-		// this.gridDraw = gridDraw;
+		nodes = new ArrayList<PathNode>();
+		pathNodeMap = new PathNodeMap();
+		pathNodeMaps = new ArrayList<PathNodeMap>();
+		paths = new ArrayList<VertexMap>();
 
 		for (int row = 0; row < this.grid.length; row++)
 			for (int column = 0; column < this.grid[row].length; column++)
 				this.setSquare(new GridSquare(this, SquareType.EMPTY, column * squareWidth, row * squareHeight, squareWidth, squareHeight), row, column);
+		PathfindAI.computeDistance(this, this.getStartPoint());
 	}
 
 	/**
@@ -269,7 +273,7 @@ public class Grid implements Serializable
 				this.setSquareContents(new Point(this.highlightedPoint), SquareType.START);
 				break;
 			case START:
-				this.setSquareContents(new Point(this.highlightedPoint), SquareType.FINISH);
+				this.setSquareContents(new Point(this.highlightedPoint), SquareType.START);
 				break;
 			case FINISH:
 				this.setSquareContents(new Point(this.highlightedPoint), SquareType.EMPTY);

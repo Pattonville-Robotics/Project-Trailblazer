@@ -118,6 +118,7 @@ public class GridSquare implements Cloneable, Serializable
 				g.setColor(new Color(shade, shade, shade));
 			else
 			{
+				this.superGrid.findFurthestPoint();
 				System.out.println("Out of bounds.");
 				g.setColor(new Color(255, 0, 0));
 			}

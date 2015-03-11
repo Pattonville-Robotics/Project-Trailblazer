@@ -62,8 +62,7 @@ public class PathfindAI implements Runnable
 			// System.out.println(distance);
 			distance++;
 			/*
-			 * System.out.println(Arrays.toString(points.toArray()));
-			 * System.out.println(Arrays.toString(newPoints.toArray()));
+			 * System.out.println(Arrays.toString(points.toArray())); System.out.println(Arrays.toString(newPoints.toArray()));
 			 */
 			if (numFailedCells == points.size() || points.size() == 0) noMoreLeft = true; // End
 			// looping
@@ -148,7 +147,7 @@ public class PathfindAI implements Runnable
 					break;
 				}
 			}
-			System.out.println(numZero + " paths out of " + paths.size() + " paths have finished.");
+			// System.out.println(numZero + " paths out of " + paths.size() + " paths have finished.");
 			if (numZero == paths.size()) allZero = true;
 		}
 
@@ -259,23 +258,18 @@ public class PathfindAI implements Runnable
 		newMap.addPoint(map.getPoint(0));
 
 		for (int i = 0; i < map.size(); i++)
+		{
+			int max = 0;
 			for (int j = i; j < map.size(); j++)
-				// System.out.println("Point " + map.getPoint(i) + " to " +
-				// map.getPoint(j) + " intersect status: "
-				// + grid.collidesWithHazard(map.getPoint(i), map.getPoint(j)));
-				if (grid.collidesWithHazard(map.getPoint(i), map.getPoint(j)))
+			{
+				if (!grid.collidesWithHazard(map.getPoint(i), map.getPoint(j)))
 				{
-					// System.out.println("Line from " +
-					// map.getPoint(i).toString() + " to " +
-					// map.getPoint(j).toString() + " collided with a wall!");
-
-					// System.out.println("Creating line from " +
-					// newMap.getLastPoint() + " to " + map.getPoint(j));
-					newMap.addPoint(map.getPoint(j - 1));
-					i = j - 2;
-
-					break;
+					max = j;
 				}
+			}
+			newMap.addPoint(map.getPoint(max));
+			if (i != max) i = max - 1;
+		}
 		newMap.addPoint(map.getLastPoint());
 
 		return newMap;
@@ -288,7 +282,7 @@ public class PathfindAI implements Runnable
 
 		for (int i = 0; i < paths.size(); i++)
 		{
-			System.out.println("Progress: " + i + " / " + paths.size());
+			// System.out.println("Progress: " + i + " / " + paths.size());
 			newPaths.add(PathfindAI.optimizePath(grid, paths.get(i)));
 		}
 		Collections.sort(newPaths);

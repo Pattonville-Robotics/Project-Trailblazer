@@ -56,7 +56,7 @@ public class GridDraw extends JComponent
 	private JFrame	frame;
 
 	private Grid	grid;
-	private JMenuItem	help1, help2, help3, help4, help5, help6, help7, help8, help9, newFile, openFile, saveFile;
+	private JMenuItem	help1, help2, help3, help4, help5, help6, help7, help8, help9, newFile, openFile, saveFile, saveAsFile;
 	private final Kryo	kryo	= new Kryo();
 	private JMenuBar	menuBar;
 	File				saveDir	= null;
@@ -152,11 +152,6 @@ public class GridDraw extends JComponent
 			this.grid.setSquareContents(new Point(4, 6), SquareType.HAZARD);
 			this.grid.setSquareContents(new Point(5, 7), SquareType.HAZARD);
 			this.grid.setSquareContents(new Point(6, 8), SquareType.HAZARD);
-			this.grid.setSquareContents(new Point(4, 5), SquareType.HAZARD);
-			this.grid.setSquareContents(new Point(7, 9), SquareType.HAZARD);
-			this.grid.setSquareContents(new Point(8, 10), SquareType.HAZARD);
-			this.grid.setSquareContents(new Point(9, 11), SquareType.HAZARD);
-			this.grid.setSquareContents(new Point(3, 1), SquareType.HAZARD);
 
 			PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
 			// PathfindAI.computePaths(this.grid);
@@ -176,7 +171,7 @@ public class GridDraw extends JComponent
 		{
 			input = new Input(new FileInputStream(file));
 			if (this.grid != null)
-				this.grid.setSelf(this.kryo.readObject(input, Grid.class));
+				this.replaceGrid(this.kryo.readObject(input, Grid.class));
 			else
 				this.grid = this.kryo.readObject(input, Grid.class);
 		}
@@ -189,6 +184,11 @@ public class GridDraw extends JComponent
 			input.close();
 		}
 		System.out.println("Finished reading in data file.");
+	}
+
+	public void replaceGrid(Grid grid)
+	{
+		this.grid.setSelf(grid);
 	}
 
 	@Override
@@ -222,8 +222,17 @@ public class GridDraw extends JComponent
 			this.grid.paintPointSet(g2d, this.grid.getPathNodeMaps().get(0).getPointArray(), this.getDrawDirection(), -1, -1);
 		}
 
-		g2d.setColor(new Color(255, 63, 63));
-		g2d.drawString(String.format("FPS: %06.2f", 1 / ((double) (System.nanoTime() - startTime) / 1000000000)), 5, this.getHeight() - 5);
+		g2d.setColor(new Color(255, 193, 63));
+		try
+		{
+			g2d.drawString(String.format("FPS: %06.2f ; Yellow length: %07.3f; Cyan length: %07.3f; Magenta length: %07.3f",
+					(1 / ((double) (System.nanoTime() - startTime) / 1000000000)), this.grid.getPaths().get(0).getTotalDistance(), this.grid.getPathNodeMaps()
+							.get(0).getTotalDistance(), this.grid.getPathNodeMap().getTotalDistance()), 5, this.getHeight() - 5);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		this.repaint();
 	}
 
@@ -249,7 +258,7 @@ public class GridDraw extends JComponent
 
 	public void setupDisplay()
 	{
-		this.frame = new JFrame("GridViewer V2.3");
+		this.frame = new JFrame("GridViewer V3.1415");
 		this.frame.setBounds(0, 0, 720, 720);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setBackground(Color.WHITE);
@@ -264,18 +273,24 @@ public class GridDraw extends JComponent
 		this.newFile = new JMenuItem("New Blank Grid...");
 		this.openFile = new JMenuItem("Open...");
 		this.saveFile = new JMenuItem("Save...");
+		this.saveAsFile = new JMenuItem("Save as...");
 		this.newFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		this.openFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		this.saveFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_DOWN_MASK));
+		this.saveFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		this.saveAsFile
+				.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_DOWN_MASK));
 		final KeyPressActions newFileAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.NEW);
-		final KeyPressActions saveFileAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.SAVE_AS);
+		final KeyPressActions saveFileAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.CONTROL_S);
+		final KeyPressActions saveAsFileAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.SAVE_AS);
 		final KeyPressActions openFileAction = new KeyPressActions(this.grid, this, KeyPressActions.actionSource.OPEN);
 		this.newFile.addActionListener(newFileAction);
 		this.openFile.addActionListener(openFileAction);
 		this.saveFile.addActionListener(saveFileAction);
+		this.saveAsFile.addActionListener(saveAsFileAction);
 		this.file.add(this.newFile);
 		this.file.add(this.openFile);
 		this.file.add(this.saveFile);
+		this.file.add(this.saveAsFile);
 
 		this.help1 = new JMenuItem("You can use the arrow keys to select a square to modify.");
 		this.help2 = new JMenuItem("Use \"ENTER\" and \"SHIFT + ENTER\" to cycle through possible square contents.");
@@ -358,10 +373,10 @@ public class GridDraw extends JComponent
 		this.getInputMap().put(KeyStroke.getKeyStroke("R"), "calculatePathsAction");
 		this.getActionMap().put("calculatePathsAction", calculatePathsAction);
 
-		this.getInputMap().put(KeyStroke.getKeyStroke("control R"), "redrawAction");
+		this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "redrawAction");
 		this.getActionMap().put("redrawAction", redrawAction);
 
-		this.getInputMap().put(KeyStroke.getKeyStroke("control S"), "saveAction");
+		this.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()), "saveAction");
 		this.getActionMap().put("saveAction", saveAction);
 
 		this.getInputMap().put(KeyStroke.getKeyStroke("L"), "loadAction");
@@ -569,6 +584,12 @@ class KeyPressActions extends AbstractAction
 				this.component.saveDir = open.getSelectedFile();
 				this.component.loadGrid(this.component.saveDir);
 			}
+			break;
+		}
+		case NEW:
+		{
+			final NewFileWindow window = new NewFileWindow(component);
+			window.getFrame().setVisible(true);
 			break;
 		}
 		default:
