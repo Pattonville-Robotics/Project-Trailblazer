@@ -15,7 +15,6 @@ public class Grid implements Serializable
 	private static final long		serialVersionUID	= 1L;
 
 	private GridSquare[][]			grid;
-	// private GridDraw gridDraw;
 	private int						highlightThickness	= 2;
 	private ArrayList<PathNode>		nodes;
 	private PathNodeMap				pathNodeMap;
