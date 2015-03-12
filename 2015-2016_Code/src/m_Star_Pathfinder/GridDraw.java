@@ -32,7 +32,6 @@ import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
 //TODO Reduce source code size; only include needed things
-//TODO Make GridMaker application or functionality to make custom sized grids
 //TODO Design easier interface for code and movement
 
 public class GridDraw extends JComponent
