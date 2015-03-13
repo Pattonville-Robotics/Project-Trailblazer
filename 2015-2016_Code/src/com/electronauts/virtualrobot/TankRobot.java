@@ -1,5 +1,7 @@
 package com.electronauts.virtualrobot;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Shape;
 
 public class TankRobot extends AbstractRobot
@@ -38,5 +40,12 @@ public class TankRobot extends AbstractRobot
 	public void setMotorPower(final MotorData motor, final double power)
 	{
 		this.getMotor(motor).setPower(power);
+	}
+
+	public void paint(Graphics g, int scale)
+	{
+		g.setColor(Color.BLACK);
+		g.drawLine((int) (this.getMotor(MotorData.MOTOR_RIGHT).getX() * scale), (int) (this.getMotor(MotorData.MOTOR_RIGHT).getY() * scale),
+				(int) (this.getMotor(MotorData.MOTOR_LEFT).getX() * scale), (int) (this.getMotor(MotorData.MOTOR_LEFT).getY() * scale));
 	}
 }
