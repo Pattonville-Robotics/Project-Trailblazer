@@ -1,46 +1,22 @@
 package com.electronauts.virtualrobot;
 
+import java.awt.Shape;
+
 public abstract class AbstractRobot implements Runnable
 {
-	private Motor	motorLeft, motorRight;
+	protected Motor[]	motors;
 
-	public double getMotorPower(final Motor.MotorData motor)
+	public abstract Shape getBounds();
+
+	public Motor getMotor(final MotorData motorData)
 	{
-		switch (motor)
-		{
-		case MOTOR_RIGHT:
-		{
-			return this.motorRight.getPower();
-		}
-		case MOTOR_LEFT:
-		{
-			return this.motorLeft.getPower();
-		}
-		default:
-		{
-			throw new IllegalArgumentException("Invalid motor specified!");
-		}
-		}
+		for (final Motor motor : this.motors)
+			if (motor.getMotorData() == motorData) return motor;
+		throw new IllegalArgumentException("Motor not found!");
 	}
 
-	public void setMotorPower(final Motor.MotorData motor, final double power)
-	{
-		switch (motor)
-		{
-		case MOTOR_RIGHT:
-		{
-			this.motorRight.setPower(power);
-			break;
-		}
-		case MOTOR_LEFT:
-		{
-			this.motorLeft.setPower(power);
-			break;
-		}
-		default:
-		{
-			throw new IllegalArgumentException("Invalid motor specified!");
-		}
-		}
-	}
+	public abstract double getMotorPower(final MotorData motor);
+
+	public abstract void setMotorPower(final MotorData motor, final double power);
+
 }
