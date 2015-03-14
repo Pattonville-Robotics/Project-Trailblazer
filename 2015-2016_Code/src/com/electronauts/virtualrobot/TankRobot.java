@@ -30,11 +30,11 @@ public class TankRobot extends AbstractRobot
 		final Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
 		final Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
 
-		output.moveTo((scale * (p1.getX() + motorL.getX())), (scale * (p1.getY() + motorL.getY())));
-		output.lineTo((scale * (p2.getX() + motorL.getX())), (scale * (p2.getY() + motorL.getY())));
+		output.moveTo(scale * (p1.getX() + motorL.getX()), scale * (p1.getY() + motorL.getY()));
+		output.lineTo(scale * (p2.getX() + motorL.getX()), scale * (p2.getY() + motorL.getY()));
 
-		output.lineTo((scale * (p2.getX() + motorR.getX())), (scale * (p2.getY() + motorR.getY())));
-		output.lineTo((scale * (p1.getX() + motorR.getX())), (scale * (p1.getY() + motorR.getY())));
+		output.lineTo(scale * (p2.getX() + motorR.getX()), scale * (p2.getY() + motorR.getY()));
+		output.lineTo(scale * (p1.getX() + motorR.getX()), scale * (p1.getY() + motorR.getY()));
 		output.closePath();
 
 		return output;

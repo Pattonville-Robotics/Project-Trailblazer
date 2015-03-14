@@ -5,6 +5,7 @@ import java.awt.geom.Path2D;
 public abstract class AbstractRobot implements Runnable
 {
 	protected Motor[]	motors;
+	private double		time;
 
 	public abstract Path2D getBounds(int scale);
 
@@ -18,4 +19,14 @@ public abstract class AbstractRobot implements Runnable
 	public abstract double getMotorRPM(final MotorData motor);
 
 	public abstract void setMotorRPM(final MotorData motor, final double rpm);
+
+	public double getTime()
+	{
+		return time;
+	}
+
+	public void setTime(double time)
+	{
+		this.time = time;
+	}
 }

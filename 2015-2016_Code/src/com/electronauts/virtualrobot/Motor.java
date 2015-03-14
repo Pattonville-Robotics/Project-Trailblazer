@@ -3,14 +3,58 @@ package com.electronauts.virtualrobot;
 public class Motor
 {
 	private final MotorData	motorData;
-	private double			x, y, rpm;
+	private double			startX, startY, x, y, rpm;
+	private Wheel			wheel;
 
-	public Motor(final MotorData motorData, final double x, final double y)
+	public Motor(final MotorData motorData, final Wheel wheel, final double x, final double y)
 	{
 		this.motorData = motorData;
+		this.wheel = wheel;
 		this.x = x;
+		this.startX = x;
 		this.y = y;
+		this.startY = y;
 		this.rpm = 0;
+	}
+
+	public double getStartX()
+	{
+		return startX;
+	}
+
+	public void setStartX(double startX)
+	{
+		this.startX = startX;
+	}
+
+	public double getStartY()
+	{
+		return startY;
+	}
+
+	public void setStartY(double startY)
+	{
+		this.startY = startY;
+	}
+
+	public double getRpm()
+	{
+		return rpm;
+	}
+
+	public void setRpm(double rpm)
+	{
+		this.rpm = rpm;
+	}
+
+	public Wheel getWheel()
+	{
+		return wheel;
+	}
+
+	public void setWheel(Wheel wheel)
+	{
+		this.wheel = wheel;
 	}
 
 	public MotorData getMotorData()
