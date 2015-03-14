@@ -1,12 +1,12 @@
 package com.electronauts.virtualrobot;
 
-import java.awt.Polygon;
+import java.awt.geom.Path2D;
 
 public abstract class AbstractRobot implements Runnable
 {
 	protected Motor[]	motors;
 
-	public abstract Polygon getBounds(int scale);
+	public abstract Path2D getBounds(int scale);
 
 	public Motor getMotor(final MotorData motorData)
 	{
@@ -15,8 +15,7 @@ public abstract class AbstractRobot implements Runnable
 		throw new IllegalArgumentException("Motor not found!");
 	}
 
-	public abstract double getMotorPower(final MotorData motor);
+	public abstract double getMotorRPM(final MotorData motor);
 
-	public abstract void setMotorPower(final MotorData motor, final double power);
-
+	public abstract void setMotorRPM(final MotorData motor, final double rpm);
 }

@@ -2,6 +2,7 @@ package com.electronauts.virtualrobot;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -19,14 +20,15 @@ public class RobotRunner
 			@Override
 			public void paintComponent(final Graphics g)
 			{
-				robot.paint(g, 50);
-				robot.getMotor(MotorData.MOTOR_RIGHT).setY(Math.sin(i) * 2 + 5);
-				robot.getMotor(MotorData.MOTOR_LEFT).setX(Math.cos(i) * 2 + 5);
-				g.setColor(Color.RED);
-				g.drawOval((int) (robot.getMotor(MotorData.MOTOR_LEFT).getX() * 50 - 5), (int) (robot.getMotor(MotorData.MOTOR_LEFT).getY() * 50 - 5), 10, 10);
-				g.drawOval((int) (robot.getMotor(MotorData.MOTOR_RIGHT).getX() * 50 - 5), (int) (robot.getMotor(MotorData.MOTOR_RIGHT).getY() * 50 - 5), 10, 10);
-				i += 0.0025;
-				repaint();
+				Graphics2D g2d = (Graphics2D) g;
+				robot.paint(g2d, 50);
+				robot.getMotor(MotorData.MOTOR_RIGHT).setY(Math.sin(this.i) * 2 + 5);
+				robot.getMotor(MotorData.MOTOR_LEFT).setX(Math.cos(this.i) * 2 + 5);
+				g2d.setColor(Color.RED);
+				g2d.drawOval((int) (robot.getMotor(MotorData.MOTOR_LEFT).getX() * 50 - 5), (int) (robot.getMotor(MotorData.MOTOR_LEFT).getY() * 50 - 5), 10, 10);
+				g2d.drawOval((int) (robot.getMotor(MotorData.MOTOR_RIGHT).getX() * 50 - 5), (int) (robot.getMotor(MotorData.MOTOR_RIGHT).getY() * 50 - 5), 10, 10);
+				this.i += 0.0025;
+				this.repaint();
 			}
 		};
 		final JFrame frame = new JFrame("Robot testing in progress...");

@@ -1,8 +1,8 @@
 package com.electronauts.virtualrobot;
 
 import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Polygon;
+import java.awt.Graphics2D;
+import java.awt.geom.Path2D;
 
 import com.electronauts.mathutil.PolarPoint;
 
@@ -22,27 +22,28 @@ public class TankRobot extends AbstractRobot
 	}
 
 	@Override
-	public Polygon getBounds(int scale)
+	public Path2D getBounds(final int scale)
 	{
-		final Polygon output = new Polygon();
-		PolarPoint p1 = new PolarPoint(this.getWidth() / 2, this.getAngle() + Math.PI / 2);
-		PolarPoint p2 = new PolarPoint(this.getWidth() / 2, this.getAngle() - Math.PI / 2);
-		Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
-		Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
+		final Path2D.Double output = new Path2D.Double();
+		final PolarPoint p1 = new PolarPoint(this.getWidth() / 2, this.getAngle() + Math.PI / 2);
+		final PolarPoint p2 = new PolarPoint(this.getWidth() / 2, this.getAngle() - Math.PI / 2);
+		final Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
+		final Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
 
-		output.addPoint((int) (scale * (p1.getX() + motorL.getX())), (int) (scale * (p1.getY() + motorL.getY())));
-		output.addPoint((int) (scale * (p2.getX() + motorL.getX())), (int) (scale * (p2.getY() + motorL.getY())));
+		output.moveTo((scale * (p1.getX() + motorL.getX())), (scale * (p1.getY() + motorL.getY())));
+		output.lineTo((scale * (p2.getX() + motorL.getX())), (scale * (p2.getY() + motorL.getY())));
 
-		output.addPoint((int) (scale * (p2.getX() + motorR.getX())), (int) (scale * (p2.getY() + motorR.getY())));
-		output.addPoint((int) (scale * (p1.getX() + motorR.getX())), (int) (scale * (p1.getY() + motorR.getY())));
+		output.lineTo((scale * (p2.getX() + motorR.getX())), (scale * (p2.getY() + motorR.getY())));
+		output.lineTo((scale * (p1.getX() + motorR.getX())), (scale * (p1.getY() + motorR.getY())));
+		output.closePath();
 
 		return output;
 	}
 
 	@Override
-	public double getMotorPower(final MotorData motor)
+	public double getMotorRPM(final MotorData motor)
 	{
-		return this.getMotor(motor).getPower();
+		return this.getMotor(motor).getRPM();
 	}
 
 	public double getWidth()
@@ -51,10 +52,10 @@ public class TankRobot extends AbstractRobot
 				+ Math.pow(this.getMotor(MotorData.MOTOR_RIGHT).getY() - this.getMotor(MotorData.MOTOR_LEFT).getY(), 2));
 	}
 
-	public void paint(final Graphics g, final int scale)
+	public void paint(final Graphics2D g2d, final int scale)
 	{
-		g.setColor(Color.BLACK);
-		g.drawPolygon(this.getBounds(scale));
+		g2d.setColor(Color.BLACK);
+		g2d.draw(this.getBounds(scale));
 	}
 
 	@Override
@@ -63,8 +64,8 @@ public class TankRobot extends AbstractRobot
 	}
 
 	@Override
-	public void setMotorPower(final MotorData motor, final double power)
+	public void setMotorRPM(final MotorData motor, final double rpm)
 	{
-		this.getMotor(motor).setPower(power);
+		this.getMotor(motor).setRPM(rpm);
 	}
 }

@@ -3,13 +3,14 @@ package com.electronauts.virtualrobot;
 public class Motor
 {
 	private final MotorData	motorData;
-	private double			x, y, power;
+	private double			x, y, rpm;
 
 	public Motor(final MotorData motorData, final double x, final double y)
 	{
 		this.motorData = motorData;
-		this.setX(x);
-		this.setY(y);
+		this.x = x;
+		this.y = y;
+		this.rpm = 0;
 	}
 
 	public MotorData getMotorData()
@@ -17,9 +18,9 @@ public class Motor
 		return this.motorData;
 	}
 
-	public double getPower()
+	public double getRPM()
 	{
-		return this.power;
+		return this.rpm;
 	}
 
 	public double getX()
@@ -32,9 +33,9 @@ public class Motor
 		return this.y;
 	}
 
-	public void setPower(final double power)
+	public void setRPM(final double rpm)
 	{
-		this.power = power;
+		this.rpm = rpm;
 	}
 
 	public void setX(final double x)
