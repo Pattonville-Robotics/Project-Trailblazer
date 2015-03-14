@@ -8,6 +8,18 @@ import com.electronauts.mathutil.PolarPoint;
 
 public class TankRobot extends AbstractRobot
 {
+	private double	radius;
+
+	public double getRadius()
+	{
+		return radius;
+	}
+
+	public void setRadius(double radius)
+	{
+		this.radius = radius;
+	}
+
 	public TankRobot(final Motor motorLeft, final Motor motorRight)
 	{
 		this.motors = new Motor[2];
@@ -67,5 +79,15 @@ public class TankRobot extends AbstractRobot
 	public void setMotorRPM(final MotorData motor, final double rpm)
 	{
 		this.getMotor(motor).setRPM(rpm);
+	}
+
+	@Override
+	public void setTime(double time)
+	{
+		super.setTime(time);
+		Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
+		Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
+		
+		motorL.setRadius(time);
 	}
 }

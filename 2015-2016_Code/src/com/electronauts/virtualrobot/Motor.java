@@ -3,7 +3,7 @@ package com.electronauts.virtualrobot;
 public class Motor
 {
 	private final MotorData	motorData;
-	private double			startX, startY, x, y, rpm;
+	private double			startX, startY, x, y, rpm, radius;
 	private Wheel			wheel;
 
 	public Motor(final MotorData motorData, final Wheel wheel, final double x, final double y)
@@ -90,5 +90,15 @@ public class Motor
 	public void setY(final double y)
 	{
 		this.y = y;
+	}
+
+	public double getRadius()
+	{
+		return radius;
+	}
+
+	public void setRadius(double radius)
+	{
+		this.radius = radius;
 	}
 }
