@@ -2,7 +2,9 @@ package com.electronauts.virtualrobot;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Shape;
+import java.awt.Polygon;
+
+import com.electronauts.mathutil.PolarPoint;
 
 public class TankRobot extends AbstractRobot
 {
@@ -13,10 +15,28 @@ public class TankRobot extends AbstractRobot
 		this.motors[1] = motorLeft;
 	}
 
-	@Override
-	public Shape getBounds()
+	public double getAngle()
 	{
-		return null;
+		return Math.atan2(this.getMotor(MotorData.MOTOR_LEFT).getY() - this.getMotor(MotorData.MOTOR_RIGHT).getY(), this.getMotor(MotorData.MOTOR_LEFT).getX()
+				- this.getMotor(MotorData.MOTOR_RIGHT).getX());
+	}
+
+	@Override
+	public Polygon getBounds(int scale)
+	{
+		final Polygon output = new Polygon();
+		PolarPoint p1 = new PolarPoint(this.getWidth() / 2, this.getAngle() + Math.PI / 2);
+		PolarPoint p2 = new PolarPoint(this.getWidth() / 2, this.getAngle() - Math.PI / 2);
+		Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
+		Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
+
+		output.addPoint((int) (scale * (p1.getX() + motorL.getX())), (int) (scale * (p1.getY() + motorL.getY())));
+		output.addPoint((int) (scale * (p2.getX() + motorL.getX())), (int) (scale * (p2.getY() + motorL.getY())));
+
+		output.addPoint((int) (scale * (p2.getX() + motorR.getX())), (int) (scale * (p2.getY() + motorR.getY())));
+		output.addPoint((int) (scale * (p1.getX() + motorR.getX())), (int) (scale * (p1.getY() + motorR.getY())));
+
+		return output;
 	}
 
 	@Override
@@ -31,6 +51,12 @@ public class TankRobot extends AbstractRobot
 				+ Math.pow(this.getMotor(MotorData.MOTOR_RIGHT).getY() - this.getMotor(MotorData.MOTOR_LEFT).getY(), 2));
 	}
 
+	public void paint(final Graphics g, final int scale)
+	{
+		g.setColor(Color.BLACK);
+		g.drawPolygon(this.getBounds(scale));
+	}
+
 	@Override
 	public void run()
 	{
@@ -40,12 +66,5 @@ public class TankRobot extends AbstractRobot
 	public void setMotorPower(final MotorData motor, final double power)
 	{
 		this.getMotor(motor).setPower(power);
-	}
-
-	public void paint(Graphics g, int scale)
-	{
-		g.setColor(Color.BLACK);
-		g.drawLine((int) (this.getMotor(MotorData.MOTOR_RIGHT).getX() * scale), (int) (this.getMotor(MotorData.MOTOR_RIGHT).getY() * scale),
-				(int) (this.getMotor(MotorData.MOTOR_LEFT).getX() * scale), (int) (this.getMotor(MotorData.MOTOR_LEFT).getY() * scale));
 	}
 }

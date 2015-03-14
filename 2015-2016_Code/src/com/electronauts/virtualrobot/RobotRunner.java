@@ -8,20 +8,28 @@ import javax.swing.JFrame;
 
 public class RobotRunner
 {
-	public static void main(String[] args)
+	public static void main(final String[] args)
 	{
-		final TankRobot robot = new TankRobot(new Motor(MotorData.MOTOR_RIGHT, 1, 1), new Motor(MotorData.MOTOR_LEFT, 2, 1));
-		JComponent component = new JComponent()
+		final TankRobot robot = new TankRobot(new Motor(MotorData.MOTOR_RIGHT, 5, 1), new Motor(MotorData.MOTOR_LEFT, 2, 5));
+		final JComponent component = new JComponent()
 		{
 			private static final long	serialVersionUID	= 1L;
+			public double				i					= 0.0;
 
 			@Override
-			public void paintComponent(Graphics g)
+			public void paintComponent(final Graphics g)
 			{
-				robot.paint(g, 20);
+				robot.paint(g, 50);
+				robot.getMotor(MotorData.MOTOR_RIGHT).setY(Math.sin(i) * 2 + 5);
+				robot.getMotor(MotorData.MOTOR_LEFT).setX(Math.cos(i) * 2 + 5);
+				g.setColor(Color.RED);
+				g.drawOval((int) (robot.getMotor(MotorData.MOTOR_LEFT).getX() * 50 - 5), (int) (robot.getMotor(MotorData.MOTOR_LEFT).getY() * 50 - 5), 10, 10);
+				g.drawOval((int) (robot.getMotor(MotorData.MOTOR_RIGHT).getX() * 50 - 5), (int) (robot.getMotor(MotorData.MOTOR_RIGHT).getY() * 50 - 5), 10, 10);
+				i += 0.0025;
+				repaint();
 			}
 		};
-		JFrame frame = new JFrame("Robot testing in progress...");
+		final JFrame frame = new JFrame("Robot testing in progress...");
 		frame.setBounds(0, 0, 720, 720);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		component.setBackground(Color.WHITE);
