@@ -11,14 +11,11 @@ public class RobotRunner
 {
 	public static void main(final String[] args)
 	{
-		final TankRobot robot = new TankRobot(new Motor(MotorData.MOTOR_RIGHT, new Wheel(1), 5, 3), new Motor(MotorData.MOTOR_LEFT, new Wheel(1), 6, 3));
-		robot.setMotorRPM(MotorData.MOTOR_LEFT, 60);
-		robot.setMotorRPM(MotorData.MOTOR_RIGHT, 30);
+		final TankRobot robot = new TankRobot(new Motor(MotorData.MOTOR_RIGHT, new Wheel(1), 14, 10), new Motor(MotorData.MOTOR_LEFT, new Wheel(1), 12, 10));
 
 		final JComponent component = new JComponent()
 		{
 			private static final long	serialVersionUID	= 1L;
-			public double				t					= 0.0;
 
 			@Override
 			public void paintComponent(final Graphics g)
@@ -26,13 +23,7 @@ public class RobotRunner
 				int scale = 20;
 				final Graphics2D g2d = (Graphics2D) g;
 				robot.paint(g2d, scale);
-				g2d.setColor(Color.RED);
-				g2d.fillOval((int) (robot.getMotor(MotorData.MOTOR_LEFT).getX() * scale - 2), (int) (robot.getMotor(MotorData.MOTOR_LEFT).getY() * scale - 2),
-						4, 4);
-				g2d.fillOval((int) (robot.getMotor(MotorData.MOTOR_RIGHT).getX() * scale - 2),
-						(int) (robot.getMotor(MotorData.MOTOR_RIGHT).getY() * scale - 2), 4, 4);
-				robot.setTime(t);
-				this.t += 0.0025;
+				robot.setTime(2, g2d);
 				this.repaint();
 			}
 		};
@@ -43,5 +34,7 @@ public class RobotRunner
 		frame.setBackground(Color.GRAY);
 		frame.getContentPane().add(component);
 		frame.setVisible(true);
+		robot.setMotorRPM(MotorData.MOTOR_LEFT, 15, (Graphics2D) component.getGraphics());
+		robot.setMotorRPM(MotorData.MOTOR_RIGHT, 20, (Graphics2D) component.getGraphics());
 	}
 }

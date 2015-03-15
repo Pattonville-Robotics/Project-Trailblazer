@@ -1,5 +1,6 @@
 package com.electronauts.virtualrobot;
 
+import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 
 public abstract class AbstractRobot implements Runnable
@@ -18,14 +19,14 @@ public abstract class AbstractRobot implements Runnable
 
 	public abstract double getMotorRPM(final MotorData motor);
 
-	public abstract void setMotorRPM(final MotorData motor, final double rpm);
+	public abstract void setMotorRPM(final MotorData motor, final double rpm, Graphics2D g2d);
 
 	public double getTime()
 	{
 		return time;
 	}
 
-	public void setTime(double time)
+	public void setTime(double time, Graphics2D g2d)
 	{
 		this.time = time;
 	}

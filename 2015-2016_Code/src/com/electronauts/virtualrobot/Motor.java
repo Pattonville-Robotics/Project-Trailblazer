@@ -3,7 +3,7 @@ package com.electronauts.virtualrobot;
 public class Motor
 {
 	private final MotorData	motorData;
-	private double			startX, startY, x, y, rpm, radius;
+	private double			rotX, rotY, x, y, rpm, radius, theta;
 	private Wheel			wheel;
 
 	public Motor(final MotorData motorData, final Wheel wheel, final double x, final double y)
@@ -11,40 +11,41 @@ public class Motor
 		this.motorData = motorData;
 		this.wheel = wheel;
 		this.x = x;
-		this.startX = x;
+		this.rotX = x;
 		this.y = y;
-		this.startY = y;
+		this.rotY = y;
 		this.rpm = 0;
+		this.theta = 0;
 	}
 
-	public double getStartX()
+	public double getRotX()
 	{
-		return startX;
+		return rotX;
 	}
 
-	public void setStartX(double startX)
+	public void setRotX(double rotX)
 	{
-		this.startX = startX;
+		this.rotX = rotX;
 	}
 
-	public double getStartY()
+	public double getRotY()
 	{
-		return startY;
+		return rotY;
 	}
 
-	public void setStartY(double startY)
+	public void setRotY(double rotY)
 	{
-		this.startY = startY;
+		this.rotY = rotY;
 	}
 
-	public double getRpm()
+	public double getTheta()
 	{
-		return rpm;
+		return theta;
 	}
 
-	public void setRpm(double rpm)
+	public void setTheta(double theta)
 	{
-		this.rpm = rpm;
+		this.theta = theta;
 	}
 
 	public Wheel getWheel()
