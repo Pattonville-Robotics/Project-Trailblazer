@@ -13,6 +13,9 @@ public class RobotRunner
 	{
 		final TankRobot robot = new TankRobot(new Motor(MotorData.MOTOR_RIGHT, new Wheel(1), 14, 10), new Motor(MotorData.MOTOR_LEFT, new Wheel(1), 12, 10));
 
+		robot.setMotorRPM(MotorData.MOTOR_LEFT, 99);
+		robot.setMotorRPM(MotorData.MOTOR_RIGHT, 100);
+
 		final JComponent component = new JComponent()
 		{
 			private static final long	serialVersionUID	= 1L;
@@ -23,7 +26,20 @@ public class RobotRunner
 				int scale = 20;
 				final Graphics2D g2d = (Graphics2D) g;
 				robot.paint(g2d, scale);
-				robot.setTime(2, g2d);
+				robot.setTime(robot.getTime() + 0.01);
+				System.out.println(robot.getTime());
+
+				g2d.setColor(Color.BLACK);
+				for (int x = 0; x < this.getWidth(); x += scale)
+				{
+					g2d.drawLine(x, 0, x, this.getHeight());
+				}
+				for (int y = 0; y < this.getHeight(); y += scale)
+				{
+					g2d.drawLine(0, y, this.getWidth(), y);
+				}
+				g2d.setColor(Color.RED);
+				g2d.drawLine(14 * scale, 10 * scale, 12 * scale, 10 * scale);
 				this.repaint();
 			}
 		};
@@ -34,7 +50,5 @@ public class RobotRunner
 		frame.setBackground(Color.GRAY);
 		frame.getContentPane().add(component);
 		frame.setVisible(true);
-		robot.setMotorRPM(MotorData.MOTOR_LEFT, 15, (Graphics2D) component.getGraphics());
-		robot.setMotorRPM(MotorData.MOTOR_RIGHT, 20, (Graphics2D) component.getGraphics());
 	}
 }

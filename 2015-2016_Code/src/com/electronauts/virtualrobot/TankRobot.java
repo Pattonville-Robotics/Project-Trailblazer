@@ -83,6 +83,11 @@ public class TankRobot extends AbstractRobot
 		g2d.setColor(Color.RED);
 		g2d.fillOval((int) (motorL.getX() * scale - 2), (int) (motorL.getY() * scale - 2), 4, 4);
 		g2d.fillOval((int) (motorR.getX() * scale - 2), (int) (motorR.getY() * scale - 2), 4, 4);
+
+		g2d.setColor(Color.BLUE);
+		g2d.drawLine((int) (motorL.getRotX() * scale), (int) (motorL.getRotY() * scale), (int) (motorL.getX() * scale), (int) (motorL.getY() * scale));
+		g2d.setColor(Color.RED);
+		g2d.drawLine((int) (motorR.getRotX() * scale), (int) (motorR.getRotY() * scale), (int) (motorR.getX() * scale), (int) (motorR.getY() * scale));
 	}
 
 	@Override
@@ -91,51 +96,53 @@ public class TankRobot extends AbstractRobot
 	}
 
 	@Override
-	public void setMotorRPM(final MotorData motor, final double rpm, Graphics2D g2d)
+	public void setMotorRPM(final MotorData motor, final double rpm)
 	{
 		this.getMotor(motor).setRPM(rpm);
 		Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
 		Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
 		double motorLUnitDistance = motorL.getRPM() * 2 * Math.PI * motorL.getWheel().getRadius();
-		System.out.println("MotorL unit = " + motorLUnitDistance);
 		double motorRUnitDistance = motorR.getRPM() * 2 * Math.PI * motorR.getWheel().getRadius();
-		System.out.println("MotorR unit = " + motorRUnitDistance);
 		PolarPoint p1 = new PolarPoint(motorLUnitDistance / ((motorLUnitDistance - motorRUnitDistance) / this.getWidth()), this.getAngle() + Math.PI);
-		System.out.println("Width = " + this.getWidth());
 
 		motorL.setRotX(motorL.getX() + p1.getX());
 		motorL.setRotY(motorL.getY() + p1.getY());
-
 		motorL.setRadius(p1.getRadius());
+		System.out.println("LRad = " + motorL.getRadius());
 		motorL.setTheta(p1.getTheta());
+
 		motorR.setRotX(motorL.getX() + p1.getX());
 		motorR.setRotY(motorL.getY() + p1.getY());
 		motorR.setRadius(p1.getRadius() - this.getWidth());
+		System.out.println("RRad = " + motorR.getRadius());
 		motorR.setTheta(p1.getTheta());
-		this.setTime(0, g2d);
-		System.out.println("L radius = " + motorL.getRadius());
-		System.out.println("R radius = " + motorR.getRadius());
+
+		this.setTime(0);
 	}
 
 	@Override
-	public void setTime(double time, Graphics2D g2d)
-	// Time is measured in seconds
+	public void setTime(double time)
 	{
 		// TODO Compute turn at time. See whiteboard for details
-		super.setTime(time, g2d);
+		super.setTime(time);
+		if (time != 0)
+		{
+			Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
+			Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
 
-		Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
-		Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
+			double motorLDistance = time * (motorL.getRPM() / 60) * 2 * Math.PI * motorL.getWheel().getRadius();
+			double motorRDistance = time * (motorR.getRPM() / 60) * 2 * Math.PI * motorR.getWheel().getRadius();
 
-		g2d.setColor(Color.BLUE);
-		g2d.drawLine((int) (motorL.getRotX() * 20), (int) (motorL.getRotY() * 20), (int) (motorL.getX() * 20), (int) (motorL.getY() * 20));
-		g2d.setColor(Color.RED);
-		g2d.drawLine((int) (motorR.getRotX() * 20), (int) (motorR.getRotY() * 20), (int) (motorR.getX() * 20), (int) (motorR.getY() * 20));
+			double radiansTurned = ((motorLDistance / (2 * Math.PI * motorL.getRadius())) * (2 * Math.PI));
+			radiansTurned = ((motorRDistance / (2 * Math.PI * motorR.getRadius())) * (2 * Math.PI));
+			System.out.println("XRot = " + motorL.getRotX());
+			System.out.println("YRot = " + motorL.getRotY());
 
-		double motorLDistance = time * (motorL.getRPM() / 60) * 2 * Math.PI * motorL.getWheel().getRadius();
-		double motorRDistance = time * (motorR.getRPM() / 60) * 2 * Math.PI * motorR.getWheel().getRadius();
+			motorL.setX((motorL.getRadius() * Math.cos(radiansTurned + motorL.getTheta())) + motorL.getRotX());
+			motorL.setY((motorL.getRadius() * Math.sin(radiansTurned + motorL.getTheta())) + motorL.getRotY());
 
-		double radiansTurned = ((motorLDistance) / (2 * Math.PI * motorL.getRadius())) * (2 * Math.PI);
-		System.out.println(radiansTurned);
+			motorR.setX((motorR.getRadius() * Math.cos(radiansTurned + motorR.getTheta())) + motorR.getRotX());
+			motorR.setY((motorR.getRadius() * Math.sin(radiansTurned + motorR.getTheta())) + motorR.getRotY());
+		}
 	}
 }
