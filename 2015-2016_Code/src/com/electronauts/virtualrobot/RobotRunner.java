@@ -13,12 +13,12 @@ public class RobotRunner
 	{
 		final TankRobot robot = new TankRobot(new Motor(MotorData.MOTOR_RIGHT, new Wheel(1), 14, 10), new Motor(MotorData.MOTOR_LEFT, new Wheel(1), 12, 10));
 
-		robot.setMotorRPM(MotorData.MOTOR_LEFT, 99);
-		robot.setMotorRPM(MotorData.MOTOR_RIGHT, 100);
+		robot.setMotorRPMs(MotorData.MOTOR_LEFT, MotorData.MOTOR_RIGHT, 40, 80);
 
 		final JComponent component = new JComponent()
 		{
 			private static final long	serialVersionUID	= 1L;
+			private final long			startTime			= System.nanoTime();
 
 			@Override
 			public void paintComponent(final Graphics g)
@@ -26,8 +26,8 @@ public class RobotRunner
 				int scale = 20;
 				final Graphics2D g2d = (Graphics2D) g;
 				robot.paint(g2d, scale);
-				robot.setTime(robot.getTime() + 0.01);
-				System.out.println(robot.getTime());
+				robot.setTime((System.nanoTime() - startTime) / 1000000000d);
+				robot.updateTime();
 
 				g2d.setColor(Color.BLACK);
 				for (int x = 0; x < this.getWidth(); x += scale)
