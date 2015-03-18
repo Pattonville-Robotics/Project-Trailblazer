@@ -4,6 +4,12 @@ import java.awt.geom.Point2D;
 
 public class PolarPoint
 {
+	public static void main(final String[] args)
+	{
+		final PolarPoint p1 = new PolarPoint(-1, Math.PI / 4);
+		System.out.println("DEBUG: (" + p1.getX() + ", " + p1.getY() + ")");
+	}
+
 	private double	radius, theta;
 
 	public PolarPoint()

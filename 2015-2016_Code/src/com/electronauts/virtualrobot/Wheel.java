@@ -9,6 +9,11 @@ public class Wheel
 		this.radius = radius;
 	}
 
+	public double getCircumference()
+	{
+		return 2 * Math.PI * this.getRadius();
+	}
+
 	public double getRadius()
 	{
 		return this.radius;

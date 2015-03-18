@@ -18,14 +18,14 @@ public abstract class AbstractRobot implements Runnable
 
 	public abstract double getMotorRPM(final MotorData motor);
 
-	public abstract void setMotorRPMs(final MotorData motor1, final MotorData motor2, final double rpm1, final double rpm2);
-
 	public double getTime()
 	{
-		return time;
+		return this.time;
 	}
 
-	public void setTime(double time)
+	public abstract void setMotorRPMs(final MotorData motor1, final MotorData motor2, final double rpm1, final double rpm2);
+
+	public void setTime(final double time)
 	{
 		this.time = time;
 	}

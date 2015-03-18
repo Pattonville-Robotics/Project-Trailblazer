@@ -17,30 +17,10 @@ public class TankRobot extends AbstractRobot
 		this.motors[1] = motorLeft;
 	}
 
-	public double getxRotCenter()
-	{
-		return xRotCenter;
-	}
-
-	public void setxRotCenter(double xRotCenter)
-	{
-		this.xRotCenter = xRotCenter;
-	}
-
-	public double getyRotCenter()
-	{
-		return yRotCenter;
-	}
-
-	public void setyRotCenter(double yRotCenter)
-	{
-		this.yRotCenter = yRotCenter;
-	}
-
 	public double getAngle()
 	{
-		return Math.atan2(this.getMotor(MotorData.MOTOR_LEFT).getY() - this.getMotor(MotorData.MOTOR_RIGHT).getY(), this.getMotor(MotorData.MOTOR_LEFT).getX()
-				- this.getMotor(MotorData.MOTOR_RIGHT).getX());
+		return Math.atan2(this.getMotor(MotorData.MOTOR_RIGHT).getY() - this.getMotor(MotorData.MOTOR_LEFT).getY(), this.getMotor(MotorData.MOTOR_RIGHT).getX()
+				- this.getMotor(MotorData.MOTOR_LEFT).getX());
 	}
 
 	@Override
@@ -74,17 +54,27 @@ public class TankRobot extends AbstractRobot
 				+ Math.pow(this.getMotor(MotorData.MOTOR_RIGHT).getY() - this.getMotor(MotorData.MOTOR_LEFT).getY(), 2));
 	}
 
+	public double getXRotCenter()
+	{
+		return this.xRotCenter;
+	}
+
+	public double getYRotCenter()
+	{
+		return this.yRotCenter;
+	}
+
 	public void paint(final Graphics2D g2d, final int scale)
 	{
-		final PolarPoint p1 = new PolarPoint(this.getWidth() / 2, this.getAngle() - Math.PI / 2);
+		final PolarPoint p1 = new PolarPoint(this.getWidth() / 2, this.getAngle() + Math.PI / 2);
 		final Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
 		final Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
-		Path2D.Double arrow = new Path2D.Double();
+		final Path2D.Double arrow = new Path2D.Double();
 		arrow.moveTo(scale * motorL.getX(), scale * motorL.getY());
 		arrow.lineTo(scale * motorR.getX(), scale * motorR.getY());
-		arrow.lineTo((scale * ((motorL.getX() + motorR.getX()) / 2 + p1.getX())), (scale * ((motorL.getY() + motorR.getY()) / 2 + p1.getY())));
+		arrow.lineTo(scale * ((motorL.getX() + motorR.getX()) / 2 + p1.getX()), scale * ((motorL.getY() + motorR.getY()) / 2 + p1.getY()));
 		arrow.closePath();
-		Path2D.Double bounds = this.getBounds(scale);
+		final Path2D.Double bounds = this.getBounds(scale);
 
 		g2d.setColor(Color.BLACK);
 		g2d.draw(bounds);
@@ -98,9 +88,11 @@ public class TankRobot extends AbstractRobot
 		g2d.drawString("Right Motor", (int) (motorR.getX() * scale), (int) (motorR.getY() * scale));
 
 		g2d.setColor(Color.BLUE);
-		g2d.drawLine((int) (this.getxRotCenter() * scale), (int) (this.getyRotCenter() * scale), (int) (motorL.getX() * scale), (int) (motorL.getY() * scale));
+		g2d.drawLine((int) (this.getXRotCenter() * scale), (int) (this.getYRotCenter() * scale), (int) (motorL.getX() * scale), (int) (motorL.getY() * scale));
 		g2d.setColor(Color.RED);
-		g2d.drawLine((int) (this.getxRotCenter() * scale), (int) (this.getyRotCenter() * scale), (int) (motorR.getX() * scale), (int) (motorR.getY() * scale));
+		g2d.drawLine((int) (this.getXRotCenter() * scale), (int) (this.getYRotCenter() * scale), (int) (motorR.getX() * scale), (int) (motorR.getY() * scale));
+		System.out.println("R: (" + motorR.getX() + ", " + motorR.getY() + ") L: (" + motorL.getX() + ", " + motorL.getY() + ") Angle: " + this.getAngle()
+				+ " rad");
 	}
 
 	@Override
@@ -114,22 +106,19 @@ public class TankRobot extends AbstractRobot
 		this.getMotor(motor1).setRPM(rpm1);
 		this.getMotor(motor2).setRPM(rpm2);
 
-		Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
-		Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
+		final Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
+		final Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
 
-		double motorLUnitDistance = motorL.getRPM() * 2 * Math.PI * motorL.getWheel().getRadius();
-		double motorRUnitDistance = motorR.getRPM() * 2 * Math.PI * motorR.getWheel().getRadius();
+		final PolarPoint p1 = new PolarPoint(motorL.getVelocity() * this.getWidth() / (motorR.getVelocity() - motorL.getVelocity()), this.getAngle() + Math.PI);
 
-		PolarPoint p1 = new PolarPoint(motorLUnitDistance / ((motorLUnitDistance - motorRUnitDistance) / this.getWidth()), this.getAngle() + Math.PI);
-
-		this.setxRotCenter(motorL.getX() + p1.getX());
-		this.setxRotCenter(motorL.getY() + p1.getY());
+		this.setXRotCenter(motorL.getX() + p1.getX());
+		this.setYRotCenter(motorL.getY() + p1.getY());
 
 		motorL.setRadius(p1.getRadius());
 		motorL.setTheta(p1.getTheta());
 		System.out.println("LRad = " + motorL.getRadius());
 
-		motorR.setRadius(p1.getRadius() - this.getWidth());
+		motorR.setRadius(p1.getRadius() + this.getWidth());
 		motorR.setTheta(p1.getTheta());
 		System.out.println("RRad = " + motorR.getRadius());
 
@@ -137,31 +126,50 @@ public class TankRobot extends AbstractRobot
 	}
 
 	@Override
-	public void setTime(double time)
+	public void setTime(final double time)
 	{
-		// TODO Compute turn at time. See whiteboard for details
 		super.setTime(time);
+	}
+
+	public void setXRotCenter(final double xRotCenter)
+	{
+		this.xRotCenter = xRotCenter;
+	}
+
+	public void setYRotCenter(final double yRotCenter)
+	{
+		this.yRotCenter = yRotCenter;
 	}
 
 	public void updateTime()
 	{
-		Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
-		Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
+		final Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
+		final Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
 
-		double motorLDistance = this.getTime() * (motorL.getRPM() / 60) * 2 * Math.PI * motorL.getWheel().getRadius();
-		double motorRDistance = this.getTime() * (motorR.getRPM() / 60) * 2 * Math.PI * motorR.getWheel().getRadius();
+		final double motorLDistance = this.getTime() * (motorL.getRPM() / 60) * 2 * Math.PI * motorL.getWheel().getRadius();
+		final double motorRDistance = this.getTime() * (motorR.getRPM() / 60) * 2 * Math.PI * motorR.getWheel().getRadius();
 
-		double radiansTurned = (((motorLDistance / (2 * Math.PI * motorL.getRadius())) * (2 * Math.PI)) + ((motorRDistance / (2 * Math.PI * motorR.getRadius())) * (2 * Math.PI))) / 2;
-		radiansTurned = radiansTurned % (Math.PI * 2);
+		double radiansTurned;
+		if (motorL.getRadius() != 0 && motorR.getRadius() != 0)
+			radiansTurned = (motorLDistance / (2 * Math.PI * motorL.getRadius()) * (2 * Math.PI) + motorRDistance / (2 * Math.PI * motorR.getRadius())
+					* (2 * Math.PI)) / 2;
+		else if (motorL.getRadius() != 0)
+			radiansTurned = motorLDistance / (2 * Math.PI * motorL.getRadius()) * (2 * Math.PI);
+		else if (motorR.getRadius() != 0)
+			radiansTurned = motorRDistance / (2 * Math.PI * motorR.getRadius()) * (2 * Math.PI);
+		else
+			radiansTurned = 0;
 
-		System.out.println("XRot = " + this.getxRotCenter());
-		System.out.println("YRot = " + this.getyRotCenter());
+		radiansTurned = (radiansTurned + Math.PI) % (Math.PI * 2);
+
+		System.out.println("XRot = " + this.getXRotCenter());
+		System.out.println("YRot = " + this.getYRotCenter());
 		System.out.println("Rads turned = " + radiansTurned);
 
-		motorL.setX((motorL.getRadius() * Math.cos(radiansTurned + motorL.getTheta())) + this.getxRotCenter());
-		motorL.setY((motorL.getRadius() * Math.sin(radiansTurned + motorL.getTheta())) + this.getyRotCenter());
+		motorL.setX(motorL.getRadius() * Math.cos(radiansTurned + motorL.getTheta()) + this.getXRotCenter());
+		motorL.setY(motorL.getRadius() * Math.sin(radiansTurned + motorL.getTheta()) + this.getYRotCenter());
 
-		motorR.setX((motorR.getRadius() * Math.cos(radiansTurned + motorR.getTheta())) + this.getxRotCenter());
-		motorR.setY((motorR.getRadius() * Math.sin(radiansTurned + motorR.getTheta())) + this.getyRotCenter());
+		motorR.setX(motorR.getRadius() * Math.cos(radiansTurned + motorR.getTheta()) + this.getXRotCenter());
+		motorR.setY(motorR.getRadius() * Math.sin(radiansTurned + motorR.getTheta()) + this.getYRotCenter());
 	}
 }

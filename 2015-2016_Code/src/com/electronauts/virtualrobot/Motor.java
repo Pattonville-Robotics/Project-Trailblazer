@@ -18,54 +18,44 @@ public class Motor
 		this.theta = 0;
 	}
 
-	public double getRotX()
-	{
-		return rotX;
-	}
-
-	public void setRotX(double rotX)
-	{
-		this.rotX = rotX;
-	}
-
-	public double getRotY()
-	{
-		return rotY;
-	}
-
-	public void setRotY(double rotY)
-	{
-		this.rotY = rotY;
-	}
-
-	public double getTheta()
-	{
-		return theta;
-	}
-
-	public void setTheta(double theta)
-	{
-		this.theta = theta;
-	}
-
-	public Wheel getWheel()
-	{
-		return wheel;
-	}
-
-	public void setWheel(Wheel wheel)
-	{
-		this.wheel = wheel;
-	}
-
 	public MotorData getMotorData()
 	{
 		return this.motorData;
 	}
 
+	public double getRadius()
+	{
+		return this.radius;
+	}
+
+	public double getRotX()
+	{
+		return this.rotX;
+	}
+
+	public double getRotY()
+	{
+		return this.rotY;
+	}
+
 	public double getRPM()
 	{
 		return this.rpm;
+	}
+
+	public double getTheta()
+	{
+		return this.theta;
+	}
+
+	public double getVelocity()
+	{
+		return this.getRPM() * this.getWheel().getCircumference();
+	}
+
+	public Wheel getWheel()
+	{
+		return this.wheel;
 	}
 
 	public double getX()
@@ -78,9 +68,34 @@ public class Motor
 		return this.y;
 	}
 
+	public void setRadius(final double radius)
+	{
+		this.radius = radius;
+	}
+
+	public void setRotX(final double rotX)
+	{
+		this.rotX = rotX;
+	}
+
+	public void setRotY(final double rotY)
+	{
+		this.rotY = rotY;
+	}
+
 	public void setRPM(final double rpm)
 	{
 		this.rpm = rpm;
+	}
+
+	public void setTheta(final double theta)
+	{
+		this.theta = theta;
+	}
+
+	public void setWheel(final Wheel wheel)
+	{
+		this.wheel = wheel;
 	}
 
 	public void setX(final double x)
@@ -91,15 +106,5 @@ public class Motor
 	public void setY(final double y)
 	{
 		this.y = y;
-	}
-
-	public double getRadius()
-	{
-		return radius;
-	}
-
-	public void setRadius(double radius)
-	{
-		this.radius = radius;
 	}
 }
