@@ -9,38 +9,52 @@ import javax.swing.JFrame;
 
 public class RobotRunner
 {
-	public static void main(final String[] args)
+	public static void init(final int updateSpeed)
 	{
-		final TankRobot robot = new TankRobot(new Motor(MotorData.MOTOR_RIGHT, new Wheel(1), 14, 10), new Motor(MotorData.MOTOR_LEFT, new Wheel(1), 12, 10));
+		final int m1x = 22;
+		final int m1y = 10;
+		final int m2x = 20;
+		final int m2y = 10;
 
-		robot.setMotorRPMs(MotorData.MOTOR_LEFT, MotorData.MOTOR_RIGHT, 1, 2);
+		final TankRobot robot = new TankRobot(new Motor(MotorData.MOTOR_RIGHT, new Wheel(1), m1x, m1y), new Motor(MotorData.MOTOR_LEFT, new Wheel(1), m2x, m2y));
+
+		robot.setMotorRPMs(MotorData.MOTOR_LEFT, MotorData.MOTOR_RIGHT, 60, 80);
 
 		final JComponent component = new JComponent()
 		{
 			private static final long	serialVersionUID	= 1L;
 
-			// private final long startTime = System.nanoTime();
-
 			@Override
 			public void paintComponent(final Graphics g)
 			{
+				final long startTime = System.nanoTime();
 				final int scale = 20;
 				final Graphics2D g2d = (Graphics2D) g;
 
-				g2d.setColor(Color.GRAY);
+				g2d.setColor(Color.LIGHT_GRAY);
 				for (int x = 0; x < this.getWidth(); x += scale)
 					g2d.drawLine(x, 0, x, this.getHeight());
 				for (int y = 0; y < this.getHeight(); y += scale)
 					g2d.drawLine(0, y, this.getWidth(), y);
 
 				robot.paint(g2d, scale);
-				robot.setTime(robot.getTime() + 0.01);
-				// robot.setTime((System.nanoTime() - this.startTime) /
-				// 1000000000d);
-				robot.updateTime();
 
 				g2d.setColor(Color.RED);
-				g2d.drawLine(14 * scale, 10 * scale, 12 * scale, 10 * scale);
+				g2d.drawLine(scale * m1x, scale * m1y, scale * m2x, scale * m2y);
+
+				g2d.setColor(Color.RED);
+				g2d.drawString(String.format("FPS: %06.2f", 1 / ((System.nanoTime() - startTime) / 1000000000d)), 10, this.getHeight() - 10);
+
+				// System.out.println("Had " + (System.nanoTime() - startTime) + "ns remaining.");
+				try
+				{
+					Thread.sleep((System.nanoTime() - startTime) / 1000000);
+				}
+				catch (final InterruptedException e)
+				{
+					e.printStackTrace();
+				}
+
 				this.repaint();
 			}
 		};
@@ -51,5 +65,31 @@ public class RobotRunner
 		frame.setBackground(Color.GRAY);
 		frame.getContentPane().add(component);
 		frame.setVisible(true);
+		final Thread alternate = new Thread()
+		{
+			@Override
+			public void run()
+			{
+				while (true)
+				{
+					try
+					{
+						Thread.sleep(3000);
+					}
+					catch (final InterruptedException e)
+					{
+						e.printStackTrace();
+					}
+					robot.setMotorRPMs(MotorData.MOTOR_LEFT, MotorData.MOTOR_RIGHT, -robot.getMotorRPM(MotorData.MOTOR_LEFT),
+							-robot.getMotorRPM(MotorData.MOTOR_RIGHT));
+				}
+			}
+		};
+		alternate.start();
+	}
+
+	public static void main(final String[] args)
+	{
+		RobotRunner.init(10);
 	}
 }

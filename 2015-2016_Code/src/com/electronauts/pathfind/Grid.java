@@ -64,8 +64,7 @@ public class Grid implements Serializable
 	/**
 	 * @param p
 	 *            - The point to be checked.
-	 * @return A {@code boolean} value describing if the specified point can be
-	 *         accessed in the internal array.
+	 * @return A {@code boolean} value describing if the specified point can be accessed in the internal array.
 	 */
 	public boolean canAccess(final Point p)
 	{

@@ -5,9 +5,19 @@ import java.awt.geom.Path2D;
 public abstract class AbstractRobot implements Runnable
 {
 	protected Motor[]	motors;
-	private double		time;
+	private long		startTime	= System.nanoTime();
 
 	public abstract Path2D getBounds(int scale);
+
+	public long getDeltaTimeNano()
+	{
+		return System.nanoTime() - this.getStartTime();
+	}
+
+	public double getDeltaTimeSeconds()
+	{
+		return (System.nanoTime() - this.getStartTime()) / 1000000000d;
+	}
 
 	public Motor getMotor(final MotorData motorData)
 	{
@@ -18,15 +28,15 @@ public abstract class AbstractRobot implements Runnable
 
 	public abstract double getMotorRPM(final MotorData motor);
 
-	public double getTime()
+	public long getStartTime()
 	{
-		return this.time;
+		return this.startTime;
 	}
 
 	public abstract void setMotorRPMs(final MotorData motor1, final MotorData motor2, final double rpm1, final double rpm2);
 
-	public void setTime(final double time)
+	public void setStartTime(final long startTime)
 	{
-		this.time = time;
+		this.startTime = startTime;
 	}
 }
