@@ -110,14 +110,15 @@ public class TankRobot extends AbstractRobot
 	@Override
 	public synchronized void setMotorRPMs(final MotorData motor1, final MotorData motor2, final double rpm1, final double rpm2)
 	{
+		final Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
+		final Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
+
+		if (motorL.getRPM() != 0 && motorR.getRPM() != 0) this.updatePosition(); // Prevent resolution errors if called just before the next update
+		
 		this.setStartTime(System.nanoTime());
-		// this.updatePosition(); // Prevent resolution errors if called just before the next update
 
 		this.getMotor(motor1).setRPM(rpm1);
 		this.getMotor(motor2).setRPM(rpm2);
-
-		final Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
-		final Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
 
 		final PolarPoint p1 = new PolarPoint(motorL.getVelocity() * this.getWidth() / (motorR.getVelocity() - motorL.getVelocity()), this.getAngle() + Math.PI);
 
