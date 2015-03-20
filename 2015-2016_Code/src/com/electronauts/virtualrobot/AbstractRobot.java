@@ -4,8 +4,8 @@ import java.awt.geom.Path2D;
 
 public abstract class AbstractRobot implements Runnable
 {
-	protected Motor[]	motors;
-	private long		startTime	= System.nanoTime();
+	protected volatile Motor[]	motors;
+	private long				startTime	= System.nanoTime();
 
 	public abstract Path2D getBounds(int scale);
 

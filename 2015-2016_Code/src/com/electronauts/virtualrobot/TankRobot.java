@@ -114,7 +114,7 @@ public class TankRobot extends AbstractRobot
 		final Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
 
 		if (motorL.getRPM() != 0 && motorR.getRPM() != 0) this.updatePosition(); // Prevent resolution errors if called just before the next update
-		
+
 		this.setStartTime(System.nanoTime());
 
 		this.getMotor(motor1).setRPM(rpm1);
@@ -170,10 +170,13 @@ public class TankRobot extends AbstractRobot
 
 		radiansTurned = radiansTurned % (Math.PI * 2);
 
-		motorL.setX(motorL.getRadius() * Math.cos(radiansTurned + this.getTheta()) + this.getXRotCenter());
-		motorL.setY(motorL.getRadius() * Math.sin(radiansTurned + this.getTheta()) + this.getYRotCenter());
+		if (radiansTurned != 0)
+		{
+			motorL.setX(motorL.getRadius() * Math.cos(radiansTurned + this.getTheta()) + this.getXRotCenter());
+			motorL.setY(motorL.getRadius() * Math.sin(radiansTurned + this.getTheta()) + this.getYRotCenter());
 
-		motorR.setX(motorR.getRadius() * Math.cos(radiansTurned + this.getTheta()) + this.getXRotCenter());
-		motorR.setY(motorR.getRadius() * Math.sin(radiansTurned + this.getTheta()) + this.getYRotCenter());
+			motorR.setX(motorR.getRadius() * Math.cos(radiansTurned + this.getTheta()) + this.getXRotCenter());
+			motorR.setY(motorR.getRadius() * Math.sin(radiansTurned + this.getTheta()) + this.getYRotCenter());
+		}
 	}
 }

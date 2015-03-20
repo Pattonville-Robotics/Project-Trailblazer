@@ -243,7 +243,7 @@ public class GridDraw extends JComponent
 		{
 			g2d.drawString(String.format("FPS: %06.2f ; Yellow length: %07.3f; Cyan length: %07.3f; Magenta length: %07.3f",
 					1 / ((double) (System.nanoTime() - startTime) / 1000000000), this.getGrid().getPaths().get(0).getTotalDistance(), this.getGrid()
-					.getPathNodeMaps().get(0).getTotalDistance(), this.getGrid().getPathNodeMap().getTotalDistance()), 5, this.getHeight() - 5);
+							.getPathNodeMaps().get(0).getTotalDistance(), this.getGrid().getPathNodeMap().getTotalDistance()), 5, this.getHeight() - 5);
 		}
 		catch (final Exception e)
 		{
@@ -303,7 +303,7 @@ public class GridDraw extends JComponent
 		this.openFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		this.saveFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 		this.saveAsFile
-		.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_DOWN_MASK));
+				.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_DOWN_MASK));
 		final KeyPressActions newFileAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.NEW);
 		final KeyPressActions saveFileAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.CONTROL_S);
 		final KeyPressActions saveAsFileAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.SAVE_AS);

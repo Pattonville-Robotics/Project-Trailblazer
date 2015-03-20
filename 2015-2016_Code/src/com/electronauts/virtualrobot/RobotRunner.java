@@ -42,29 +42,21 @@ public class RobotRunner
 				g2d.setColor(Color.RED);
 				g2d.drawLine(scale * m1x, scale * m1y, scale * m2x, scale * m2y);
 
-				g2d.setColor(Color.RED);
-				g2d.drawString(String.format("FPS: %06.2f", 1 / ((System.nanoTime() - startTime) / 1000000000d)), 10, this.getHeight() - 10);
-
-				// System.out.println("Had " + (System.nanoTime() - startTime) + "ns remaining.");
 				try
 				{
-					Thread.sleep((System.nanoTime() - startTime) / 1000000);
+					if (updateSpeed - (System.nanoTime() - startTime) / 1000000 > 0) Thread.sleep(updateSpeed - (System.nanoTime() - startTime) / 1000000);
 				}
 				catch (final InterruptedException e)
 				{
 					e.printStackTrace();
 				}
 
+				g2d.setColor(Color.RED);
+				g2d.drawString(String.format("FPS: %06.2f", 1 / ((double) (System.nanoTime() - startTime) / 1000000000)), 10, this.getHeight() - 10);
+
 				this.repaint();
 			}
 		};
-		final JFrame frame = new JFrame("Robot testing in progress...");
-		frame.setBounds(0, 0, 720, 720);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		component.setBackground(Color.WHITE);
-		frame.setBackground(Color.GRAY);
-		frame.getContentPane().add(component);
-		frame.setVisible(true);
 		final Thread alternate = new Thread()
 		{
 			@Override
@@ -74,7 +66,7 @@ public class RobotRunner
 				{
 					try
 					{
-						Thread.sleep(3000);
+						Thread.sleep(4000);
 					}
 					catch (final InterruptedException e)
 					{
@@ -85,6 +77,13 @@ public class RobotRunner
 				}
 			}
 		};
+		final JFrame frame = new JFrame("Robot testing in progress...");
+		frame.setBounds(0, 0, 720, 720);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		component.setBackground(Color.WHITE);
+		frame.setBackground(Color.GRAY);
+		frame.getContentPane().add(component);
+		frame.setVisible(true);
 		alternate.start();
 	}
 
