@@ -3,9 +3,12 @@ package com.electronauts.virtualrobot;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.KeyStroke;
 
 public class RobotRunner
 {
@@ -17,8 +20,6 @@ public class RobotRunner
 		final int m2y = 10;
 
 		final TankRobot robot = new TankRobot(new Motor(MotorData.MOTOR_RIGHT, new Wheel(1), m1x, m1y), new Motor(MotorData.MOTOR_LEFT, new Wheel(1), m2x, m2y));
-
-		robot.setMotorRPMs(MotorData.MOTOR_LEFT, MotorData.MOTOR_RIGHT, 60, 80);
 
 		final JComponent component = new JComponent()
 		{
@@ -52,43 +53,81 @@ public class RobotRunner
 				}
 
 				g2d.setColor(Color.RED);
-				g2d.drawString(String.format("FPS: %06.2f", 1 / ((double) (System.nanoTime() - startTime) / 1000000000)), 10, this.getHeight() - 10);
+				g2d.drawString(String.format("FPS: %06.2f Left motor power: %06.1f Right motor power %06.1f",
+						1 / ((double) (System.nanoTime() - startTime) / 1000000000), robot.getMotorRPM(MotorData.MOTOR_LEFT),
+						robot.getMotorRPM(MotorData.MOTOR_RIGHT)), 10, this.getHeight() - 10);
 
 				this.repaint();
-			}
-		};
-		final Thread alternate = new Thread()
-		{
-			@Override
-			public void run()
-			{
-				while (true)
-				{
-					try
-					{
-						Thread.sleep(4000);
-					}
-					catch (final InterruptedException e)
-					{
-						e.printStackTrace();
-					}
-					robot.setMotorRPMs(MotorData.MOTOR_LEFT, MotorData.MOTOR_RIGHT, -robot.getMotorRPM(MotorData.MOTOR_LEFT),
-							-robot.getMotorRPM(MotorData.MOTOR_RIGHT));
-				}
 			}
 		};
 		final JFrame frame = new JFrame("Robot testing in progress...");
 		frame.setBounds(0, 0, 720, 720);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		component.setBackground(Color.WHITE);
-		frame.setBackground(Color.GRAY);
+		frame.setBackground(Color.WHITE);
 		frame.getContentPane().add(component);
 		frame.setVisible(true);
-		alternate.start();
+		robot.setMotorRPMs(MotorData.MOTOR_LEFT, MotorData.MOTOR_RIGHT, 0, 0);
+
+		component.getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "leftAction");
+		component.getActionMap().put("leftAction", new AbstractAction()
+		{
+			private static final long	serialVersionUID	= 1L;
+
+			@Override
+			public void actionPerformed(final ActionEvent e)
+			{
+				robot.setMotorRPMs(MotorData.MOTOR_LEFT, MotorData.MOTOR_RIGHT, robot.getMotorRPM(MotorData.MOTOR_LEFT) + 5,
+						robot.getMotorRPM(MotorData.MOTOR_RIGHT) - 5);
+				System.out.println(robot.getMotorRPM(MotorData.MOTOR_LEFT) + " " + robot.getMotorRPM(MotorData.MOTOR_RIGHT));
+			}
+		});
+
+		component.getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "rightAction");
+		component.getActionMap().put("rightAction", new AbstractAction()
+		{
+			private static final long	serialVersionUID	= 1L;
+
+			@Override
+			public void actionPerformed(final ActionEvent e)
+			{
+				robot.setMotorRPMs(MotorData.MOTOR_LEFT, MotorData.MOTOR_RIGHT, robot.getMotorRPM(MotorData.MOTOR_LEFT) - 5,
+						robot.getMotorRPM(MotorData.MOTOR_RIGHT) + 5);
+				System.out.println(robot.getMotorRPM(MotorData.MOTOR_LEFT) + " " + robot.getMotorRPM(MotorData.MOTOR_RIGHT));
+			}
+		});
+
+		component.getInputMap().put(KeyStroke.getKeyStroke("UP"), "upAction");
+		component.getActionMap().put("upAction", new AbstractAction()
+		{
+			private static final long	serialVersionUID	= 1L;
+
+			@Override
+			public void actionPerformed(final ActionEvent e)
+			{
+				robot.setMotorRPMs(MotorData.MOTOR_LEFT, MotorData.MOTOR_RIGHT, robot.getMotorRPM(MotorData.MOTOR_LEFT) + 5,
+						robot.getMotorRPM(MotorData.MOTOR_RIGHT) + 5);
+				System.out.println(robot.getMotorRPM(MotorData.MOTOR_LEFT) + " " + robot.getMotorRPM(MotorData.MOTOR_RIGHT));
+			}
+		});
+
+		component.getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "downAction");
+		component.getActionMap().put("downAction", new AbstractAction()
+		{
+			private static final long	serialVersionUID	= 1L;
+
+			@Override
+			public void actionPerformed(final ActionEvent e)
+			{
+				robot.setMotorRPMs(MotorData.MOTOR_LEFT, MotorData.MOTOR_RIGHT, robot.getMotorRPM(MotorData.MOTOR_LEFT) - 5,
+						robot.getMotorRPM(MotorData.MOTOR_RIGHT) - 5);
+				System.out.println(robot.getMotorRPM(MotorData.MOTOR_LEFT) + " " + robot.getMotorRPM(MotorData.MOTOR_RIGHT));
+			}
+		});
 	}
 
 	public static void main(final String[] args)
 	{
-		RobotRunner.init(10);
+		RobotRunner.init(16);
 	}
 }

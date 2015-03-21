@@ -3,6 +3,7 @@ package com.electronauts.virtualrobot;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
+import java.awt.geom.Point2D;
 
 import com.electronauts.mathutil.PolarPoint;
 
@@ -40,6 +41,12 @@ public class TankRobot extends AbstractRobot
 		output.closePath();
 
 		return output;
+	}
+
+	public Point2D.Double getLocation()
+	{
+		return new Point2D.Double((this.getMotor(MotorData.MOTOR_LEFT).getX() + this.getMotor(MotorData.MOTOR_RIGHT).getX()) / 2, (this.getMotor(
+				MotorData.MOTOR_LEFT).getY() + this.getMotor(MotorData.MOTOR_RIGHT).getY()) / 2);
 	}
 
 	@Override
@@ -102,6 +109,11 @@ public class TankRobot extends AbstractRobot
 		// this.getAngle()+ " rad");
 	}
 
+	public double readGyro()
+	{
+		return this.getAngle() + Math.PI / 2;
+	}
+
 	@Override
 	public void run()
 	{
@@ -113,24 +125,34 @@ public class TankRobot extends AbstractRobot
 		final Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
 		final Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
 
-		if (motorL.getRPM() != 0 && motorR.getRPM() != 0) this.updatePosition(); // Prevent resolution errors if called just before the next update
+		if (!(motorL.getRPM() == 0 && motorR.getRPM() == 0)) this.updatePosition(); // Prevent resolution errors if called just before the next update
 
 		this.setStartTime(System.nanoTime());
 
 		this.getMotor(motor1).setRPM(rpm1);
 		this.getMotor(motor2).setRPM(rpm2);
 
-		final PolarPoint p1 = new PolarPoint(motorL.getVelocity() * this.getWidth() / (motorR.getVelocity() - motorL.getVelocity()), this.getAngle() + Math.PI);
+		if (motorL.getRPM() != motorR.getRPM())
+		{
+			final PolarPoint p1 = new PolarPoint(motorL.getVelocity() * this.getWidth() / (motorR.getVelocity() - motorL.getVelocity()), this.getAngle()
+					+ Math.PI);
 
-		this.setXRotCenter(motorL.getX() + p1.getX());
-		this.setYRotCenter(motorL.getY() + p1.getY());
+			this.setXRotCenter(motorL.getX() + p1.getX());
+			this.setYRotCenter(motorL.getY() + p1.getY());
 
-		motorL.setRadius(p1.getRadius());
+			motorL.setRadius(p1.getRadius());
 
-		motorR.setRadius(p1.getRadius() + this.getWidth());
+			motorR.setRadius(p1.getRadius() + this.getWidth());
 
-		this.setTheta(this.getAngle());
-
+			this.setTheta(this.getAngle());
+		}
+		else if (motorL.getRPM() == motorR.getRPM())
+		{
+			motorL.setxLineStart(motorL.getX());
+			motorL.setyLineStart(motorL.getY());
+			motorR.setxLineStart(motorR.getX());
+			motorR.setyLineStart(motorR.getY());
+		}
 	}
 
 	public void setTheta(final double theta)
@@ -170,13 +192,23 @@ public class TankRobot extends AbstractRobot
 
 		radiansTurned = radiansTurned % (Math.PI * 2);
 
-		if (radiansTurned != 0)
+		if (!(motorL.getRPM() == 0 && motorR.getRPM() == 0 || motorL.getRPM() == motorR.getRPM()))
 		{
 			motorL.setX(motorL.getRadius() * Math.cos(radiansTurned + this.getTheta()) + this.getXRotCenter());
 			motorL.setY(motorL.getRadius() * Math.sin(radiansTurned + this.getTheta()) + this.getYRotCenter());
 
 			motorR.setX(motorR.getRadius() * Math.cos(radiansTurned + this.getTheta()) + this.getXRotCenter());
 			motorR.setY(motorR.getRadius() * Math.sin(radiansTurned + this.getTheta()) + this.getYRotCenter());
+		}
+		else if (motorL.getRPM() == motorR.getRPM())
+		{
+			final PolarPoint p1 = new PolarPoint(motorLDistance, this.getAngle() + Math.PI / 2);
+			final PolarPoint p2 = new PolarPoint(motorRDistance, this.getAngle() + Math.PI / 2);
+
+			motorL.setX(motorL.getxLineStart() + p1.getX());
+			motorL.setY(motorL.getyLineStart() + p1.getY());
+			motorR.setX(motorR.getxLineStart() + p2.getX());
+			motorR.setY(motorR.getyLineStart() + p2.getY());
 		}
 	}
 }

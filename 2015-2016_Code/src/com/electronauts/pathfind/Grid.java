@@ -166,19 +166,14 @@ public class Grid implements Serializable
 		return this.paths;
 	}
 
-	private GridSquare getSquare(final Point p)
+	public GridSquare getSquareCopy(final Point p)
 	{
-		return this.grid[p.y][p.x];
+		return this.grid[p.y][p.x].clone();
 	}
 
 	/*
 	 * public GridDraw getGridDraw() { return gridDraw; }
 	 */
-
-	public GridSquare getSquareCopy(final Point p)
-	{
-		return this.grid[p.y][p.x].clone();
-	}
 
 	public int getSquareHeight()
 	{
@@ -412,5 +407,10 @@ public class Grid implements Serializable
 			return true;
 		else
 			return false;
+	}
+
+	private GridSquare getSquare(final Point p)
+	{
+		return this.grid[p.y][p.x];
 	}
 }
