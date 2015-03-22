@@ -7,10 +7,29 @@ import java.awt.geom.Point2D;
 
 import com.electronauts.mathutil.PolarPoint;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class TankRobot.
+ *
+ * @author Mitchell Skaggs
+ */
 public class TankRobot extends AbstractRobot
 {
-	private double	xRotCenter, yRotCenter, theta;
 
+	/** The x and y rotation centers. */
+	private double	xRotCenter, yRotCenter;
+
+	/** The initial angle around the circle */
+	private double	theta;
+
+	/**
+	 * Constructs a TankRobot object given two motor objects.
+	 *
+	 * @param motorLeft
+	 *            a {@code Motor} object that is used as the "left" motor
+	 * @param motorRight
+	 *            a {@code Motor} object that is used as the "right" motor
+	 */
 	public TankRobot(final Motor motorLeft, final Motor motorRight)
 	{
 		this.motors = new Motor[2];
@@ -18,15 +37,26 @@ public class TankRobot extends AbstractRobot
 		this.motors[1] = motorLeft;
 	}
 
+	/**
+	 * Returns the angle from the x-axis to the line segment formed by the two motors, using the {@code atan2} method in the {@code Math} class.
+	 * 
+	 * @return the angle from the x-axis to the line segment formed by the two motors.
+	 */
 	public double getAngle()
 	{
 		return Math.atan2(this.getMotor(MotorData.MOTOR_RIGHT).getY() - this.getMotor(MotorData.MOTOR_LEFT).getY(), this.getMotor(MotorData.MOTOR_RIGHT).getX()
 				- this.getMotor(MotorData.MOTOR_LEFT).getX());
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.electronauts.virtualrobot.AbstractRobot#getBounds(int)
+	 */
 	@Override
 	public Path2D.Double getBounds(final int scale)
 	{
+		this.updatePosition();
 		final Path2D.Double output = new Path2D.Double();
 		final PolarPoint p1 = new PolarPoint(this.getWidth() / 2, this.getAngle() + Math.PI / 2);
 		final PolarPoint p2 = new PolarPoint(this.getWidth() / 2, this.getAngle() - Math.PI / 2);
@@ -43,39 +73,78 @@ public class TankRobot extends AbstractRobot
 		return output;
 	}
 
+	/**
+	 * Gets the coordinates of the center of the robot.
+	 *
+	 * @return a {@code Point2D.Double} that describes the center of the robot at the time.
+	 */
 	public Point2D.Double getLocation()
 	{
+		this.updatePosition();
 		return new Point2D.Double((this.getMotor(MotorData.MOTOR_LEFT).getX() + this.getMotor(MotorData.MOTOR_RIGHT).getX()) / 2, (this.getMotor(
 				MotorData.MOTOR_LEFT).getY() + this.getMotor(MotorData.MOTOR_RIGHT).getY()) / 2);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.electronauts.virtualrobot.AbstractRobot#getMotorRPM(com.electronauts.virtualrobot.MotorData)
+	 */
 	@Override
 	public double getMotorRPM(final MotorData motor)
 	{
 		return this.getMotor(motor).getRPM();
 	}
 
+	/**
+	 * Gets the initial angle around the robot's turning circle.
+	 *
+	 * @return the angle, in radians
+	 */
 	public double getTheta()
 	{
 		return this.theta;
 	}
 
+	/**
+	 * Gets the width of the robot.
+	 *
+	 * @return the width
+	 */
 	public double getWidth()
 	{
 		return Math.sqrt(Math.pow(this.getMotor(MotorData.MOTOR_RIGHT).getX() - this.getMotor(MotorData.MOTOR_LEFT).getX(), 2)
 				+ Math.pow(this.getMotor(MotorData.MOTOR_RIGHT).getY() - this.getMotor(MotorData.MOTOR_LEFT).getY(), 2));
 	}
 
+	/**
+	 * Gets the x rotation center.
+	 *
+	 * @return the x rotation center
+	 */
 	public double getXRotCenter()
 	{
 		return this.xRotCenter;
 	}
 
+	/**
+	 * Gets the y rotation center.
+	 *
+	 * @return the y rotation center
+	 */
 	public double getYRotCenter()
 	{
 		return this.yRotCenter;
 	}
 
+	/**
+	 * Paints the robot onto the specified Graphics2D object.
+	 *
+	 * @param g2d
+	 *            the {@code Graphics2D} that is to be drawn on
+	 * @param scale
+	 *            the scale at which it should be drawn
+	 */
 	public void paint(final Graphics2D g2d, final int scale)
 	{
 		this.updatePosition();
@@ -104,21 +173,34 @@ public class TankRobot extends AbstractRobot
 		g2d.drawLine((int) (this.getXRotCenter() * scale), (int) (this.getYRotCenter() * scale), (int) (motorL.getX() * scale), (int) (motorL.getY() * scale));
 		g2d.setColor(Color.RED);
 		g2d.drawLine((int) (this.getXRotCenter() * scale), (int) (this.getYRotCenter() * scale), (int) (motorR.getX() * scale), (int) (motorR.getY() * scale));
-		// System.out.println("R: (" + motorR.getX() + ", " + motorR.getY() +
-		// ") L: (" + motorL.getX() + ", " + motorL.getY() + ") Angle: " +
-		// this.getAngle()+ " rad");
 	}
 
+	/**
+	 * Reads the virtual gyroscope onboard the robot.
+	 *
+	 * @return the angle, in radians, that the robot has turned
+	 */
 	public double readGyro()
 	{
 		return this.getAngle() + Math.PI / 2;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public void run()
 	{
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.electronauts.virtualrobot.AbstractRobot#setMotorRPMs(com.electronauts.virtualrobot.MotorData, com.electronauts.virtualrobot.MotorData, double,
+	 * double)
+	 */
 	@Override
 	public synchronized void setMotorRPMs(final MotorData motor1, final MotorData motor2, final double rpm1, final double rpm2)
 	{
@@ -155,21 +237,42 @@ public class TankRobot extends AbstractRobot
 		}
 	}
 
+	/**
+	 * Sets the theta.
+	 *
+	 * @param theta
+	 *            the new theta
+	 */
 	public void setTheta(final double theta)
 	{
 		this.theta = theta;
 	}
 
+	/**
+	 * Sets the x rotation center.
+	 *
+	 * @param xRotCenter
+	 *            the new x rotation center
+	 */
 	public void setXRotCenter(final double xRotCenter)
 	{
 		this.xRotCenter = xRotCenter;
 	}
 
+	/**
+	 * Sets the y rotation center.
+	 *
+	 * @param yRotCenter
+	 *            the new y rotation center
+	 */
 	public void setYRotCenter(final double yRotCenter)
 	{
 		this.yRotCenter = yRotCenter;
 	}
 
+	/**
+	 * Update the position of the robot based on the current time.
+	 */
 	public void updatePosition()
 	{
 		final Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);

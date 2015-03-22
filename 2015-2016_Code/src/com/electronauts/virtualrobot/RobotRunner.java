@@ -10,8 +10,19 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class RobotRunner.
+ */
 public class RobotRunner
 {
+
+	/**
+	 * Initializes the windows.
+	 *
+	 * @param updateSpeed
+	 *            the minimum time in milliseconds each frame should take to render.
+	 */
 	public static void init(final int updateSpeed)
 	{
 		final int m1x = 22;
@@ -24,6 +35,7 @@ public class RobotRunner
 		final JComponent component = new JComponent()
 		{
 			private static final long	serialVersionUID	= 1L;
+			private long				lastTime			= 0;
 
 			@Override
 			public void paintComponent(final Graphics g)
@@ -43,20 +55,23 @@ public class RobotRunner
 				g2d.setColor(Color.RED);
 				g2d.drawLine(scale * m1x, scale * m1y, scale * m2x, scale * m2y);
 
+				g2d.setColor(Color.RED);
+				g2d.drawString(
+						String.format("FPS: %06.2f Left motor power: %06.1f Right motor power %06.1f", 1 / (lastTime / 1000000000d),
+								robot.getMotorRPM(MotorData.MOTOR_LEFT), robot.getMotorRPM(MotorData.MOTOR_RIGHT)), 10, this.getHeight() - 10);
 				try
 				{
-					if (updateSpeed - (System.nanoTime() - startTime) / 1000000 > 0) Thread.sleep(updateSpeed - (System.nanoTime() - startTime) / 1000000);
+					if (updateSpeed - (System.nanoTime() - startTime) / 1000000 > 0)
+						Thread.sleep((long) (updateSpeed - (System.nanoTime() - startTime) / 1000000d));
 				}
 				catch (final InterruptedException e)
 				{
 					e.printStackTrace();
 				}
-
-				g2d.setColor(Color.RED);
-				g2d.drawString(String.format("FPS: %06.2f Left motor power: %06.1f Right motor power %06.1f",
-						1 / ((double) (System.nanoTime() - startTime) / 1000000000), robot.getMotorRPM(MotorData.MOTOR_LEFT),
-						robot.getMotorRPM(MotorData.MOTOR_RIGHT)), 10, this.getHeight() - 10);
-
+				while (updateSpeed - (System.nanoTime() - startTime) / 1000000 > 0) // Mop up the rest with a high-precision timer
+				{
+				}
+				lastTime = System.nanoTime() - startTime;
 				this.repaint();
 			}
 		};
@@ -126,8 +141,14 @@ public class RobotRunner
 		});
 	}
 
+	/**
+	 * The main method.
+	 *
+	 * @param args
+	 *            the arguments
+	 */
 	public static void main(final String[] args)
 	{
-		RobotRunner.init(16);
+		RobotRunner.init(10);
 	}
 }

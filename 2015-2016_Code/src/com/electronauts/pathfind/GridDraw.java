@@ -160,8 +160,6 @@ public class GridDraw extends JComponent
 			this.getGrid().setSquareContents(new Point(6, 8), SquareType.HAZARD);
 
 			PathfindAI.computeDistance(this.getGrid(), this.getGrid().getStartPoint());
-			// PathfindAI.computePaths(this.grid);
-			// PathfindAI.optimizePaths(this.grid);
 
 			System.out.println("Finished generating new data. Begin caching.");
 			this.cacheGrid(this.saveDir);
@@ -202,10 +200,7 @@ public class GridDraw extends JComponent
 		g2d.setPaint(new GradientPaint(0, 0, new Color(25, 25, 112), this.getWidth(), this.getHeight(), new Color(176, 196, 222)));
 		g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
 
-		// System.out.println("Began drawing to the screen.");
 		this.getGrid().paint(g2d);
-		// System.out.println("Lowest next to start: " +
-		// grid.getLowestAdjacentSquares(grid.getFinishPoint()));
 
 		if (this.getDrawNodes() || this.getDrawBalencedNodes()) this.getGrid().paintNodes(g2d);
 

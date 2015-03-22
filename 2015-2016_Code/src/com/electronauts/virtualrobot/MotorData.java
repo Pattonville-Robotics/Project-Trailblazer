@@ -1,6 +1,14 @@
 package com.electronauts.virtualrobot;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Enum MotorData.
+ */
 public enum MotorData
 {
-	MOTOR_LEFT, MOTOR_RIGHT
+	
+	/** The motor left. */
+	MOTOR_LEFT, 
+ /** The motor right. */
+ MOTOR_RIGHT
 }
