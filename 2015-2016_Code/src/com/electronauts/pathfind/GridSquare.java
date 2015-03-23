@@ -7,16 +7,44 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class GridSquare.
+ */
 public class GridSquare implements Cloneable, Serializable
 {
+	
+	/** The Constant font1. */
 	private static final Font	font1				= new Font("Arial", Font.PLAIN, 20);
+	
+	/** The Constant font2. */
 	private static final Font	font2				= new Font("Arial", Font.PLAIN, 12);
+	
+	/** The Constant serialVersionUID. */
 	private static final long	serialVersionUID	= 1L;
+	
+	/** The super grid. */
 	public Grid					superGrid;
+	
+	/** The contents. */
 	private SquareType			contents;
+	
+	/** The distance. */
 	private int					distance;
+	
+	/** The height. */
 	private int					x, y, width, height;
 
+	/**
+	 * Instantiates a new grid square.
+	 *
+	 * @param superGrid the super grid
+	 * @param contents the contents
+	 * @param x the x
+	 * @param y the y
+	 * @param width the width
+	 * @param height the height
+	 */
 	public GridSquare(final Grid superGrid, final SquareType contents, final int x, final int y, final int width, final int height)
 	{
 		this.contents = contents;
@@ -28,6 +56,9 @@ public class GridSquare implements Cloneable, Serializable
 		this.distance = -1;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
 	@Override
 	public GridSquare clone()
 	{
@@ -42,72 +73,142 @@ public class GridSquare implements Cloneable, Serializable
 		}
 	}
 
+	/**
+	 * Gets the bounds.
+	 *
+	 * @return the bounds
+	 */
 	public Rectangle getBounds()
 	{
 		return new Rectangle(this.x / this.superGrid.getSquareWidth(), this.y / this.superGrid.getSquareHeight(), this.width / this.superGrid.getSquareWidth(),
 				this.height / this.superGrid.getSquareHeight());
 	}
 
+	/**
+	 * Gets the center point.
+	 *
+	 * @return the center point
+	 */
 	public Point getCenterPoint()
 	{
 		return new Point(this.getXCenter(), this.getYCenter());
 	}
 
+	/**
+	 * Gets the contents.
+	 *
+	 * @return the contents
+	 */
 	public SquareType getContents()
 	{
 		return this.contents;
 	}
 
+	/**
+	 * Gets the distance.
+	 *
+	 * @return the distance
+	 */
 	public int getDistance()
 	{
 		return this.distance;
 	}
 
+	/**
+	 * Gets the height.
+	 *
+	 * @return the height
+	 */
 	public int getHeight()
 	{
 		return this.height;
 	}
 
+	/**
+	 * Gets the point.
+	 *
+	 * @return the point
+	 */
 	public Point getPoint()
 	{
 		return new Point(this.x, this.y);
 	}
 
+	/**
+	 * Gets the radial distance.
+	 *
+	 * @return the radial distance
+	 */
 	public double getRadialDistance()
 	{
 		return Math.sqrt(Math.pow(this.x - this.superGrid.getStartPoint().x, 2) + Math.pow(this.y - this.superGrid.getStartPoint().y, 2));
 	}
 
+	/**
+	 * Gets the super grid.
+	 *
+	 * @return the super grid
+	 */
 	public Grid getSuperGrid()
 	{
 		return this.superGrid;
 	}
 
+	/**
+	 * Gets the width.
+	 *
+	 * @return the width
+	 */
 	public int getWidth()
 	{
 		return this.width;
 	}
 
+	/**
+	 * Gets the x.
+	 *
+	 * @return the x
+	 */
 	public int getX()
 	{
 		return this.x;
 	}
 
+	/**
+	 * Gets the x center.
+	 *
+	 * @return the x center
+	 */
 	public int getXCenter()
 	{
 		return this.x + this.width / 2;
 	}
 
+	/**
+	 * Gets the y.
+	 *
+	 * @return the y
+	 */
 	public int getY()
 	{
 		return this.y;
 	}
 
+	/**
+	 * Gets the y center.
+	 *
+	 * @return the y center
+	 */
 	public int getYCenter()
 	{
 		return this.y + this.height / 2;
 	}
 
+	/**
+	 * Paint.
+	 *
+	 * @param g the g
+	 */
 	public void paint(final Graphics g)
 	{
 		switch (this.contents)
@@ -176,22 +277,44 @@ public class GridSquare implements Cloneable, Serializable
 		}
 	}
 
+	/**
+	 * Sets the contents.
+	 *
+	 * @param contents the new contents
+	 */
 	public void setContents(final SquareType contents)
 	{
 		this.contents = contents;
 	}
 
+	/**
+	 * Sets the distance.
+	 *
+	 * @param distance the new distance
+	 */
 	public void setDistance(final int distance)
 	{
 		this.distance = distance;
 	}
 
+	/**
+	 * Sets the location.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
 	public void setLocation(final int x, final int y)
 	{
 		this.x = x;
 		this.y = y;
 	}
 
+	/**
+	 * Sets the size.
+	 *
+	 * @param width the width
+	 * @param height the height
+	 */
 	public void setSize(final int width, final int height)
 	{
 		this.width = width;

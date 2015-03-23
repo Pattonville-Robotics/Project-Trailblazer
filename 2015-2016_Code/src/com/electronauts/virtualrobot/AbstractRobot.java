@@ -48,11 +48,8 @@ public abstract class AbstractRobot implements Runnable
 	/**
 	 * Gets the specified motor.
 	 *
-	 * @param motorData
-	 *            the motor to request
+	 * @param motorData            the motor to request
 	 * @return the motor
-	 * @throws IllegalArgumentException
-	 *             if the requested motor is not on the robot
 	 */
 	public Motor getMotor(final MotorData motorData)
 	{

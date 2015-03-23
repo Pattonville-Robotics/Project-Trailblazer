@@ -7,8 +7,19 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class PathfindAI.
+ */
 public class PathfindAI implements Runnable
 {
+	
+	/**
+	 * Compute distance.
+	 *
+	 * @param grid the grid
+	 * @param start the start
+	 */
 	public static void computeDistance(final Grid grid, final Point start)
 	{
 		for (int y = 0; y < grid.getGrid().length; y++)
@@ -70,6 +81,11 @@ public class PathfindAI implements Runnable
 		}
 	}
 
+	/**
+	 * Compute paths.
+	 *
+	 * @param grid the grid
+	 */
 	public static void computePaths(final Grid grid)
 	{
 		final ArrayList<VertexMap> paths = new ArrayList<VertexMap>();
@@ -149,6 +165,11 @@ public class PathfindAI implements Runnable
 		grid.setPaths(paths);
 	}
 
+	/**
+	 * Connect all nodes.
+	 *
+	 * @param grid the grid
+	 */
 	public static void connectAllNodes(final Grid grid)
 	{
 		final ArrayList<PathNodeMap> maps = new ArrayList<PathNodeMap>();
@@ -181,6 +202,11 @@ public class PathfindAI implements Runnable
 		grid.setPathNodeMaps(maps);
 	}
 
+	/**
+	 * Connect nodes.
+	 *
+	 * @param grid the grid
+	 */
 	public static void connectNodes(final Grid grid)
 	// The first node is always the finish point and the last is always the
 	// start
@@ -201,6 +227,11 @@ public class PathfindAI implements Runnable
 		grid.setPathNodeMap(map);
 	}
 
+	/**
+	 * Identify nodes.
+	 *
+	 * @param grid the grid
+	 */
 	public static void identifyNodes(final Grid grid)
 	{
 		final int[] xVarianceDiagonal = new int[] { -1, 1, 1, -1 };
@@ -237,6 +268,13 @@ public class PathfindAI implements Runnable
 
 	}
 
+	/**
+	 * Optimize path.
+	 *
+	 * @param grid the grid
+	 * @param map the map
+	 * @return the vertex map
+	 */
 	public static VertexMap optimizePath(final Grid grid, final VertexMap map)
 	{
 		final VertexMap newMap = new VertexMap();
@@ -255,6 +293,11 @@ public class PathfindAI implements Runnable
 		return newMap;
 	}
 
+	/**
+	 * Optimize paths.
+	 *
+	 * @param grid the grid
+	 */
 	public static void optimizePaths(final Grid grid)
 	{
 		final ArrayList<VertexMap> paths = grid.getPaths();
@@ -267,11 +310,17 @@ public class PathfindAI implements Runnable
 		grid.setPaths(newPaths);
 	}
 
+	/**
+	 * Instantiates a new pathfind ai.
+	 */
 	public PathfindAI()
 	{
 		System.out.println("y u do dis?");
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public void run()
 	{

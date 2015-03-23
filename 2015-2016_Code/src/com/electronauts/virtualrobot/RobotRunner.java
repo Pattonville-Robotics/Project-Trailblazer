@@ -12,13 +12,14 @@ import javax.swing.KeyStroke;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class RobotRunner.
+ * The RobotRunner class is a demo that creates a {@link TankRobot} , {@code JComponent}, and {@code JFrame}, and paints the TankRobot onto the
+ * JComponent. Actions are given for modification of the robot's {@link Motor} RPM.
  */
 public class RobotRunner
 {
 
 	/**
-	 * Initializes the windows.
+	 * Initializes the windows. This also creates Action-KeyStroke pairs in the JComponent that renders the scene.
 	 *
 	 * @param updateSpeed
 	 *            the minimum time in milliseconds each frame should take to render.
@@ -53,7 +54,7 @@ public class RobotRunner
 				robot.paint(g2d, scale);
 
 				g2d.setColor(Color.RED);
-				g2d.drawLine(scale * m1x, scale * m1y, scale * m2x, scale * m2y);
+				g2d.drawLine(scale * m1x, TankRobot.Y_SHIFT - scale * m1y, scale * m2x, TankRobot.Y_SHIFT - scale * m2y);
 
 				g2d.setColor(Color.RED);
 				g2d.drawString(
@@ -92,8 +93,8 @@ public class RobotRunner
 			@Override
 			public void actionPerformed(final ActionEvent e)
 			{
-				robot.setMotorRPMs(MotorData.MOTOR_LEFT, MotorData.MOTOR_RIGHT, robot.getMotorRPM(MotorData.MOTOR_LEFT) + 5,
-						robot.getMotorRPM(MotorData.MOTOR_RIGHT) - 5);
+				robot.setMotorRPMs(MotorData.MOTOR_LEFT, MotorData.MOTOR_RIGHT, robot.getMotorRPM(MotorData.MOTOR_LEFT) - 5,
+						robot.getMotorRPM(MotorData.MOTOR_RIGHT) + 5);
 				System.out.println(robot.getMotorRPM(MotorData.MOTOR_LEFT) + " " + robot.getMotorRPM(MotorData.MOTOR_RIGHT));
 			}
 		});
@@ -106,8 +107,8 @@ public class RobotRunner
 			@Override
 			public void actionPerformed(final ActionEvent e)
 			{
-				robot.setMotorRPMs(MotorData.MOTOR_LEFT, MotorData.MOTOR_RIGHT, robot.getMotorRPM(MotorData.MOTOR_LEFT) - 5,
-						robot.getMotorRPM(MotorData.MOTOR_RIGHT) + 5);
+				robot.setMotorRPMs(MotorData.MOTOR_LEFT, MotorData.MOTOR_RIGHT, robot.getMotorRPM(MotorData.MOTOR_LEFT) + 5,
+						robot.getMotorRPM(MotorData.MOTOR_RIGHT) - 5);
 				System.out.println(robot.getMotorRPM(MotorData.MOTOR_LEFT) + " " + robot.getMotorRPM(MotorData.MOTOR_RIGHT));
 			}
 		});

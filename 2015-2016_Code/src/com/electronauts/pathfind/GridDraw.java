@@ -31,13 +31,24 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
+// TODO: Auto-generated Javadoc
 //TODO Reduce source code size; only include needed things
 //TODO Design easier interface for code and movement
 
+/**
+ * The Class GridDraw.
+ */
 public class GridDraw extends JComponent
 {
+	
+	/** The Constant serialVersionUID. */
 	private static final long	serialVersionUID	= 1L;
 
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(final String[] args)
 	{
 		final GridDraw gridDraw = new GridDraw();
@@ -47,26 +58,52 @@ public class GridDraw extends JComponent
 		gridDraw.frame.setVisible(true);
 	}
 
+	/** The draw balenced nodes. */
 	private boolean	drawBalencedNodes	= false;
+	
+	/** The draw direction. */
 	private boolean	drawDirection		= false;
+	
+	/** The draw nodes. */
 	private boolean	drawNodes			= false;
+	
+	/** The draw paths. */
 	private boolean	drawPaths			= false;
 
+	/** The help. */
 	private JMenu	file, help;
 
+	/** The frame. */
 	private JFrame	frame;
 
+	/** The grid. */
 	private Grid	grid;
+	
+	/** The save as file. */
 	private JMenuItem	help1, help2, help3, help4, help5, help6, help7, help8, help9, newFile, openFile, saveFile, saveAsFile;
+	
+	/** The kryo. */
 	private final Kryo	kryo	= new Kryo();
+	
+	/** The menu bar. */
 	private JMenuBar	menuBar;
+	
+	/** The save dir. */
 	File				saveDir	= null;
 
+	/**
+	 * Instantiates a new grid draw.
+	 */
 	public GridDraw()
 	{
 		super();
 	}
 
+	/**
+	 * Cache grid.
+	 *
+	 * @param file the file
+	 */
 	public void cacheGrid(final File file)
 	{
 		Output output = null;
@@ -87,51 +124,91 @@ public class GridDraw extends JComponent
 		}
 	}
 
+	/**
+	 * Disable nodes.
+	 */
 	public void disableNodes()
 	{
 		this.drawNodes = false;
 	}
 
+	/**
+	 * Disable paths.
+	 */
 	public void disablePaths()
 	{
 		this.drawPaths = false;
 	}
 
+	/**
+	 * Enable nodes.
+	 */
 	public void enableNodes()
 	{
 		this.drawNodes = true;
 	}
 
+	/**
+	 * Enable paths.
+	 */
 	public void enablePaths()
 	{
 		this.drawPaths = true;
 	}
 
+	/**
+	 * Gets the draw balenced nodes.
+	 *
+	 * @return the draw balenced nodes
+	 */
 	public boolean getDrawBalencedNodes()
 	{
 		return this.drawBalencedNodes;
 	}
 
+	/**
+	 * Gets the draw direction.
+	 *
+	 * @return the draw direction
+	 */
 	public boolean getDrawDirection()
 	{
 		return this.drawDirection;
 	}
 
+	/**
+	 * Gets the draw nodes.
+	 *
+	 * @return the draw nodes
+	 */
 	public boolean getDrawNodes()
 	{
 		return this.drawNodes;
 	}
 
+	/**
+	 * Gets the draw paths.
+	 *
+	 * @return the draw paths
+	 */
 	public boolean getDrawPaths()
 	{
 		return this.drawPaths;
 	}
 
+	/**
+	 * Gets the grid.
+	 *
+	 * @return the grid
+	 */
 	public Grid getGrid()
 	{
 		return this.grid;
 	}
 
+	/**
+	 * Inits the.
+	 */
 	public void init()
 	{
 		this.saveDir = new File(System.getProperty("user.home") + "//grid.data");
@@ -167,6 +244,11 @@ public class GridDraw extends JComponent
 		System.out.println("Finished initialization.");
 	}
 
+	/**
+	 * Load grid.
+	 *
+	 * @param file the file
+	 */
 	public void loadGrid(final File file)
 	{
 		System.out.println("Began reading in data file.");
@@ -190,6 +272,9 @@ public class GridDraw extends JComponent
 		System.out.println("Finished reading in data file.");
 	}
 
+	/* (non-Javadoc)
+	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
+	 */
 	@Override
 	public void paintComponent(final Graphics g)
 	{
@@ -246,36 +331,69 @@ public class GridDraw extends JComponent
 		this.repaint();
 	}
 
+	/**
+	 * Replace grid.
+	 *
+	 * @param grid the grid
+	 */
 	public void replaceGrid(final Grid grid)
 	{
 		this.getGrid().setSelf(grid);
 	}
 
+	/**
+	 * Sets the draw balenced nodes.
+	 *
+	 * @param drawBalencedNodes the new draw balenced nodes
+	 */
 	public void setDrawBalencedNodes(final boolean drawBalencedNodes)
 	{
 		this.drawBalencedNodes = drawBalencedNodes;
 	}
 
+	/**
+	 * Sets the draw direction.
+	 *
+	 * @param drawDirection the new draw direction
+	 */
 	public void setDrawDirection(final boolean drawDirection)
 	{
 		this.drawDirection = drawDirection;
 	}
 
+	/**
+	 * Sets the draw nodes.
+	 *
+	 * @param drawNodes the new draw nodes
+	 */
 	public void setDrawNodes(final boolean drawNodes)
 	{
 		this.drawNodes = drawNodes;
 	}
 
+	/**
+	 * Sets the draw paths.
+	 *
+	 * @param drawPaths the new draw paths
+	 */
 	public void setDrawPaths(final boolean drawPaths)
 	{
 		this.drawPaths = drawPaths;
 	}
 
+	/**
+	 * Sets the grid.
+	 *
+	 * @param grid the new grid
+	 */
 	public void setGrid(final Grid grid)
 	{
 		this.grid = grid;
 	}
 
+	/**
+	 * Setup display.
+	 */
 	public void setupDisplay()
 	{
 		this.frame = new JFrame("GridViewer V3.14159");
@@ -341,6 +459,9 @@ public class GridDraw extends JComponent
 		this.frame.setJMenuBar(this.menuBar);
 	}
 
+	/**
+	 * Setup io mapping.
+	 */
 	public void setupIOMapping()
 	{
 		final MouseCycleListener mouseCycleListener = new MouseCycleListener(this.getGrid(), this);

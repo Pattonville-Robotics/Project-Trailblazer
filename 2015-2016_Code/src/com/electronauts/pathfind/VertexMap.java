@@ -5,32 +5,62 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class VertexMap.
+ */
 public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 {
+	
+	/** The Constant serialVersionUID. */
 	private static final long	serialVersionUID	= 1L;
 
+	/**
+	 * Gets the distance.
+	 *
+	 * @param p1 the p1
+	 * @param p2 the p2
+	 * @return the distance
+	 */
 	public static double getDistance(final Point p1, final Point p2)
 	{
 		return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
 	}
 
+	/** The points. */
 	private LinkedList<Point>	points;
 
+	/**
+	 * Instantiates a new vertex map.
+	 */
 	public VertexMap()
 	{
 		this.points = new LinkedList<Point>();
 	}
 
+	/**
+	 * Instantiates a new vertex map.
+	 *
+	 * @param points the points
+	 */
 	public VertexMap(final LinkedList<Point> points)
 	{
 		this.points = points;
 	}
 
+	/**
+	 * Adds the point.
+	 *
+	 * @param p the p
+	 */
 	public void addPoint(final Point p)
 	{
 		this.points.add(p);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
 	@Override
 	public VertexMap clone()
 	{
@@ -42,6 +72,9 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 		return new VertexMap(newList);
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
 	@Override
 	public int compareTo(final VertexMap map)
 	{
@@ -53,22 +86,43 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 			return 0;
 	}
 
+	/**
+	 * Gets the array.
+	 *
+	 * @return the array
+	 */
 	public Point[] getArray()
 	{
 		final Point[] result = new Point[this.points.size()];
 		return this.points.toArray(result);
 	}
 
+	/**
+	 * Gets the last point.
+	 *
+	 * @return the last point
+	 */
 	public Point getLastPoint()
 	{
 		return this.points.get(this.points.size() - 1);
 	}
 
+	/**
+	 * Gets the list.
+	 *
+	 * @return the list
+	 */
 	public LinkedList<Point> getList()
 	{
 		return this.points;
 	}
 
+	/**
+	 * Gets the point.
+	 *
+	 * @param i the i
+	 * @return the point
+	 */
 	public Point getPoint(final int i)
 	{
 		try
@@ -82,6 +136,11 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 		}
 	}
 
+	/**
+	 * Gets the reverse list.
+	 *
+	 * @return the reverse list
+	 */
 	public LinkedList<Point> getReverseList()
 	{
 		final Iterator<Point> reverseIterator = this.points.descendingIterator();
@@ -93,11 +152,21 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 		return newPoints;
 	}
 
+	/**
+	 * Gets the reverse map.
+	 *
+	 * @return the reverse map
+	 */
 	public VertexMap getReverseMap()
 	{
 		return new VertexMap(this.getReverseList());
 	}
 
+	/**
+	 * Gets the total distance.
+	 *
+	 * @return the total distance
+	 */
 	public double getTotalDistance()
 	{
 		double sum = 0;
@@ -108,6 +177,9 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 		return sum;
 	}
 
+	/**
+	 * Reverse list.
+	 */
 	public void reverseList()
 	{
 		final Iterator<Point> reverseIterator = this.points.descendingIterator();
@@ -119,11 +191,19 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 		this.points = newPoints;
 	}
 
+	/**
+	 * Size.
+	 *
+	 * @return the int
+	 */
 	public int size()
 	{
 		return this.points.size();
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString()
 	{

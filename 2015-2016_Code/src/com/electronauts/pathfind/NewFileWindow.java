@@ -19,23 +19,46 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class NewFileWindow.
+ */
 public class NewFileWindow
 {
+	
+	/** The frame. */
 	private JFrame				frame;
+	
+	/** The preview panel. */
 	private GridPreviewPanel	previewPanel;
+	
+	/** The super grid draw. */
 	private final GridDraw		superGridDraw;
 
+	/**
+	 * Instantiates a new new file window.
+	 *
+	 * @param superGridDraw the super grid draw
+	 */
 	public NewFileWindow(final GridDraw superGridDraw)
 	{
 		this.superGridDraw = superGridDraw;
 		this.initialize();
 	}
 
+	/**
+	 * Gets the frame.
+	 *
+	 * @return the frame
+	 */
 	public JFrame getFrame()
 	{
 		return this.frame;
 	}
 
+	/**
+	 * Initialize.
+	 */
 	private void initialize()
 	{
 		this.frame = new JFrame();

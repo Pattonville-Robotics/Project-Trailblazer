@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package com.electronauts.pathfind;
 
 import java.awt.Color;
@@ -10,19 +13,45 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Grid.
+ */
 public class Grid implements Serializable
 {
+	
+	/** The Constant serialVersionUID. */
 	private static final long		serialVersionUID	= 1L;
 
+	/** The grid. */
 	private GridSquare[][]			grid;
+	
+	/** The highlight thickness. */
 	private int						highlightThickness	= 2;
+	
+	/** The nodes. */
 	private ArrayList<PathNode>		nodes;
+	
+	/** The path node map. */
 	private PathNodeMap				pathNodeMap;
+	
+	/** The path node maps. */
 	private ArrayList<PathNodeMap>	pathNodeMaps;
+	
+	/** The paths. */
 	private ArrayList<VertexMap>	paths;
+	
+	/** The square height. */
 	private int						squareWidth, squareHeight;
+	
+	/** The highlighted point. */
 	private Point					startPoint, finishPoint, furthestPoint, highlightedPoint;
 
+	/**
+	 * Instantiates a new grid.
+	 *
+	 * @param grid the grid
+	 */
 	public Grid(final GridSquare[][] grid)
 	{
 		this.grid = grid;
@@ -62,8 +91,9 @@ public class Grid implements Serializable
 	}
 
 	/**
-	 * @param p
-	 *            - The point to be checked.
+	 * Can access.
+	 *
+	 * @param p            - The point to be checked.
 	 * @return A {@code boolean} value describing if the specified point can be accessed in the internal array.
 	 */
 	public boolean canAccess(final Point p)
@@ -79,6 +109,13 @@ public class Grid implements Serializable
 		return true;
 	}
 
+	/**
+	 * Collides with hazard.
+	 *
+	 * @param p1 the p1
+	 * @param p2 the p2
+	 * @return true, if successful
+	 */
 	public boolean collidesWithHazard(final Point p1, final Point p2)
 	{
 		final Line2D.Double line = new Line2D.Double(p1.x + .5, p1.y + .5, p2.x + .5, p2.y + .5);
@@ -91,6 +128,9 @@ public class Grid implements Serializable
 		return false;
 	}
 
+	/**
+	 * Find furthest point.
+	 */
 	public void findFurthestPoint()
 	{
 		final Point p = new Point(0, 0);
@@ -105,31 +145,63 @@ public class Grid implements Serializable
 		this.furthestPoint = p;
 	}
 
+	/**
+	 * Gets the distance.
+	 *
+	 * @param p the p
+	 * @return the distance
+	 */
 	public int getDistance(final Point p)
 	{
 		return this.getSquare(p).getDistance();
 	}
 
+	/**
+	 * Gets the finish point.
+	 *
+	 * @return the finish point
+	 */
 	public Point getFinishPoint()
 	{
 		return this.finishPoint;
 	}
 
+	/**
+	 * Gets the furthest point.
+	 *
+	 * @return the furthest point
+	 */
 	public Point getFurthestPoint()
 	{
 		return this.furthestPoint;
 	}
 
+	/**
+	 * Gets the grid.
+	 *
+	 * @return the grid
+	 */
 	public GridSquare[][] getGrid()
 	{
 		return this.grid;
 	}
 
+	/**
+	 * Gets the highlighted point.
+	 *
+	 * @return the highlighted point
+	 */
 	public Point getHighlightedPoint()
 	{
 		return this.highlightedPoint;
 	}
 
+	/**
+	 * Gets the lowest adjacent squares.
+	 *
+	 * @param p the p
+	 * @return the lowest adjacent squares
+	 */
 	public ArrayList<Point> getLowestAdjacentSquares(final Point p)
 	{
 		final ArrayList<Point> adjacent = new ArrayList<Point>();
@@ -146,26 +218,52 @@ public class Grid implements Serializable
 		return adjacent;
 	}
 
+	/**
+	 * Gets the nodes.
+	 *
+	 * @return the nodes
+	 */
 	public ArrayList<PathNode> getNodes()
 	{
 		return this.nodes;
 	}
 
+	/**
+	 * Gets the path node map.
+	 *
+	 * @return the path node map
+	 */
 	public PathNodeMap getPathNodeMap()
 	{
 		return this.pathNodeMap;
 	}
 
+	/**
+	 * Gets the path node maps.
+	 *
+	 * @return the path node maps
+	 */
 	public ArrayList<PathNodeMap> getPathNodeMaps()
 	{
 		return this.pathNodeMaps;
 	}
 
+	/**
+	 * Gets the paths.
+	 *
+	 * @return the paths
+	 */
 	public ArrayList<VertexMap> getPaths()
 	{
 		return this.paths;
 	}
 
+	/**
+	 * Gets the square copy.
+	 *
+	 * @param p the p
+	 * @return the square copy
+	 */
 	public GridSquare getSquareCopy(final Point p)
 	{
 		return this.grid[p.y][p.x].clone();
@@ -175,21 +273,41 @@ public class Grid implements Serializable
 	 * public GridDraw getGridDraw() { return gridDraw; }
 	 */
 
+	/**
+	 * Gets the square height.
+	 *
+	 * @return the square height
+	 */
 	public int getSquareHeight()
 	{
 		return this.squareHeight;
 	}
 
+	/**
+	 * Gets the square width.
+	 *
+	 * @return the square width
+	 */
 	public int getSquareWidth()
 	{
 		return this.squareWidth;
 	}
 
+	/**
+	 * Gets the start point.
+	 *
+	 * @return the start point
+	 */
 	public Point getStartPoint()
 	{
 		return this.startPoint;
 	}
 
+	/**
+	 * Move highlighted square.
+	 *
+	 * @param direction the direction
+	 */
 	public void moveHighlightedSquare(final int direction)
 	{
 		switch (direction)
@@ -209,6 +327,11 @@ public class Grid implements Serializable
 		}
 	}
 
+	/**
+	 * Paint.
+	 *
+	 * @param g the g
+	 */
 	public void paint(final Graphics g)
 	{
 		for (int row = 0; row < this.grid.length; row++)
@@ -221,6 +344,16 @@ public class Grid implements Serializable
 					this.squareHeight + 2 * i);
 	}
 
+	/**
+	 * Paint line.
+	 *
+	 * @param g2d the g2d
+	 * @param p1 the p1
+	 * @param p2 the p2
+	 * @param drawDirection the draw direction
+	 * @param xVar the x var
+	 * @param yVar the y var
+	 */
 	public void paintLine(final Graphics2D g2d, final Point p1, final Point p2, final boolean drawDirection, final int xVar, final int yVar)
 	{
 		// g.setColor(new Color(255, 0, 0));
@@ -231,6 +364,11 @@ public class Grid implements Serializable
 				.getYCenter() + yVar);
 	}
 
+	/**
+	 * Paint nodes.
+	 *
+	 * @param g2d the g2d
+	 */
 	public void paintNodes(final Graphics2D g2d)
 	{
 		g2d.setColor(new Color(204, 0, 102));
@@ -243,17 +381,37 @@ public class Grid implements Serializable
 		}
 	}
 
+	/**
+	 * Paint point set.
+	 *
+	 * @param g2d the g2d
+	 * @param points the points
+	 * @param drawDirection the draw direction
+	 * @param xVar the x var
+	 * @param yVar the y var
+	 */
 	public void paintPointSet(final Graphics2D g2d, final Point[] points, final boolean drawDirection, final int xVar, final int yVar)
 	{
 		for (int i = 0; i < points.length - 1; i++)
 			this.paintLine(g2d, points[i], points[i + 1], drawDirection, xVar, yVar);
 	}
 
+	/**
+	 * Paint rectangle.
+	 *
+	 * @param g the g
+	 * @param r the r
+	 */
 	public void paintRectangle(final Graphics g, final Rectangle2D r)
 	{
 		g.drawRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
 	}
 
+	/**
+	 * Rotate highlighted square.
+	 *
+	 * @param clockWise the clock wise
+	 */
 	public void rotateHighlightedSquare(final boolean clockWise)
 	{
 		if (clockWise)
@@ -290,16 +448,32 @@ public class Grid implements Serializable
 			}
 	}
 
+	/**
+	 * Sets the furthest point.
+	 *
+	 * @param p the new furthest point
+	 */
 	public void setFurthestPoint(final Point p)
 	{
 		this.furthestPoint = p;
 	}
 
+	/**
+	 * Sets the grid.
+	 *
+	 * @param grid the new grid
+	 */
 	public void setGrid(final GridSquare[][] grid)
 	{
 		this.grid = grid;
 	}
 
+	/**
+	 * Sets the highlighted square.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 */
 	public void setHighlightedSquare(final int x, final int y)
 	{
 		if (x >= 0 && x < this.grid[0].length && y >= 0 && y < this.grid.length)
@@ -310,26 +484,51 @@ public class Grid implements Serializable
 		}
 	}
 
+	/**
+	 * Sets the nodes.
+	 *
+	 * @param nodes the new nodes
+	 */
 	public void setNodes(final ArrayList<PathNode> nodes)
 	{
 		this.nodes = nodes;
 	}
 
+	/**
+	 * Sets the path node map.
+	 *
+	 * @param pathNodeMap the new path node map
+	 */
 	public void setPathNodeMap(final PathNodeMap pathNodeMap)
 	{
 		this.pathNodeMap = pathNodeMap;
 	}
 
+	/**
+	 * Sets the path node maps.
+	 *
+	 * @param pathNodeMaps the new path node maps
+	 */
 	public void setPathNodeMaps(final ArrayList<PathNodeMap> pathNodeMaps)
 	{
 		this.pathNodeMaps = pathNodeMaps;
 	}
 
+	/**
+	 * Sets the paths.
+	 *
+	 * @param v the new paths
+	 */
 	public void setPaths(final ArrayList<VertexMap> v)
 	{
 		this.paths = v;
 	}
 
+	/**
+	 * Sets the self.
+	 *
+	 * @param newGrid the new self
+	 */
 	public void setSelf(final Grid newGrid)
 	{
 		this.grid = newGrid.grid;
@@ -346,11 +545,24 @@ public class Grid implements Serializable
 		this.highlightedPoint = newGrid.highlightedPoint;
 	}
 
+	/**
+	 * Sets the square.
+	 *
+	 * @param gridSquare the grid square
+	 * @param row the row
+	 * @param column the column
+	 */
 	public void setSquare(final GridSquare gridSquare, final int row, final int column)
 	{
 		this.grid[row][column] = gridSquare;
 	}
 
+	/**
+	 * Sets the square contents.
+	 *
+	 * @param p the p
+	 * @param contents the contents
+	 */
 	public void setSquareContents(final Point p, final SquareType contents)
 	{
 		try
@@ -384,6 +596,12 @@ public class Grid implements Serializable
 		}
 	}
 
+	/**
+	 * Sets the square distance.
+	 *
+	 * @param p the p
+	 * @param distance the distance
+	 */
 	public void setSquareDistance(final Point p, final int distance)
 	{
 		try
@@ -396,11 +614,23 @@ public class Grid implements Serializable
 		}
 	}
 
+	/**
+	 * Sets the start point.
+	 *
+	 * @param p the new start point
+	 */
 	public void setStartPoint(final Point p)
 	{
 		this.startPoint = p;
 	}
 
+	/**
+	 * Test set highlighted square.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @return true, if successful
+	 */
 	public boolean testSetHighlightedSquare(final int x, final int y)
 	{
 		if (x >= 0 && x < this.grid[0].length && y >= 0 && y < this.grid.length)
@@ -409,6 +639,12 @@ public class Grid implements Serializable
 			return false;
 	}
 
+	/**
+	 * Gets the square.
+	 *
+	 * @param p the p
+	 * @return the square
+	 */
 	private GridSquare getSquare(final Point p)
 	{
 		return this.grid[p.y][p.x];
