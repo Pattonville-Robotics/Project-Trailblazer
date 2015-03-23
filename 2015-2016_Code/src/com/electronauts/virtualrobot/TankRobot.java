@@ -9,12 +9,13 @@ import com.electronauts.mathutil.PolarPoint;
 
 // TODO: Auto-generated Javadoc
 /**
- * The TankRobot class simulates the motion of a tank-like robot with two motors, through time.
+ * The TankRobot class simulates the motion of a tank-like robot with two motors through time.
  * <p>
  * It uses the system's nanosecond timer to keep track of how long it has driven. It uses an equation to find the turning circle of the robot, given the robot's
- * width, the radius of it's wheels, and the RPMs of each of the motors.
- * <p>
- * By default, it runs in real-time.
+ * width, the radius of it's wheels, and the RPMs of each of the motors. This system of physics simulation, based on the initial conditions and elapsed time, is
+ * much more accurate than one based on the previous state of the robot.
+ * <p
+ * By default, it runs in real-time, but in the future, a timescale option will be implemented.
  *
  * @author Mitchell Skaggs
  */
