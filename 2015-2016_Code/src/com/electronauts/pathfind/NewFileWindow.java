@@ -25,20 +25,21 @@ import javax.swing.event.ChangeListener;
  */
 public class NewFileWindow
 {
-	
+
 	/** The frame. */
 	private JFrame				frame;
-	
+
 	/** The preview panel. */
 	private GridPreviewPanel	previewPanel;
-	
+
 	/** The super grid draw. */
 	private final GridDraw		superGridDraw;
 
 	/**
 	 * Instantiates a new new file window.
 	 *
-	 * @param superGridDraw the super grid draw
+	 * @param superGridDraw
+	 *            the super grid draw
 	 */
 	public NewFileWindow(final GridDraw superGridDraw)
 	{

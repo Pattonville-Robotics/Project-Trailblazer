@@ -6,9 +6,9 @@ package com.electronauts.virtualrobot;
  */
 public enum MotorData
 {
-	
+
 	/** The motor left. */
-	MOTOR_LEFT, 
- /** The motor right. */
- MOTOR_RIGHT
+	MOTOR_LEFT,
+	/** The motor right. */
+	MOTOR_RIGHT
 }

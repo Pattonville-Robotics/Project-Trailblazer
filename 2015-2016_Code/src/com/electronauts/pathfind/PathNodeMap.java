@@ -11,15 +11,17 @@ import java.util.LinkedList;
  */
 public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializable
 {
-	
+
 	/** The Constant serialVersionUID. */
 	private static final long	serialVersionUID	= 1L;
 
 	/**
 	 * Gets the distance.
 	 *
-	 * @param p1 the p1
-	 * @param p2 the p2
+	 * @param p1
+	 *            the p1
+	 * @param p2
+	 *            the p2
 	 * @return the distance
 	 */
 	public static double getDistance(final Point p1, final Point p2)
@@ -41,7 +43,8 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 	/**
 	 * Instantiates a new path node map.
 	 *
-	 * @param points the points
+	 * @param points
+	 *            the points
 	 */
 	public PathNodeMap(final LinkedList<PathNode> points)
 	{
@@ -51,14 +54,17 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 	/**
 	 * Adds the point.
 	 *
-	 * @param p the p
+	 * @param p
+	 *            the p
 	 */
 	public void addPoint(final PathNode p)
 	{
 		this.points.add(p);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Object#clone()
 	 */
 	@Override
@@ -72,7 +78,9 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 		return new PathNodeMap(newList);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
@@ -120,7 +128,8 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 	/**
 	 * Gets the point.
 	 *
-	 * @param i the i
+	 * @param i
+	 *            the i
 	 * @return the point
 	 */
 	public PathNode getPoint(final int i)
@@ -216,7 +225,9 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 		return this.points.size();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

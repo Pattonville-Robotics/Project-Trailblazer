@@ -6,14 +6,15 @@ package com.electronauts.virtualrobot;
  */
 public class Wheel
 {
-	
+
 	/** The radius. */
 	private double	radius;
 
 	/**
 	 * Instantiates a new wheel.
 	 *
-	 * @param radius the radius
+	 * @param radius
+	 *            the radius
 	 */
 	public Wheel(final double radius)
 	{
@@ -43,7 +44,8 @@ public class Wheel
 	/**
 	 * Sets the radius.
 	 *
-	 * @param radius the new radius
+	 * @param radius
+	 *            the new radius
 	 */
 	public void setRadius(final double radius)
 	{

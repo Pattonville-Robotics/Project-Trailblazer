@@ -6,7 +6,7 @@ package com.electronauts.virtualrobot;
  */
 public class Motor
 {
-	
+
 	/** The motor data. */
 	private final MotorData	motorData;
 
@@ -19,10 +19,14 @@ public class Motor
 	/**
 	 * Instantiates a new motor.
 	 *
-	 * @param motorData the motor data
-	 * @param wheel the wheel
-	 * @param x the x
-	 * @param y the y
+	 * @param motorData
+	 *            the motor data
+	 * @param wheel
+	 *            the wheel
+	 * @param x
+	 *            the x
+	 * @param y
+	 *            the y
 	 */
 	public Motor(final MotorData motorData, final Wheel wheel, final double x, final double y)
 	{
@@ -36,11 +40,16 @@ public class Motor
 	/**
 	 * Instantiates a new motor.
 	 *
-	 * @param motorData the motor data
-	 * @param wheel the wheel
-	 * @param rpm the rpm
-	 * @param x the x
-	 * @param y the y
+	 * @param motorData
+	 *            the motor data
+	 * @param wheel
+	 *            the wheel
+	 * @param rpm
+	 *            the rpm
+	 * @param x
+	 *            the x
+	 * @param y
+	 *            the y
 	 */
 	public Motor(final MotorData motorData, final Wheel wheel, final double rpm, final double x, final double y)
 	{
@@ -144,7 +153,8 @@ public class Motor
 	/**
 	 * Sets the radius.
 	 *
-	 * @param radius the new radius
+	 * @param radius
+	 *            the new radius
 	 */
 	public void setRadius(final double radius)
 	{
@@ -154,7 +164,8 @@ public class Motor
 	/**
 	 * Sets the rpm.
 	 *
-	 * @param rpm the new rpm
+	 * @param rpm
+	 *            the new rpm
 	 */
 	public void setRPM(final double rpm)
 	{
@@ -164,7 +175,8 @@ public class Motor
 	/**
 	 * Sets the wheel.
 	 *
-	 * @param wheel the new wheel
+	 * @param wheel
+	 *            the new wheel
 	 */
 	public void setWheel(final Wheel wheel)
 	{
@@ -174,7 +186,8 @@ public class Motor
 	/**
 	 * Sets the x.
 	 *
-	 * @param x the new x
+	 * @param x
+	 *            the new x
 	 */
 	public void setX(final double x)
 	{
@@ -184,7 +197,8 @@ public class Motor
 	/**
 	 * Sets the x line start.
 	 *
-	 * @param xLineStart the new x line start
+	 * @param xLineStart
+	 *            the new x line start
 	 */
 	public void setxLineStart(final double xLineStart)
 	{
@@ -194,7 +208,8 @@ public class Motor
 	/**
 	 * Sets the y.
 	 *
-	 * @param y the new y
+	 * @param y
+	 *            the new y
 	 */
 	public void setY(final double y)
 	{
@@ -204,7 +219,8 @@ public class Motor
 	/**
 	 * Sets the y line start.
 	 *
-	 * @param yLineStart the new y line start
+	 * @param yLineStart
+	 *            the new y line start
 	 */
 	public void setyLineStart(final double yLineStart)
 	{

@@ -6,13 +6,13 @@ package com.electronauts.pathfind;
  */
 public enum SquareType
 {
-	
+
 	/** The empty. */
-	EMPTY, 
- /** The finish. */
- FINISH, 
- /** The hazard. */
- HAZARD, 
- /** The start. */
- START
+	EMPTY,
+	/** The finish. */
+	FINISH,
+	/** The hazard. */
+	HAZARD,
+	/** The start. */
+	START
 }

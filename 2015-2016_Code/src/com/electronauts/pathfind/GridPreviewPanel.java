@@ -24,10 +24,14 @@ public class GridPreviewPanel extends JPanel
 	/**
 	 * Instantiates a new grid preview panel.
 	 *
-	 * @param numRows the num rows
-	 * @param numColumns the num columns
-	 * @param squareWidth the square width
-	 * @param squareHeight the square height
+	 * @param numRows
+	 *            the num rows
+	 * @param numColumns
+	 *            the num columns
+	 * @param squareWidth
+	 *            the square width
+	 * @param squareHeight
+	 *            the square height
 	 */
 	public GridPreviewPanel(final int numRows, final int numColumns, final int squareWidth, final int squareHeight)
 	{
@@ -38,7 +42,9 @@ public class GridPreviewPanel extends JPanel
 		this.squareHeight = squareHeight;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see javax.swing.JComponent#paint(java.awt.Graphics)
 	 */
 	@Override
@@ -54,7 +60,8 @@ public class GridPreviewPanel extends JPanel
 	/**
 	 * Sets the num columns.
 	 *
-	 * @param numColumns the new num columns
+	 * @param numColumns
+	 *            the new num columns
 	 */
 	public void setNumColumns(final int numColumns)
 	{
@@ -64,7 +71,8 @@ public class GridPreviewPanel extends JPanel
 	/**
 	 * Sets the num rows.
 	 *
-	 * @param numRows the new num rows
+	 * @param numRows
+	 *            the new num rows
 	 */
 	public void setNumRows(final int numRows)
 	{
@@ -74,7 +82,8 @@ public class GridPreviewPanel extends JPanel
 	/**
 	 * Sets the square height.
 	 *
-	 * @param squareHeight the new square height
+	 * @param squareHeight
+	 *            the new square height
 	 */
 	public void setSquareHeight(final int squareHeight)
 	{
@@ -84,7 +93,8 @@ public class GridPreviewPanel extends JPanel
 	/**
 	 * Sets the square width.
 	 *
-	 * @param squareWidth the new square width
+	 * @param squareWidth
+	 *            the new square width
 	 */
 	public void setSquareWidth(final int squareWidth)
 	{

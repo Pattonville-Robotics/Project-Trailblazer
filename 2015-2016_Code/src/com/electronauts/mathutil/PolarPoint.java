@@ -8,11 +8,12 @@ import java.awt.geom.Point2D;
  */
 public class PolarPoint
 {
-	
+
 	/**
 	 * The main method.
 	 *
-	 * @param args the arguments
+	 * @param args
+	 *            the arguments
 	 */
 	public static void main(final String[] args)
 	{
@@ -33,8 +34,10 @@ public class PolarPoint
 	/**
 	 * Instantiates a new polar point.
 	 *
-	 * @param radius the radius
-	 * @param theta the theta
+	 * @param radius
+	 *            the radius
+	 * @param theta
+	 *            the theta
 	 */
 	public PolarPoint(final double radius, final double theta)
 	{
@@ -45,7 +48,8 @@ public class PolarPoint
 	/**
 	 * Instantiates a new polar point.
 	 *
-	 * @param p the p
+	 * @param p
+	 *            the p
 	 */
 	public PolarPoint(final Point2D.Double p)
 	{
@@ -96,7 +100,8 @@ public class PolarPoint
 	/**
 	 * Sets the radius.
 	 *
-	 * @param radius the new radius
+	 * @param radius
+	 *            the new radius
 	 */
 	public void setRadius(final double radius)
 	{
@@ -106,7 +111,8 @@ public class PolarPoint
 	/**
 	 * Sets the theta.
 	 *
-	 * @param theta the new theta
+	 * @param theta
+	 *            the new theta
 	 */
 	public void setTheta(final double theta)
 	{

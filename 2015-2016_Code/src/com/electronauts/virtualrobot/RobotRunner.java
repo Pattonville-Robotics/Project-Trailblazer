@@ -12,8 +12,8 @@ import javax.swing.KeyStroke;
 
 // TODO: Auto-generated Javadoc
 /**
- * The RobotRunner class is a demo that creates a {@link TankRobot} , {@code JComponent}, and {@code JFrame}, and paints the TankRobot onto the
- * JComponent. Actions are given for modification of the robot's {@link Motor} RPM.
+ * The RobotRunner class is a demo that creates a {@link TankRobot} , {@code JComponent}, and {@code JFrame}, and paints the TankRobot onto the JComponent.
+ * Actions are given for modification of the robot's {@link Motor} RPM.
  */
 public class RobotRunner
 {
@@ -58,7 +58,7 @@ public class RobotRunner
 
 				g2d.setColor(Color.RED);
 				g2d.drawString(
-						String.format("FPS: %06.2f Left motor power: %06.1f Right motor power %06.1f", 1 / (lastTime / 1000000000d),
+						String.format("FPS: %06.2f Left motor power: %06.1f Right motor power %06.1f", 1 / (this.lastTime / 1000000000d),
 								robot.getMotorRPM(MotorData.MOTOR_LEFT), robot.getMotorRPM(MotorData.MOTOR_RIGHT)), 10, this.getHeight() - 10);
 				try
 				{
@@ -72,7 +72,7 @@ public class RobotRunner
 				while (updateSpeed - (System.nanoTime() - startTime) / 1000000 > 0) // Mop up the rest with a high-precision timer
 				{
 				}
-				lastTime = System.nanoTime() - startTime;
+				this.lastTime = System.nanoTime() - startTime;
 				this.repaint();
 			}
 		};

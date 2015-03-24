@@ -13,37 +13,43 @@ import java.io.Serializable;
  */
 public class GridSquare implements Cloneable, Serializable
 {
-	
+
 	/** The Constant font1. */
 	private static final Font	font1				= new Font("Arial", Font.PLAIN, 20);
-	
+
 	/** The Constant font2. */
 	private static final Font	font2				= new Font("Arial", Font.PLAIN, 12);
-	
+
 	/** The Constant serialVersionUID. */
 	private static final long	serialVersionUID	= 1L;
-	
+
 	/** The super grid. */
 	public Grid					superGrid;
-	
+
 	/** The contents. */
 	private SquareType			contents;
-	
+
 	/** The distance. */
 	private int					distance;
-	
+
 	/** The height. */
 	private int					x, y, width, height;
 
 	/**
 	 * Instantiates a new grid square.
 	 *
-	 * @param superGrid the super grid
-	 * @param contents the contents
-	 * @param x the x
-	 * @param y the y
-	 * @param width the width
-	 * @param height the height
+	 * @param superGrid
+	 *            the super grid
+	 * @param contents
+	 *            the contents
+	 * @param x
+	 *            the x
+	 * @param y
+	 *            the y
+	 * @param width
+	 *            the width
+	 * @param height
+	 *            the height
 	 */
 	public GridSquare(final Grid superGrid, final SquareType contents, final int x, final int y, final int width, final int height)
 	{
@@ -56,7 +62,9 @@ public class GridSquare implements Cloneable, Serializable
 		this.distance = -1;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Object#clone()
 	 */
 	@Override
@@ -207,7 +215,8 @@ public class GridSquare implements Cloneable, Serializable
 	/**
 	 * Paint.
 	 *
-	 * @param g the g
+	 * @param g
+	 *            the g
 	 */
 	public void paint(final Graphics g)
 	{
@@ -280,7 +289,8 @@ public class GridSquare implements Cloneable, Serializable
 	/**
 	 * Sets the contents.
 	 *
-	 * @param contents the new contents
+	 * @param contents
+	 *            the new contents
 	 */
 	public void setContents(final SquareType contents)
 	{
@@ -290,7 +300,8 @@ public class GridSquare implements Cloneable, Serializable
 	/**
 	 * Sets the distance.
 	 *
-	 * @param distance the new distance
+	 * @param distance
+	 *            the new distance
 	 */
 	public void setDistance(final int distance)
 	{
@@ -300,8 +311,10 @@ public class GridSquare implements Cloneable, Serializable
 	/**
 	 * Sets the location.
 	 *
-	 * @param x the x
-	 * @param y the y
+	 * @param x
+	 *            the x
+	 * @param y
+	 *            the y
 	 */
 	public void setLocation(final int x, final int y)
 	{
@@ -312,8 +325,10 @@ public class GridSquare implements Cloneable, Serializable
 	/**
 	 * Sets the size.
 	 *
-	 * @param width the width
-	 * @param height the height
+	 * @param width
+	 *            the width
+	 * @param height
+	 *            the height
 	 */
 	public void setSize(final int width, final int height)
 	{

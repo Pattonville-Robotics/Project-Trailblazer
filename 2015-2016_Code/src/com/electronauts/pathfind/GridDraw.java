@@ -40,14 +40,15 @@ import com.esotericsoftware.kryo.io.Output;
  */
 public class GridDraw extends JComponent
 {
-	
+
 	/** The Constant serialVersionUID. */
 	private static final long	serialVersionUID	= 1L;
 
 	/**
 	 * The main method.
 	 *
-	 * @param args the arguments
+	 * @param args
+	 *            the arguments
 	 */
 	public static void main(final String[] args)
 	{
@@ -60,13 +61,13 @@ public class GridDraw extends JComponent
 
 	/** The draw balenced nodes. */
 	private boolean	drawBalencedNodes	= false;
-	
+
 	/** The draw direction. */
 	private boolean	drawDirection		= false;
-	
+
 	/** The draw nodes. */
 	private boolean	drawNodes			= false;
-	
+
 	/** The draw paths. */
 	private boolean	drawPaths			= false;
 
@@ -78,16 +79,16 @@ public class GridDraw extends JComponent
 
 	/** The grid. */
 	private Grid	grid;
-	
+
 	/** The save as file. */
 	private JMenuItem	help1, help2, help3, help4, help5, help6, help7, help8, help9, newFile, openFile, saveFile, saveAsFile;
-	
+
 	/** The kryo. */
 	private final Kryo	kryo	= new Kryo();
-	
+
 	/** The menu bar. */
 	private JMenuBar	menuBar;
-	
+
 	/** The save dir. */
 	File				saveDir	= null;
 
@@ -102,7 +103,8 @@ public class GridDraw extends JComponent
 	/**
 	 * Cache grid.
 	 *
-	 * @param file the file
+	 * @param file
+	 *            the file
 	 */
 	public void cacheGrid(final File file)
 	{
@@ -247,7 +249,8 @@ public class GridDraw extends JComponent
 	/**
 	 * Load grid.
 	 *
-	 * @param file the file
+	 * @param file
+	 *            the file
 	 */
 	public void loadGrid(final File file)
 	{
@@ -272,7 +275,9 @@ public class GridDraw extends JComponent
 		System.out.println("Finished reading in data file.");
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
 	 */
 	@Override
@@ -334,7 +339,8 @@ public class GridDraw extends JComponent
 	/**
 	 * Replace grid.
 	 *
-	 * @param grid the grid
+	 * @param grid
+	 *            the grid
 	 */
 	public void replaceGrid(final Grid grid)
 	{
@@ -344,7 +350,8 @@ public class GridDraw extends JComponent
 	/**
 	 * Sets the draw balenced nodes.
 	 *
-	 * @param drawBalencedNodes the new draw balenced nodes
+	 * @param drawBalencedNodes
+	 *            the new draw balenced nodes
 	 */
 	public void setDrawBalencedNodes(final boolean drawBalencedNodes)
 	{
@@ -354,7 +361,8 @@ public class GridDraw extends JComponent
 	/**
 	 * Sets the draw direction.
 	 *
-	 * @param drawDirection the new draw direction
+	 * @param drawDirection
+	 *            the new draw direction
 	 */
 	public void setDrawDirection(final boolean drawDirection)
 	{
@@ -364,7 +372,8 @@ public class GridDraw extends JComponent
 	/**
 	 * Sets the draw nodes.
 	 *
-	 * @param drawNodes the new draw nodes
+	 * @param drawNodes
+	 *            the new draw nodes
 	 */
 	public void setDrawNodes(final boolean drawNodes)
 	{
@@ -374,7 +383,8 @@ public class GridDraw extends JComponent
 	/**
 	 * Sets the draw paths.
 	 *
-	 * @param drawPaths the new draw paths
+	 * @param drawPaths
+	 *            the new draw paths
 	 */
 	public void setDrawPaths(final boolean drawPaths)
 	{
@@ -384,7 +394,8 @@ public class GridDraw extends JComponent
 	/**
 	 * Sets the grid.
 	 *
-	 * @param grid the new grid
+	 * @param grid
+	 *            the new grid
 	 */
 	public void setGrid(final Grid grid)
 	{

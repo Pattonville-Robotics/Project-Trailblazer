@@ -16,6 +16,8 @@ public abstract class AbstractRobot implements Runnable
 	/** The motors. */
 	protected volatile Motor[]	motors;
 
+	public abstract double getAngle();
+
 	/**
 	 * Gets the bounds.
 	 *
@@ -48,7 +50,8 @@ public abstract class AbstractRobot implements Runnable
 	/**
 	 * Gets the specified motor.
 	 *
-	 * @param motorData            the motor to request
+	 * @param motorData
+	 *            the motor to request
 	 * @return the motor
 	 */
 	public Motor getMotor(final MotorData motorData)

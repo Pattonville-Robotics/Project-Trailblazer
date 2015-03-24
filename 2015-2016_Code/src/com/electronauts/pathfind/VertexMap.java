@@ -11,15 +11,17 @@ import java.util.LinkedList;
  */
 public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 {
-	
+
 	/** The Constant serialVersionUID. */
 	private static final long	serialVersionUID	= 1L;
 
 	/**
 	 * Gets the distance.
 	 *
-	 * @param p1 the p1
-	 * @param p2 the p2
+	 * @param p1
+	 *            the p1
+	 * @param p2
+	 *            the p2
 	 * @return the distance
 	 */
 	public static double getDistance(final Point p1, final Point p2)
@@ -41,7 +43,8 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 	/**
 	 * Instantiates a new vertex map.
 	 *
-	 * @param points the points
+	 * @param points
+	 *            the points
 	 */
 	public VertexMap(final LinkedList<Point> points)
 	{
@@ -51,14 +54,17 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 	/**
 	 * Adds the point.
 	 *
-	 * @param p the p
+	 * @param p
+	 *            the p
 	 */
 	public void addPoint(final Point p)
 	{
 		this.points.add(p);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Object#clone()
 	 */
 	@Override
@@ -72,7 +78,9 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 		return new VertexMap(newList);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
@@ -120,7 +128,8 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 	/**
 	 * Gets the point.
 	 *
-	 * @param i the i
+	 * @param i
+	 *            the i
 	 * @return the point
 	 */
 	public Point getPoint(final int i)
@@ -201,7 +210,9 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 		return this.points.size();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

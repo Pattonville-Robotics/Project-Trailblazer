@@ -13,12 +13,14 @@ import java.util.List;
  */
 public class PathfindAI implements Runnable
 {
-	
+
 	/**
 	 * Compute distance.
 	 *
-	 * @param grid the grid
-	 * @param start the start
+	 * @param grid
+	 *            the grid
+	 * @param start
+	 *            the start
 	 */
 	public static void computeDistance(final Grid grid, final Point start)
 	{
@@ -84,7 +86,8 @@ public class PathfindAI implements Runnable
 	/**
 	 * Compute paths.
 	 *
-	 * @param grid the grid
+	 * @param grid
+	 *            the grid
 	 */
 	public static void computePaths(final Grid grid)
 	{
@@ -168,7 +171,8 @@ public class PathfindAI implements Runnable
 	/**
 	 * Connect all nodes.
 	 *
-	 * @param grid the grid
+	 * @param grid
+	 *            the grid
 	 */
 	public static void connectAllNodes(final Grid grid)
 	{
@@ -205,7 +209,8 @@ public class PathfindAI implements Runnable
 	/**
 	 * Connect nodes.
 	 *
-	 * @param grid the grid
+	 * @param grid
+	 *            the grid
 	 */
 	public static void connectNodes(final Grid grid)
 	// The first node is always the finish point and the last is always the
@@ -230,7 +235,8 @@ public class PathfindAI implements Runnable
 	/**
 	 * Identify nodes.
 	 *
-	 * @param grid the grid
+	 * @param grid
+	 *            the grid
 	 */
 	public static void identifyNodes(final Grid grid)
 	{
@@ -271,8 +277,10 @@ public class PathfindAI implements Runnable
 	/**
 	 * Optimize path.
 	 *
-	 * @param grid the grid
-	 * @param map the map
+	 * @param grid
+	 *            the grid
+	 * @param map
+	 *            the map
 	 * @return the vertex map
 	 */
 	public static VertexMap optimizePath(final Grid grid, final VertexMap map)
@@ -296,7 +304,8 @@ public class PathfindAI implements Runnable
 	/**
 	 * Optimize paths.
 	 *
-	 * @param grid the grid
+	 * @param grid
+	 *            the grid
 	 */
 	public static void optimizePaths(final Grid grid)
 	{
@@ -318,7 +327,9 @@ public class PathfindAI implements Runnable
 		System.out.println("y u do dis?");
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override

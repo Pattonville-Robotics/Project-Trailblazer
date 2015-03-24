@@ -1,5 +1,5 @@
 /*
- * 
+ *
  */
 package com.electronauts.pathfind;
 
@@ -19,38 +19,39 @@ import java.util.ArrayList;
  */
 public class Grid implements Serializable
 {
-	
+
 	/** The Constant serialVersionUID. */
 	private static final long		serialVersionUID	= 1L;
 
 	/** The grid. */
 	private GridSquare[][]			grid;
-	
+
 	/** The highlight thickness. */
 	private int						highlightThickness	= 2;
-	
+
 	/** The nodes. */
 	private ArrayList<PathNode>		nodes;
-	
+
 	/** The path node map. */
 	private PathNodeMap				pathNodeMap;
-	
+
 	/** The path node maps. */
 	private ArrayList<PathNodeMap>	pathNodeMaps;
-	
+
 	/** The paths. */
 	private ArrayList<VertexMap>	paths;
-	
+
 	/** The square height. */
 	private int						squareWidth, squareHeight;
-	
+
 	/** The highlighted point. */
 	private Point					startPoint, finishPoint, furthestPoint, highlightedPoint;
 
 	/**
 	 * Instantiates a new grid.
 	 *
-	 * @param grid the grid
+	 * @param grid
+	 *            the grid
 	 */
 	public Grid(final GridSquare[][] grid)
 	{
@@ -93,7 +94,8 @@ public class Grid implements Serializable
 	/**
 	 * Can access.
 	 *
-	 * @param p            - The point to be checked.
+	 * @param p
+	 *            - The point to be checked.
 	 * @return A {@code boolean} value describing if the specified point can be accessed in the internal array.
 	 */
 	public boolean canAccess(final Point p)
@@ -112,8 +114,10 @@ public class Grid implements Serializable
 	/**
 	 * Collides with hazard.
 	 *
-	 * @param p1 the p1
-	 * @param p2 the p2
+	 * @param p1
+	 *            the p1
+	 * @param p2
+	 *            the p2
 	 * @return true, if successful
 	 */
 	public boolean collidesWithHazard(final Point p1, final Point p2)
@@ -148,7 +152,8 @@ public class Grid implements Serializable
 	/**
 	 * Gets the distance.
 	 *
-	 * @param p the p
+	 * @param p
+	 *            the p
 	 * @return the distance
 	 */
 	public int getDistance(final Point p)
@@ -199,7 +204,8 @@ public class Grid implements Serializable
 	/**
 	 * Gets the lowest adjacent squares.
 	 *
-	 * @param p the p
+	 * @param p
+	 *            the p
 	 * @return the lowest adjacent squares
 	 */
 	public ArrayList<Point> getLowestAdjacentSquares(final Point p)
@@ -261,7 +267,8 @@ public class Grid implements Serializable
 	/**
 	 * Gets the square copy.
 	 *
-	 * @param p the p
+	 * @param p
+	 *            the p
 	 * @return the square copy
 	 */
 	public GridSquare getSquareCopy(final Point p)
@@ -306,7 +313,8 @@ public class Grid implements Serializable
 	/**
 	 * Move highlighted square.
 	 *
-	 * @param direction the direction
+	 * @param direction
+	 *            the direction
 	 */
 	public void moveHighlightedSquare(final int direction)
 	{
@@ -330,7 +338,8 @@ public class Grid implements Serializable
 	/**
 	 * Paint.
 	 *
-	 * @param g the g
+	 * @param g
+	 *            the g
 	 */
 	public void paint(final Graphics g)
 	{
@@ -347,12 +356,18 @@ public class Grid implements Serializable
 	/**
 	 * Paint line.
 	 *
-	 * @param g2d the g2d
-	 * @param p1 the p1
-	 * @param p2 the p2
-	 * @param drawDirection the draw direction
-	 * @param xVar the x var
-	 * @param yVar the y var
+	 * @param g2d
+	 *            the g2d
+	 * @param p1
+	 *            the p1
+	 * @param p2
+	 *            the p2
+	 * @param drawDirection
+	 *            the draw direction
+	 * @param xVar
+	 *            the x var
+	 * @param yVar
+	 *            the y var
 	 */
 	public void paintLine(final Graphics2D g2d, final Point p1, final Point p2, final boolean drawDirection, final int xVar, final int yVar)
 	{
@@ -367,7 +382,8 @@ public class Grid implements Serializable
 	/**
 	 * Paint nodes.
 	 *
-	 * @param g2d the g2d
+	 * @param g2d
+	 *            the g2d
 	 */
 	public void paintNodes(final Graphics2D g2d)
 	{
@@ -384,11 +400,16 @@ public class Grid implements Serializable
 	/**
 	 * Paint point set.
 	 *
-	 * @param g2d the g2d
-	 * @param points the points
-	 * @param drawDirection the draw direction
-	 * @param xVar the x var
-	 * @param yVar the y var
+	 * @param g2d
+	 *            the g2d
+	 * @param points
+	 *            the points
+	 * @param drawDirection
+	 *            the draw direction
+	 * @param xVar
+	 *            the x var
+	 * @param yVar
+	 *            the y var
 	 */
 	public void paintPointSet(final Graphics2D g2d, final Point[] points, final boolean drawDirection, final int xVar, final int yVar)
 	{
@@ -399,8 +420,10 @@ public class Grid implements Serializable
 	/**
 	 * Paint rectangle.
 	 *
-	 * @param g the g
-	 * @param r the r
+	 * @param g
+	 *            the g
+	 * @param r
+	 *            the r
 	 */
 	public void paintRectangle(final Graphics g, final Rectangle2D r)
 	{
@@ -410,7 +433,8 @@ public class Grid implements Serializable
 	/**
 	 * Rotate highlighted square.
 	 *
-	 * @param clockWise the clock wise
+	 * @param clockWise
+	 *            the clock wise
 	 */
 	public void rotateHighlightedSquare(final boolean clockWise)
 	{
@@ -451,7 +475,8 @@ public class Grid implements Serializable
 	/**
 	 * Sets the furthest point.
 	 *
-	 * @param p the new furthest point
+	 * @param p
+	 *            the new furthest point
 	 */
 	public void setFurthestPoint(final Point p)
 	{
@@ -461,7 +486,8 @@ public class Grid implements Serializable
 	/**
 	 * Sets the grid.
 	 *
-	 * @param grid the new grid
+	 * @param grid
+	 *            the new grid
 	 */
 	public void setGrid(final GridSquare[][] grid)
 	{
@@ -471,8 +497,10 @@ public class Grid implements Serializable
 	/**
 	 * Sets the highlighted square.
 	 *
-	 * @param x the x
-	 * @param y the y
+	 * @param x
+	 *            the x
+	 * @param y
+	 *            the y
 	 */
 	public void setHighlightedSquare(final int x, final int y)
 	{
@@ -487,7 +515,8 @@ public class Grid implements Serializable
 	/**
 	 * Sets the nodes.
 	 *
-	 * @param nodes the new nodes
+	 * @param nodes
+	 *            the new nodes
 	 */
 	public void setNodes(final ArrayList<PathNode> nodes)
 	{
@@ -497,7 +526,8 @@ public class Grid implements Serializable
 	/**
 	 * Sets the path node map.
 	 *
-	 * @param pathNodeMap the new path node map
+	 * @param pathNodeMap
+	 *            the new path node map
 	 */
 	public void setPathNodeMap(final PathNodeMap pathNodeMap)
 	{
@@ -507,7 +537,8 @@ public class Grid implements Serializable
 	/**
 	 * Sets the path node maps.
 	 *
-	 * @param pathNodeMaps the new path node maps
+	 * @param pathNodeMaps
+	 *            the new path node maps
 	 */
 	public void setPathNodeMaps(final ArrayList<PathNodeMap> pathNodeMaps)
 	{
@@ -517,7 +548,8 @@ public class Grid implements Serializable
 	/**
 	 * Sets the paths.
 	 *
-	 * @param v the new paths
+	 * @param v
+	 *            the new paths
 	 */
 	public void setPaths(final ArrayList<VertexMap> v)
 	{
@@ -527,7 +559,8 @@ public class Grid implements Serializable
 	/**
 	 * Sets the self.
 	 *
-	 * @param newGrid the new self
+	 * @param newGrid
+	 *            the new self
 	 */
 	public void setSelf(final Grid newGrid)
 	{
@@ -548,9 +581,12 @@ public class Grid implements Serializable
 	/**
 	 * Sets the square.
 	 *
-	 * @param gridSquare the grid square
-	 * @param row the row
-	 * @param column the column
+	 * @param gridSquare
+	 *            the grid square
+	 * @param row
+	 *            the row
+	 * @param column
+	 *            the column
 	 */
 	public void setSquare(final GridSquare gridSquare, final int row, final int column)
 	{
@@ -560,8 +596,10 @@ public class Grid implements Serializable
 	/**
 	 * Sets the square contents.
 	 *
-	 * @param p the p
-	 * @param contents the contents
+	 * @param p
+	 *            the p
+	 * @param contents
+	 *            the contents
 	 */
 	public void setSquareContents(final Point p, final SquareType contents)
 	{
@@ -599,8 +637,10 @@ public class Grid implements Serializable
 	/**
 	 * Sets the square distance.
 	 *
-	 * @param p the p
-	 * @param distance the distance
+	 * @param p
+	 *            the p
+	 * @param distance
+	 *            the distance
 	 */
 	public void setSquareDistance(final Point p, final int distance)
 	{
@@ -617,7 +657,8 @@ public class Grid implements Serializable
 	/**
 	 * Sets the start point.
 	 *
-	 * @param p the new start point
+	 * @param p
+	 *            the new start point
 	 */
 	public void setStartPoint(final Point p)
 	{
@@ -627,8 +668,10 @@ public class Grid implements Serializable
 	/**
 	 * Test set highlighted square.
 	 *
-	 * @param x the x
-	 * @param y the y
+	 * @param x
+	 *            the x
+	 * @param y
+	 *            the y
 	 * @return true, if successful
 	 */
 	public boolean testSetHighlightedSquare(final int x, final int y)
@@ -642,7 +685,8 @@ public class Grid implements Serializable
 	/**
 	 * Gets the square.
 	 *
-	 * @param p the p
+	 * @param p
+	 *            the p
 	 * @return the square
 	 */
 	private GridSquare getSquare(final Point p)

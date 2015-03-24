@@ -13,15 +13,17 @@ public class PathNode
 	// Can only go to lower squares with visibility
 	/** The directed edges. */
 	private ArrayList<PathNode>	directedEdges	= new ArrayList<PathNode>();
-	
+
 	/** The node. */
 	private Point				node;
 
 	/**
 	 * Instantiates a new path node.
 	 *
-	 * @param x the x
-	 * @param y the y
+	 * @param x
+	 *            the x
+	 * @param y
+	 *            the y
 	 */
 	public PathNode(final int x, final int y)
 	{
@@ -31,7 +33,8 @@ public class PathNode
 	/**
 	 * Instantiates a new path node.
 	 *
-	 * @param node the node
+	 * @param node
+	 *            the node
 	 */
 	public PathNode(final Point node)
 	{
@@ -41,14 +44,17 @@ public class PathNode
 	/**
 	 * Adds the directed edge.
 	 *
-	 * @param edge the edge
+	 * @param edge
+	 *            the edge
 	 */
 	public void addDirectedEdge(final PathNode edge)
 	{
 		this.directedEdges.add(edge);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -77,7 +83,9 @@ public class PathNode
 		return this.node;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -89,7 +97,8 @@ public class PathNode
 	/**
 	 * Sets the directed edges.
 	 *
-	 * @param directedEdges the new directed edges
+	 * @param directedEdges
+	 *            the new directed edges
 	 */
 	public void setDirectedEdges(final ArrayList<PathNode> directedEdges)
 	{
@@ -99,14 +108,17 @@ public class PathNode
 	/**
 	 * Sets the node.
 	 *
-	 * @param node the new node
+	 * @param node
+	 *            the new node
 	 */
 	public void setNode(final Point node)
 	{
 		this.node = node;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

@@ -22,13 +22,13 @@ import com.electronauts.mathutil.PolarPoint;
 public class TankRobot extends AbstractRobot
 {
 
-	/** The x and y rotation centers. */
-	private double			xRotCenter, yRotCenter;
+	public static final int	Y_SHIFT	= 500;
 
 	/** The initial angle around the circle */
 	private double			theta;
 
-	public static final int	Y_SHIFT	= 500;
+	/** The x and y rotation centers. */
+	private double			xRotCenter, yRotCenter;
 
 	/**
 	 * Constructs a TankRobot object given two motor objects.
@@ -47,9 +47,10 @@ public class TankRobot extends AbstractRobot
 
 	/**
 	 * Returns the angle from the x-axis to the line segment formed by the two motors, using the {@code atan2} method in the {@code Math} class.
-	 * 
+	 *
 	 * @return the angle from the x-axis to the line segment formed by the two motors.
 	 */
+	@Override
 	public double getAngle()
 	{
 		return Math.atan2(this.getMotor(MotorData.MOTOR_RIGHT).getY() - this.getMotor(MotorData.MOTOR_LEFT).getY(), this.getMotor(MotorData.MOTOR_RIGHT).getX()
@@ -71,11 +72,11 @@ public class TankRobot extends AbstractRobot
 		final Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
 		final Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
 
-		output.moveTo(scale * (p1.getX() + motorL.getX()), Y_SHIFT - scale * (p1.getY() + motorL.getY()));
-		output.lineTo(scale * (p2.getX() + motorL.getX()), Y_SHIFT - scale * (p2.getY() + motorL.getY()));
+		output.moveTo(scale * (p1.getX() + motorL.getX()), TankRobot.Y_SHIFT - scale * (p1.getY() + motorL.getY()));
+		output.lineTo(scale * (p2.getX() + motorL.getX()), TankRobot.Y_SHIFT - scale * (p2.getY() + motorL.getY()));
 
-		output.lineTo(scale * (p2.getX() + motorR.getX()), Y_SHIFT - scale * (p2.getY() + motorR.getY()));
-		output.lineTo(scale * (p1.getX() + motorR.getX()), Y_SHIFT - scale * (p1.getY() + motorR.getY()));
+		output.lineTo(scale * (p2.getX() + motorR.getX()), TankRobot.Y_SHIFT - scale * (p2.getY() + motorR.getY()));
+		output.lineTo(scale * (p1.getX() + motorR.getX()), TankRobot.Y_SHIFT - scale * (p1.getY() + motorR.getY()));
 		output.closePath();
 
 		return output;
@@ -163,9 +164,9 @@ public class TankRobot extends AbstractRobot
 		final Motor motorL = this.getMotor(MotorData.MOTOR_LEFT);
 		final Motor motorR = this.getMotor(MotorData.MOTOR_RIGHT);
 		final Path2D.Double arrow = new Path2D.Double();
-		arrow.moveTo(scale * motorL.getX(), Y_SHIFT - scale * motorL.getY());
-		arrow.lineTo(scale * motorR.getX(), Y_SHIFT - scale * motorR.getY());
-		arrow.lineTo(scale * ((motorL.getX() + motorR.getX()) / 2 + p1.getX()), Y_SHIFT - scale * ((motorL.getY() + motorR.getY()) / 2 + p1.getY()));
+		arrow.moveTo(scale * motorL.getX(), TankRobot.Y_SHIFT - scale * motorL.getY());
+		arrow.lineTo(scale * motorR.getX(), TankRobot.Y_SHIFT - scale * motorR.getY());
+		arrow.lineTo(scale * ((motorL.getX() + motorR.getX()) / 2 + p1.getX()), TankRobot.Y_SHIFT - scale * ((motorL.getY() + motorR.getY()) / 2 + p1.getY()));
 		arrow.closePath();
 		final Path2D.Double bounds = this.getBounds(scale);
 
@@ -174,18 +175,18 @@ public class TankRobot extends AbstractRobot
 		g2d.setColor(Color.GRAY);
 		g2d.fill(arrow);
 		g2d.setColor(Color.RED);
-		g2d.fillOval((int) (motorL.getX() * scale - 2), Y_SHIFT - (int) (motorL.getY() * scale + 2), 4, 4);
-		g2d.fillOval((int) (motorR.getX() * scale - 2), Y_SHIFT - (int) (motorR.getY() * scale + 2), 4, 4);
+		g2d.fillOval((int) (motorL.getX() * scale - 2), TankRobot.Y_SHIFT - (int) (motorL.getY() * scale + 2), 4, 4);
+		g2d.fillOval((int) (motorR.getX() * scale - 2), TankRobot.Y_SHIFT - (int) (motorR.getY() * scale + 2), 4, 4);
 		g2d.setColor(Color.DARK_GRAY);
-		g2d.drawString("Left Motor", (int) (motorL.getX() * scale), Y_SHIFT - (int) (motorL.getY() * scale));
-		g2d.drawString("Right Motor", (int) (motorR.getX() * scale), Y_SHIFT - (int) (motorR.getY() * scale));
+		g2d.drawString("Left Motor", (int) (motorL.getX() * scale), TankRobot.Y_SHIFT - (int) (motorL.getY() * scale));
+		g2d.drawString("Right Motor", (int) (motorR.getX() * scale), TankRobot.Y_SHIFT - (int) (motorR.getY() * scale));
 
 		g2d.setColor(Color.BLUE);
-		g2d.drawLine((int) (this.getXRotCenter() * scale), Y_SHIFT - (int) (this.getYRotCenter() * scale), (int) (motorL.getX() * scale), Y_SHIFT
-				- (int) (motorL.getY() * scale));
+		g2d.drawLine((int) (this.getXRotCenter() * scale), TankRobot.Y_SHIFT - (int) (this.getYRotCenter() * scale), (int) (motorL.getX() * scale),
+				TankRobot.Y_SHIFT - (int) (motorL.getY() * scale));
 		g2d.setColor(Color.RED);
-		g2d.drawLine((int) (this.getXRotCenter() * scale), Y_SHIFT - (int) (this.getYRotCenter() * scale), (int) (motorR.getX() * scale), Y_SHIFT
-				- (int) (motorR.getY() * scale));
+		g2d.drawLine((int) (this.getXRotCenter() * scale), TankRobot.Y_SHIFT - (int) (this.getYRotCenter() * scale), (int) (motorR.getX() * scale),
+				TankRobot.Y_SHIFT - (int) (motorR.getY() * scale));
 	}
 
 	/**
