@@ -18,7 +18,7 @@ public class Gyroscope extends AbstractSensor
 	 */
 	public Gyroscope(final AbstractRobot parent)
 	{
-		super(parent);
+		super(parent, SensorType.GYROSCOPE);
 		this.resetBaseAngle();
 	}
 
@@ -34,7 +34,7 @@ public class Gyroscope extends AbstractSensor
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.electronauts.virtualrobot.AbstractSensor#getRobot()
 	 */
 	@Override
@@ -45,7 +45,7 @@ public class Gyroscope extends AbstractSensor
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.electronauts.virtualrobot.AbstractSensor#readValue()
 	 */
 	@Override

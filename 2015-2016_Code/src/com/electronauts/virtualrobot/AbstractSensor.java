@@ -2,7 +2,8 @@ package com.electronauts.virtualrobot;
 
 // TODO: Auto-generated Javadoc
 /**
- * The AbstractSensor encapsulates methods common to all types of sensor. It allows the AbstractRobot class to 
+ * The AbstractSensor encapsulates methods common to all types of sensor. It allows the AbstractRobot class to query the various sensors onboard and make
+ * informed decisions based on the state of the simulation and surroundings.
  */
 public abstract class AbstractSensor
 {
@@ -10,15 +11,21 @@ public abstract class AbstractSensor
 	/** The parent robot. */
 	public AbstractRobot	parent;
 
+	/** The sensor type. */
+	private SensorType		sensorType;
+
 	/**
 	 * Instantiates a new abstract sensor from the robot on which it is mounted.
 	 *
 	 * @param parent
 	 *            the parent robot
+	 * @param sensorType
+	 *            the sensor type
 	 */
-	public AbstractSensor(final AbstractRobot parent)
+	protected AbstractSensor(final AbstractRobot parent, final SensorType sensorType)
 	{
 		this.parent = parent;
+		this.sensorType = sensorType;
 	}
 
 	/**
@@ -34,4 +41,25 @@ public abstract class AbstractSensor
 	 * @return the value of the sensor
 	 */
 	public abstract Number readValue();
+
+	/**
+	 * Gets the sensor type.
+	 *
+	 * @return the sensorType
+	 */
+	public SensorType getSensorType()
+	{
+		return sensorType;
+	}
+
+	/**
+	 * Sets the sensor type.
+	 *
+	 * @param sensorType
+	 *            the sensorType to set
+	 */
+	public void setSensorType(SensorType sensorType)
+	{
+		this.sensorType = sensorType;
+	}
 }

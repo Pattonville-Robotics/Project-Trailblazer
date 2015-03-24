@@ -7,3 +7,5 @@ javadoc
 radians
 onboard
 timescale
+enum
+gyroscopic

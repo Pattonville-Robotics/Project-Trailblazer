@@ -1,6 +1,7 @@
 package com.electronauts.virtualrobot;
 
 import java.awt.geom.Path2D;
+import java.util.ArrayList;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -11,12 +12,53 @@ public abstract class AbstractRobot implements Runnable
 {
 
 	/** The start time. */
-	private long				startTime	= System.nanoTime();
+	private long						startTime	= System.nanoTime();
 
 	/** The motors. */
-	protected volatile Motor[]	motors;
+	protected volatile Motor[]			motors;
 
+	/** The sensors. */
+	protected ArrayList<AbstractSensor>	sensors;
+
+	/**
+	 * Gets the angle of the robot from the x-axis to the line perpendicular to the forward direction of the robot.
+	 *
+	 * @return the robot's angle
+	 */
 	public abstract double getAngle();
+
+	/**
+	 * Adds a sensor to the robot.
+	 *
+	 * @param abstractSensor
+	 *            the sensor to be added to the robot
+	 */
+	public void addSensor(AbstractSensor abstractSensor)
+	{
+		sensors.add(abstractSensor);
+	}
+
+	public Number getSensorValue(SensorType sensorType)
+	{
+		return this.getSensor(sensorType).readValue();
+	}
+
+	/**
+	 * Gets the specified sensor.
+	 *
+	 * @param sensorType
+	 *            the sensor type to be requested
+	 * @return the requested sensor, if available
+	 * 
+	 * @throws IllegalArgumentException
+	 *             if the sensor is not onboard the robot
+	 */
+	public AbstractSensor getSensor(final SensorType sensorType)
+	{
+		for (final AbstractSensor absr : this.sensors)
+			if (absr.getSensorType() == sensorType) return absr;
+		throw new IllegalArgumentException("Sensor not found!");
+	}
 
 	/**
 	 * Gets the bounds.

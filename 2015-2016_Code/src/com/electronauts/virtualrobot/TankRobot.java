@@ -22,9 +22,10 @@ import com.electronauts.mathutil.PolarPoint;
 public class TankRobot extends AbstractRobot
 {
 
+	/** The Constant Y_SHIFT. */
 	public static final int	Y_SHIFT	= 500;
 
-	/** The initial angle around the circle */
+	/** The initial angle around the circle. */
 	private double			theta;
 
 	/** The x and y rotation centers. */
