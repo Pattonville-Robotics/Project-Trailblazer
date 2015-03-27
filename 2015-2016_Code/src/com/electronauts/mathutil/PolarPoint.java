@@ -8,7 +8,6 @@ import java.awt.geom.Point2D;
  */
 public class PolarPoint
 {
-
 	/**
 	 * The main method.
 	 *
