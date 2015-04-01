@@ -64,7 +64,7 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#clone()
 	 */
 	@Override
@@ -80,7 +80,7 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
@@ -227,7 +227,7 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

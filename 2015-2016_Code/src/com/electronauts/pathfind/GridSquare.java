@@ -64,7 +64,7 @@ public class GridSquare implements Cloneable, Serializable
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#clone()
 	 */
 	@Override

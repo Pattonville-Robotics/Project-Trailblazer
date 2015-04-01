@@ -51,13 +51,13 @@ public class RobotRunner
 				for (int y = 0; y < this.getHeight(); y += scale)
 					g2d.drawLine(0, y, this.getWidth(), y);
 
-				g2d.translate(0, getHeight() / 2);
+				g2d.translate(0, this.getHeight() / 2);
 				g2d.scale(1, -1);
-				g2d.translate(0, -getHeight() / 2);
+				g2d.translate(0, -this.getHeight() / 2);
 				robot.paint(g2d, scale);
-				g2d.translate(0, getHeight() / 2);
+				g2d.translate(0, this.getHeight() / 2);
 				g2d.scale(1, -1);
-				g2d.translate(0, -getHeight() / 2);
+				g2d.translate(0, -this.getHeight() / 2);
 
 				g2d.setColor(Color.RED);
 				g2d.drawLine(scale * m1x, scale * m1y, scale * m2x, scale * m2y);

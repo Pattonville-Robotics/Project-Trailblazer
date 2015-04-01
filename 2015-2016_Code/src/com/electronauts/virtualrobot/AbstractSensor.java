@@ -36,6 +36,16 @@ public abstract class AbstractSensor
 	public abstract AbstractRobot getRobot();
 
 	/**
+	 * Gets the sensor type.
+	 *
+	 * @return the sensorType
+	 */
+	public SensorType getSensorType()
+	{
+		return this.sensorType;
+	}
+
+	/**
 	 * Reads the value of the sensor. This can be in a variety of precisions, but it will always be a {@code Number}
 	 *
 	 * @return the value of the sensor
@@ -43,22 +53,12 @@ public abstract class AbstractSensor
 	public abstract Number readValue();
 
 	/**
-	 * Gets the sensor type.
-	 *
-	 * @return the sensorType
-	 */
-	public SensorType getSensorType()
-	{
-		return sensorType;
-	}
-
-	/**
 	 * Sets the sensor type.
 	 *
 	 * @param sensorType
 	 *            the sensorType to set
 	 */
-	public void setSensorType(SensorType sensorType)
+	public void setSensorType(final SensorType sensorType)
 	{
 		this.sensorType = sensorType;
 	}

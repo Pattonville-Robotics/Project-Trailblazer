@@ -21,44 +21,22 @@ public abstract class AbstractRobot implements Runnable
 	protected ArrayList<AbstractSensor>	sensors;
 
 	/**
-	 * Gets the angle of the robot from the x-axis to the line perpendicular to the forward direction of the robot.
-	 *
-	 * @return the robot's angle
-	 */
-	public abstract double getAngle();
-
-	/**
 	 * Adds a sensor to the robot.
 	 *
 	 * @param abstractSensor
 	 *            the sensor to be added to the robot
 	 */
-	public void addSensor(AbstractSensor abstractSensor)
+	public void addSensor(final AbstractSensor abstractSensor)
 	{
-		sensors.add(abstractSensor);
-	}
-
-	public Number getSensorValue(SensorType sensorType)
-	{
-		return this.getSensor(sensorType).readValue();
+		this.sensors.add(abstractSensor);
 	}
 
 	/**
-	 * Gets the specified sensor.
+	 * Gets the angle of the robot from the x-axis to the line perpendicular to the forward direction of the robot.
 	 *
-	 * @param sensorType
-	 *            the sensor type to be requested
-	 * @return the requested sensor, if available
-	 * 
-	 * @throws IllegalArgumentException
-	 *             if the sensor is not onboard the robot
+	 * @return the robot's angle
 	 */
-	public AbstractSensor getSensor(final SensorType sensorType)
-	{
-		for (final AbstractSensor absr : this.sensors)
-			if (absr.getSensorType() == sensorType) return absr;
-		throw new IllegalArgumentException("Sensor not found!");
-	}
+	public abstract double getAngle();
 
 	/**
 	 * Gets the bounds.
@@ -111,6 +89,32 @@ public abstract class AbstractRobot implements Runnable
 	 * @return the motor's RPM
 	 */
 	public abstract double getMotorRPM(final MotorData motor);
+
+	/**
+	 * Gets the specified sensor.
+	 *
+	 * @param sensorType
+	 *            the sensor type to be requested
+	 * @return the requested sensor, if available
+	 */
+	public AbstractSensor getSensor(final SensorType sensorType)
+	{
+		for (final AbstractSensor absr : this.sensors)
+			if (absr.getSensorType() == sensorType) return absr;
+		throw new IllegalArgumentException("Sensor not found!");
+	}
+
+	/**
+	 * Gets the sensor value.
+	 *
+	 * @param sensorType
+	 *            the sensor type
+	 * @return the sensor value
+	 */
+	public Number getSensorValue(final SensorType sensorType)
+	{
+		return this.getSensor(sensorType).readValue();
+	}
 
 	/**
 	 * Gets the start time.

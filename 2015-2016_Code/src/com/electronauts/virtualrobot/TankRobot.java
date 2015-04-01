@@ -57,7 +57,7 @@ public class TankRobot extends AbstractRobot
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.electronauts.virtualrobot.AbstractRobot#getBounds(int)
 	 */
 	@Override
@@ -94,7 +94,7 @@ public class TankRobot extends AbstractRobot
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.electronauts.virtualrobot.AbstractRobot#getMotorRPM(com.electronauts.virtualrobot.MotorData)
 	 */
 	@Override
@@ -197,7 +197,7 @@ public class TankRobot extends AbstractRobot
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
@@ -207,7 +207,7 @@ public class TankRobot extends AbstractRobot
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.electronauts.virtualrobot.AbstractRobot#setMotorRPMs(com.electronauts.virtualrobot.MotorData, com.electronauts.virtualrobot.MotorData, double,
 	 * double)
 	 */

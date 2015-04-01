@@ -53,7 +53,7 @@ public class PathfindAI implements Runnable
 					final Point prospectivePoint = new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j]);
 					if (grid.canAccess(prospectivePoint)
 							&& (grid.getSquareCopy(prospectivePoint).getContents() == SquareType.EMPTY || grid.getSquareCopy(prospectivePoint).getContents() == SquareType.FINISH))
-						// If it's not outside the grid and is an empty square
+					// If it's not outside the grid and is an empty square
 					{
 						if (!pointSet.contains(new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j])))
 						{
@@ -269,7 +269,7 @@ public class PathfindAI implements Runnable
 		for (int i = 0; i < nodes.size(); i++)
 			for (int j = 0; j < nodes.size(); j++)
 				if (i != j && !grid.collidesWithHazard(nodes.get(i).getNode(), nodes.get(j).getNode())
-				&& grid.getSquareCopy(nodes.get(i).getNode()).getDistance() > grid.getSquareCopy(nodes.get(j).getNode()).getDistance())
+						&& grid.getSquareCopy(nodes.get(i).getNode()).getDistance() > grid.getSquareCopy(nodes.get(j).getNode()).getDistance())
 					nodes.get(i).addDirectedEdge(nodes.get(j));
 
 	}
@@ -329,7 +329,7 @@ public class PathfindAI implements Runnable
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override

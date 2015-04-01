@@ -44,7 +44,7 @@ public class GridPreviewPanel extends JPanel
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see javax.swing.JComponent#paint(java.awt.Graphics)
 	 */
 	@Override

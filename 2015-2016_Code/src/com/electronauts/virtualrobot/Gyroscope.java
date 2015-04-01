@@ -34,7 +34,7 @@ public class Gyroscope extends AbstractSensor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.electronauts.virtualrobot.AbstractSensor#getRobot()
 	 */
 	@Override
@@ -45,7 +45,7 @@ public class Gyroscope extends AbstractSensor
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.electronauts.virtualrobot.AbstractSensor#readValue()
 	 */
 	@Override

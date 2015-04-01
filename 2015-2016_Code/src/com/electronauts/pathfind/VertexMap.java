@@ -64,7 +64,7 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#clone()
 	 */
 	@Override
@@ -80,7 +80,7 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
@@ -212,7 +212,7 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
