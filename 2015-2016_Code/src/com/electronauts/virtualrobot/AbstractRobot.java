@@ -1,5 +1,6 @@
 package com.electronauts.virtualrobot;
 
+import java.awt.Graphics2D;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 
@@ -10,7 +11,6 @@ import java.util.ArrayList;
  */
 public abstract class AbstractRobot implements Runnable
 {
-
 	/** The start time. */
 	private long						startTime	= System.nanoTime();
 
@@ -19,6 +19,9 @@ public abstract class AbstractRobot implements Runnable
 
 	/** The sensors. */
 	protected ArrayList<AbstractSensor>	sensors;
+
+	/** The initial angle around the circle. */
+	protected double					theta;
 
 	/**
 	 * Adds a sensor to the robot.
@@ -90,6 +93,8 @@ public abstract class AbstractRobot implements Runnable
 	 */
 	public abstract double getMotorRPM(final MotorData motor);
 
+	public abstract void paint(final Graphics2D g2d, final int scale);
+
 	/**
 	 * Gets the specified sensor.
 	 *
@@ -149,5 +154,26 @@ public abstract class AbstractRobot implements Runnable
 	public void setStartTime(final long startTime)
 	{
 		this.startTime = startTime;
+	}
+
+	/**
+	 * Gets the initial angle around the robot's turning circle from a line parallel to the x-axis.
+	 *
+	 * @return the angle, in radians
+	 */
+	public double getTheta()
+	{
+		return this.theta;
+	}
+
+	/**
+	 * Sets the theta.
+	 *
+	 * @param theta
+	 *            the new theta
+	 */
+	public void setTheta(final double theta)
+	{
+		this.theta = theta;
 	}
 }

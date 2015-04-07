@@ -33,6 +33,8 @@ public class RobotRunner
 
 		final TankRobot robot = new TankRobot(new Motor(MotorData.MOTOR_RIGHT, new Wheel(1), m1x, m1y), new Motor(MotorData.MOTOR_LEFT, new Wheel(1), m2x, m2y));
 
+		final HolonomicRobot robot2 = new HolonomicRobot(0, 0, 2, 2);
+		
 		final JComponent component = new JComponent()
 		{
 			private static final long	serialVersionUID	= 1L;
@@ -55,6 +57,7 @@ public class RobotRunner
 				g2d.scale(1, -1);
 				g2d.translate(0, -this.getHeight() / 2);
 				robot.paint(g2d, scale);
+				robot2.paint(g2d, scale);
 				g2d.translate(0, this.getHeight() / 2);
 				g2d.scale(1, -1);
 				g2d.translate(0, -this.getHeight() / 2);

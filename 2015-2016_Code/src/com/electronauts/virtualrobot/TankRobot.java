@@ -22,9 +22,6 @@ import com.electronauts.mathutil.PolarPoint;
 public class TankRobot extends AbstractRobot
 {
 
-	/** The initial angle around the circle. */
-	private double	theta;
-
 	/** The x and y rotation centers. */
 	private double	xRotCenter, yRotCenter;
 
@@ -57,7 +54,7 @@ public class TankRobot extends AbstractRobot
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.electronauts.virtualrobot.AbstractRobot#getBounds(int)
 	 */
 	@Override
@@ -94,23 +91,13 @@ public class TankRobot extends AbstractRobot
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.electronauts.virtualrobot.AbstractRobot#getMotorRPM(com.electronauts.virtualrobot.MotorData)
 	 */
 	@Override
 	public double getMotorRPM(final MotorData motor)
 	{
 		return this.getMotor(motor).getRPM();
-	}
-
-	/**
-	 * Gets the initial angle around the robot's turning circle from a line parallel to the x-axis.
-	 *
-	 * @return the angle, in radians
-	 */
-	public double getTheta()
-	{
-		return this.theta;
 	}
 
 	/**
@@ -155,6 +142,7 @@ public class TankRobot extends AbstractRobot
 	 * @param scale
 	 *            the scale at which it should be drawn
 	 */
+	@Override
 	public void paint(final Graphics2D g2d, final int scale)
 	{
 		this.updatePosition();
@@ -197,7 +185,7 @@ public class TankRobot extends AbstractRobot
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override
@@ -207,7 +195,7 @@ public class TankRobot extends AbstractRobot
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.electronauts.virtualrobot.AbstractRobot#setMotorRPMs(com.electronauts.virtualrobot.MotorData, com.electronauts.virtualrobot.MotorData, double,
 	 * double)
 	 */
@@ -245,17 +233,6 @@ public class TankRobot extends AbstractRobot
 			motorR.setxLineStart(motorR.getX());
 			motorR.setyLineStart(motorR.getY());
 		}
-	}
-
-	/**
-	 * Sets the theta.
-	 *
-	 * @param theta
-	 *            the new theta
-	 */
-	public void setTheta(final double theta)
-	{
-		this.theta = theta;
 	}
 
 	/**

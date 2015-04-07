@@ -14,7 +14,7 @@ public class Motor
 	private Wheel			wheel;
 
 	/** The radius. */
-	private double			x, y, xLineStart, yLineStart, rpm, radius;
+	private double			x, y, xLineStart, yLineStart, rpm, radius, orientation;
 
 	/**
 	 * Instantiates a new motor.
@@ -58,6 +58,16 @@ public class Motor
 		this.x = x;
 		this.y = y;
 		this.rpm = rpm;
+	}
+
+	public Motor(final MotorData motorData, final Wheel wheel, final double rpm, final double x, final double y, double orientation)
+	{
+		this.motorData = motorData;
+		this.wheel = wheel;
+		this.x = x;
+		this.y = y;
+		this.rpm = rpm;
+		this.orientation = orientation;
 	}
 
 	/**
@@ -225,5 +235,22 @@ public class Motor
 	public void setyLineStart(final double yLineStart)
 	{
 		this.yLineStart = yLineStart;
+	}
+
+	/**
+	 * @return the orientation
+	 */
+	public double getOrientation()
+	{
+		return orientation;
+	}
+
+	/**
+	 * @param orientation
+	 *            the orientation to set
+	 */
+	public void setOrientation(double orientation)
+	{
+		this.orientation = orientation;
 	}
 }

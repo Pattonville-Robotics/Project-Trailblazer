@@ -1,14 +1,25 @@
 package com.electronauts.virtualrobot;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Enum MotorData.
+ * The MotorData Enum specifies what location the motor is in the robot, and allows the motor to be located in the robot's motor array.
  */
 public enum MotorData
 {
-
-	/** The motor left. */
+	/** A left motor. */
 	MOTOR_LEFT,
-	/** The motor right. */
-	MOTOR_RIGHT
+
+	/** A right motor. */
+	MOTOR_RIGHT,
+
+	/** A front left motor. */
+	MOTOR_FRONT_LEFT,
+
+	/** A front right motor. */
+	MOTOR_FRONT_RIGHT,
+
+	/** A back left motor. */
+	MOTOR_BACK_LEFT,
+
+	/** A back right motor. */
+	MOTOR_BACK_RIGHT
 }
