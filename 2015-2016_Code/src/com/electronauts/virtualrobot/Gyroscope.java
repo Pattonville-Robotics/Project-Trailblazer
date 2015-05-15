@@ -1,5 +1,7 @@
 package com.electronauts.virtualrobot;
 
+import org.apache.commons.math3.util.FastMath;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Gyroscope class is attached to a robot of type {@link AbstractRobot} and provides a way to query the robot's direction.
@@ -34,7 +36,7 @@ public class Gyroscope extends AbstractSensor
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.electronauts.virtualrobot.AbstractSensor#getRobot()
 	 */
 	@Override
@@ -45,13 +47,13 @@ public class Gyroscope extends AbstractSensor
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.electronauts.virtualrobot.AbstractSensor#readValue()
 	 */
 	@Override
 	public Number readValue()
 	{
-		return (this.baseAngle - this.parent.getAngle()) % (2 * Math.PI);
+		return (this.baseAngle - this.parent.getAngle()) % (2 * FastMath.PI);
 	}
 
 	/**

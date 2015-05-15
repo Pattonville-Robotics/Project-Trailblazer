@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import org.apache.commons.math3.util.FastMath;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class PathNodeMap.
@@ -26,7 +28,7 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 	 */
 	public static double getDistance(final Point p1, final Point p2)
 	{
-		return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+		return FastMath.sqrt(FastMath.pow(p2.x - p1.x, 2) + FastMath.pow(p2.y - p1.y, 2));
 	}
 
 	/** The points. */
@@ -64,7 +66,7 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#clone()
 	 */
 	@Override
@@ -80,7 +82,7 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
@@ -227,7 +229,7 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

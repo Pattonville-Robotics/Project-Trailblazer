@@ -11,33 +11,14 @@ import java.awt.geom.Point2D;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 
+import org.apache.commons.math3.util.FastMath;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Vector2D.
  */
 public class Vector2D
 {
-	public static void main(String[] args)
-	{
-		final Vector2D v1 = Vector2D.createFromPolar(Math.PI / 3, 100);
-		JComponent comp = new JComponent()
-		{
-			private static final long	serialVersionUID	= 1L;
-
-			@Override
-			public void paint(Graphics g)
-			{
-				Graphics2D g2d = (Graphics2D) g;
-				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				v1.paintAt(20, 20, g2d);
-			}
-		};
-		JFrame f = new JFrame();
-		f.add(comp);
-		f.setSize(400, 400);
-		f.setVisible(true);
-	}
-
 	/**
 	 * Adds the two {@code Vector2D} objects together into a new composite {@code Vector2D}
 	 *
@@ -63,7 +44,7 @@ public class Vector2D
 	 */
 	public static Vector2D createFromCartesian(final double x, final double y)
 	{
-		return new Vector2D(Math.atan2(y, x), Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
+		return new Vector2D(FastMath.atan2(y, x), FastMath.sqrt(FastMath.pow(x, 2) + FastMath.pow(y, 2)));
 	}
 
 	/**
@@ -127,7 +108,28 @@ public class Vector2D
 	 */
 	public static double dotProduct(final Vector2D v1, final Vector2D v2)
 	{
-		return v1.getMagnitude() * v2.getMagnitude() * Math.cos(v1.getDirection() - v2.getDirection());
+		return v1.getMagnitude() * v2.getMagnitude() * FastMath.cos(v1.getDirection() - v2.getDirection());
+	}
+
+	public static void main(final String[] args)
+	{
+		final Vector2D v1 = Vector2D.createFromPolar(FastMath.PI / 3, 100);
+		final JComponent comp = new JComponent()
+		{
+			private static final long	serialVersionUID	= 1L;
+
+			@Override
+			public void paint(final Graphics g)
+			{
+				final Graphics2D g2d = (Graphics2D) g;
+				g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+				v1.paintAt(20, 20, g2d);
+			}
+		};
+		final JFrame f = new JFrame();
+		f.add(comp);
+		f.setSize(400, 400);
+		f.setVisible(true);
 	}
 
 	/** The magnitude. */
@@ -149,7 +151,7 @@ public class Vector2D
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -195,7 +197,7 @@ public class Vector2D
 	 */
 	public double getX()
 	{
-		return this.magnitude * Math.cos(this.direction);
+		return this.magnitude * FastMath.cos(this.direction);
 	}
 
 	/**
@@ -205,7 +207,21 @@ public class Vector2D
 	 */
 	public double getY()
 	{
-		return this.magnitude * Math.sin(this.direction);
+		return this.magnitude * FastMath.sin(this.direction);
+	}
+
+	public void paintAt(final double x, final double y, final Graphics2D g2d)
+	{
+		g2d.setPaint(new GradientPaint((float) x, (float) y, Color.BLUE, (float) (x + this.getX()), (float) (y + this.getY()), Color.RED));
+		g2d.drawLine((int) x, (int) y, (int) (x + this.getX()), (int) (y + this.getY()));
+		final Path2D.Double p2d = new Path2D.Double();
+		final PolarPoint p1 = new PolarPoint(this.getMagnitude() / 5, this.getDirection() + 7 * FastMath.PI / 8);
+		final PolarPoint p2 = new PolarPoint(this.getMagnitude() / 5, this.getDirection() - 7 * FastMath.PI / 8);
+		p2d.moveTo(x + this.getX(), y + this.getY());
+		p2d.lineTo(x + this.getX() + p1.getX(), y + this.getY() + p1.getY());
+		p2d.lineTo(x + this.getX() + p2.getX(), y + this.getY() + p2.getY());
+		p2d.closePath();
+		g2d.fill(p2d);
 	}
 
 	/**
@@ -228,19 +244,5 @@ public class Vector2D
 	public void setMagnitude(final double magnitude)
 	{
 		this.magnitude = magnitude;
-	}
-
-	public void paintAt(double x, double y, Graphics2D g2d)
-	{
-		g2d.setPaint(new GradientPaint((float) x, (float) y, Color.BLUE, (float) (x + this.getX()), (float) (y + this.getY()), Color.RED));
-		g2d.drawLine((int) x, (int) y, (int) (x + this.getX()), (int) (y + this.getY()));
-		Path2D.Double p2d = new Path2D.Double();
-		PolarPoint p1 = new PolarPoint(this.getMagnitude() / 5, this.getDirection() + (7 * Math.PI / 8));
-		PolarPoint p2 = new PolarPoint(this.getMagnitude() / 5, this.getDirection() - (7 * Math.PI / 8));
-		p2d.moveTo(x + this.getX(), y + this.getY());
-		p2d.lineTo(x + this.getX() + p1.getX(), y + this.getY() + p1.getY());
-		p2d.lineTo(x + this.getX() + p2.getX(), y + this.getY() + p2.getY());
-		p2d.closePath();
-		g2d.fill(p2d);
 	}
 }

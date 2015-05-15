@@ -1,5 +1,7 @@
 package com.electronauts.virtualrobot;
 
+import org.apache.commons.math3.util.FastMath;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Wheel.
@@ -28,7 +30,7 @@ public class Wheel
 	 */
 	public double getCircumference()
 	{
-		return 2 * Math.PI * this.getRadius();
+		return 2 * FastMath.PI * this.getRadius();
 	}
 
 	/**

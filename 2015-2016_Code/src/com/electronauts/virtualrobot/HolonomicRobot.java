@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Path2D.Double;
 
+import org.apache.commons.math3.util.FastMath;
+
 import com.electronauts.mathutil.PolarPoint;
 
 public class HolonomicRobot extends AbstractRobot
@@ -18,10 +20,10 @@ public class HolonomicRobot extends AbstractRobot
 		this.yCenter = y;
 		this.width = width;
 		this.length = length;
-		this.motors[0] = new Motor(MotorData.MOTOR_FRONT_LEFT, new Wheel(1), x - width / 2, y + length / 2, this.orientation + Math.PI / 4);
-		this.motors[1] = new Motor(MotorData.MOTOR_FRONT_RIGHT, new Wheel(1), x + width / 2, y + length / 2, this.orientation - Math.PI / 4);
-		this.motors[2] = new Motor(MotorData.MOTOR_BACK_LEFT, new Wheel(1), x - width / 2, y - length / 2, this.orientation - 3 * Math.PI / 4);
-		this.motors[3] = new Motor(MotorData.MOTOR_BACK_RIGHT, new Wheel(1), x + width / 2, y - length / 2, this.orientation + 3 * Math.PI / 4);
+		this.motors[0] = new Motor(MotorData.MOTOR_FRONT_LEFT, new Wheel(1), x - width / 2, y + length / 2, this.orientation + FastMath.PI / 4);
+		this.motors[1] = new Motor(MotorData.MOTOR_FRONT_RIGHT, new Wheel(1), x + width / 2, y + length / 2, this.orientation - FastMath.PI / 4);
+		this.motors[2] = new Motor(MotorData.MOTOR_BACK_LEFT, new Wheel(1), x - width / 2, y - length / 2, this.orientation - 3 * FastMath.PI / 4);
+		this.motors[3] = new Motor(MotorData.MOTOR_BACK_RIGHT, new Wheel(1), x + width / 2, y - length / 2, this.orientation + 3 * FastMath.PI / 4);
 
 	}
 

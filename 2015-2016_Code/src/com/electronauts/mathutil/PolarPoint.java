@@ -2,6 +2,8 @@ package com.electronauts.mathutil;
 
 import java.awt.geom.Point2D;
 
+import org.apache.commons.math3.util.FastMath;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class PolarPoint.
@@ -16,7 +18,7 @@ public class PolarPoint
 	 */
 	public static void main(final String[] args)
 	{
-		final PolarPoint p1 = new PolarPoint(-1, Math.PI / 4);
+		final PolarPoint p1 = new PolarPoint(-1, FastMath.PI / 4);
 		System.out.println("DEBUG: (" + p1.getX() + ", " + p1.getY() + ")");
 	}
 
@@ -52,8 +54,8 @@ public class PolarPoint
 	 */
 	public PolarPoint(final Point2D.Double p)
 	{
-		this.setRadius(Math.sqrt(Math.pow(p.x, 2) + Math.pow(p.y, 2)));
-		this.setTheta(Math.atan2(p.y, p.x));
+		this.setRadius(FastMath.sqrt(FastMath.pow(p.x, 2) + FastMath.pow(p.y, 2)));
+		this.setTheta(FastMath.atan2(p.y, p.x));
 	}
 
 	/**
@@ -83,7 +85,7 @@ public class PolarPoint
 	 */
 	public double getX()
 	{
-		return this.radius * Math.cos(this.theta);
+		return this.radius * FastMath.cos(this.theta);
 	}
 
 	/**
@@ -93,7 +95,7 @@ public class PolarPoint
 	 */
 	public double getY()
 	{
-		return this.radius * Math.sin(this.theta);
+		return this.radius * FastMath.sin(this.theta);
 	}
 
 	/**
@@ -125,6 +127,6 @@ public class PolarPoint
 	 */
 	public Point2D.Double toPointDouble()
 	{
-		return new Point2D.Double(this.radius * Math.cos(this.theta), this.radius * Math.sin(this.theta));
+		return new Point2D.Double(this.radius * FastMath.cos(this.theta), this.radius * FastMath.sin(this.theta));
 	}
 }

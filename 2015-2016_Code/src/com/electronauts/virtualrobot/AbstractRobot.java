@@ -93,8 +93,6 @@ public abstract class AbstractRobot implements Runnable
 	 */
 	public abstract double getMotorRPM(final MotorData motor);
 
-	public abstract void paint(final Graphics2D g2d, final int scale);
-
 	/**
 	 * Gets the specified sensor.
 	 *
@@ -132,6 +130,18 @@ public abstract class AbstractRobot implements Runnable
 	}
 
 	/**
+	 * Gets the initial angle around the robot's turning circle from a line parallel to the x-axis.
+	 *
+	 * @return the angle, in radians
+	 */
+	public double getTheta()
+	{
+		return this.theta;
+	}
+
+	public abstract void paint(final Graphics2D g2d, final int scale);
+
+	/**
 	 * Sets the specified motor's RPMs.
 	 *
 	 * @param motor1
@@ -154,16 +164,6 @@ public abstract class AbstractRobot implements Runnable
 	public void setStartTime(final long startTime)
 	{
 		this.startTime = startTime;
-	}
-
-	/**
-	 * Gets the initial angle around the robot's turning circle from a line parallel to the x-axis.
-	 *
-	 * @return the angle, in radians
-	 */
-	public double getTheta()
-	{
-		return this.theta;
 	}
 
 	/**

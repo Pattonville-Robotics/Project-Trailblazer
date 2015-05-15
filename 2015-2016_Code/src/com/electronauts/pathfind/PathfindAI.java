@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.commons.math3.util.FastMath;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class PathfindAI.
@@ -28,7 +30,7 @@ public class PathfindAI implements Runnable
 			for (int x = 0; x < grid.getGrid()[y].length; x++)
 				grid.setSquareDistance(new Point(x, y), -2);
 		final List<Point> points = new ArrayList<Point>(grid.getGrid().length * 4);
-		final AbstractSet<Point> pointSet = new HashSet<Point>((int) Math.pow(grid.getGrid().length, 2));
+		final AbstractSet<Point> pointSet = new HashSet<Point>((int) FastMath.pow(grid.getGrid().length, 2));
 		points.add(start);
 		boolean noMoreLeft = false;
 		int distance = 0;
@@ -53,7 +55,7 @@ public class PathfindAI implements Runnable
 					final Point prospectivePoint = new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j]);
 					if (grid.canAccess(prospectivePoint)
 							&& (grid.getSquareCopy(prospectivePoint).getContents() == SquareType.EMPTY || grid.getSquareCopy(prospectivePoint).getContents() == SquareType.FINISH))
-					// If it's not outside the grid and is an empty square
+						// If it's not outside the grid and is an empty square
 					{
 						if (!pointSet.contains(new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j])))
 						{
@@ -269,7 +271,7 @@ public class PathfindAI implements Runnable
 		for (int i = 0; i < nodes.size(); i++)
 			for (int j = 0; j < nodes.size(); j++)
 				if (i != j && !grid.collidesWithHazard(nodes.get(i).getNode(), nodes.get(j).getNode())
-						&& grid.getSquareCopy(nodes.get(i).getNode()).getDistance() > grid.getSquareCopy(nodes.get(j).getNode()).getDistance())
+				&& grid.getSquareCopy(nodes.get(i).getNode()).getDistance() > grid.getSquareCopy(nodes.get(j).getNode()).getDistance())
 					nodes.get(i).addDirectedEdge(nodes.get(j));
 
 	}
@@ -329,7 +331,7 @@ public class PathfindAI implements Runnable
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Runnable#run()
 	 */
 	@Override

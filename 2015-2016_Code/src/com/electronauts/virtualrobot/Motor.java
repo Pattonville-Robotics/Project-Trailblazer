@@ -60,7 +60,7 @@ public class Motor
 		this.rpm = rpm;
 	}
 
-	public Motor(final MotorData motorData, final Wheel wheel, final double rpm, final double x, final double y, double orientation)
+	public Motor(final MotorData motorData, final Wheel wheel, final double rpm, final double x, final double y, final double orientation)
 	{
 		this.motorData = motorData;
 		this.wheel = wheel;
@@ -78,6 +78,14 @@ public class Motor
 	public MotorData getMotorData()
 	{
 		return this.motorData;
+	}
+
+	/**
+	 * @return the orientation
+	 */
+	public double getOrientation()
+	{
+		return this.orientation;
 	}
 
 	/**
@@ -161,6 +169,15 @@ public class Motor
 	}
 
 	/**
+	 * @param orientation
+	 *            the orientation to set
+	 */
+	public void setOrientation(final double orientation)
+	{
+		this.orientation = orientation;
+	}
+
+	/**
 	 * Sets the radius.
 	 *
 	 * @param radius
@@ -235,22 +252,5 @@ public class Motor
 	public void setyLineStart(final double yLineStart)
 	{
 		this.yLineStart = yLineStart;
-	}
-
-	/**
-	 * @return the orientation
-	 */
-	public double getOrientation()
-	{
-		return orientation;
-	}
-
-	/**
-	 * @param orientation
-	 *            the orientation to set
-	 */
-	public void setOrientation(double orientation)
-	{
-		this.orientation = orientation;
 	}
 }

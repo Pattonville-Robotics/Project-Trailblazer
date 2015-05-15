@@ -7,6 +7,8 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
+import org.apache.commons.math3.util.FastMath;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class GridSquare.
@@ -64,7 +66,7 @@ public class GridSquare implements Cloneable, Serializable
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#clone()
 	 */
 	@Override
@@ -149,7 +151,7 @@ public class GridSquare implements Cloneable, Serializable
 	 */
 	public double getRadialDistance()
 	{
-		return Math.sqrt(Math.pow(this.x - this.superGrid.getStartPoint().x, 2) + Math.pow(this.y - this.superGrid.getStartPoint().y, 2));
+		return FastMath.sqrt(FastMath.pow(this.x - this.superGrid.getStartPoint().x, 2) + FastMath.pow(this.y - this.superGrid.getStartPoint().y, 2));
 	}
 
 	/**

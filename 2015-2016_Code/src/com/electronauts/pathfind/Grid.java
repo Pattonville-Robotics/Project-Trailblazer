@@ -265,6 +265,22 @@ public class Grid implements Serializable
 	}
 
 	/**
+	 * Gets the square.
+	 *
+	 * @param p
+	 *            the p
+	 * @return the square
+	 */
+	private GridSquare getSquare(final Point p)
+	{
+		return this.grid[p.y][p.x];
+	}
+
+	/*
+	 * public GridDraw getGridDraw() { return gridDraw; }
+	 */
+
+	/**
 	 * Gets the square copy.
 	 *
 	 * @param p
@@ -275,10 +291,6 @@ public class Grid implements Serializable
 	{
 		return this.grid[p.y][p.x].clone();
 	}
-
-	/*
-	 * public GridDraw getGridDraw() { return gridDraw; }
-	 */
 
 	/**
 	 * Gets the square height.
@@ -680,17 +692,5 @@ public class Grid implements Serializable
 			return true;
 		else
 			return false;
-	}
-
-	/**
-	 * Gets the square.
-	 *
-	 * @param p
-	 *            the p
-	 * @return the square
-	 */
-	private GridSquare getSquare(final Point p)
-	{
-		return this.grid[p.y][p.x];
 	}
 }
