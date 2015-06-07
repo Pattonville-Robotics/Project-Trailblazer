@@ -22,9 +22,19 @@ public class MathUtil
 		return FastMath.sqrt(FastMath.pow(x1 - x2, 2) + FastMath.pow(y1 - y2, 2));
 	}
 
+	public static double distanceSquared(final double x1, final double y1, final double x2, final double y2)
+	{
+		return FastMath.pow(x1 - x2, 2) + FastMath.pow(y1 - y2, 2);
+	}
+
 	public static double distance(final Point2D p1, final Point2D p2)
 	{
 		return MathUtil.distance(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+	}
+
+	public static double distanceSquared(final Point2D p1, final Point2D p2)
+	{
+		return MathUtil.distanceSquared(p1.getX(), p1.getY(), p2.getX(), p2.getY());
 	}
 
 	public static Point2D getIntersectionPoint(final Line2D l1, final Line2D l2)
