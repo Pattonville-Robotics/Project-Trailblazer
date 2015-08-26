@@ -1,3 +1,3 @@
-# 2015 - 2016 FIRST Tech Challenge season
-Current project: "Virtual Robot v0.271828"
-- To be used in the 2015 - 2016 season of the FIRST Technology Challenge (FTC).
+# Project TrailBlazer
+
+This project is a program to allow our robot to move on coordnates, and this package will calculate the quickest path to the coordnate and move the robot to the desired location.
