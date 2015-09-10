@@ -8,6 +8,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -16,8 +17,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.Mnemonic;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -31,6 +37,22 @@ public class HelloWorld extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 
+		Canvas canvas = new Canvas(300, 300);
+		final GraphicsContext g = canvas.getGraphicsContext2D();
+		g.setFill(Color.YELLOW);
+		g.setStroke(Color.YELLOW);
+		g.setLineWidth(5);
+		g.fillOval(100, 100, 50, 25);
+
+		canvas.blendModeProperty().setValue(BlendMode.HARD_LIGHT);
+		canvas.setOnMouseDragged(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				int radius = 5;
+				g.fillOval(event.getX() - radius, event.getY() - radius, 2 * radius, 2 * radius);
+			}
+		});
+
 		MenuBar menuBar = new MenuBar();
 		menuBar.setUseSystemMenuBar(true);
 		Menu menu = new Menu("Test Menu");
@@ -42,6 +64,8 @@ public class HelloWorld extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				System.out.println("Shortcut + N");
+				g.setFill(Color.BLUE);
+				g.setStroke(Color.BLUE);
 			}
 		});
 		menuItem2.acceleratorProperty().setValue(KeyCombination.valueOf("Shortcut+O"));
@@ -49,6 +73,8 @@ public class HelloWorld extends Application {
 			@Override
 			public void handle(ActionEvent event) {
 				System.out.println("Shortcut + O");
+				g.setFill(Color.YELLOW);
+				g.setStroke(Color.YELLOW);
 			}
 		});
 		menu.getItems().addAll(menuItem1, menuItem2);
@@ -65,13 +91,6 @@ public class HelloWorld extends Application {
 			}
 		});
 
-		Canvas canvas = new Canvas(300, 300);
-		GraphicsContext g = canvas.getGraphicsContext2D();
-		g.setFill(Color.BLUE);
-		g.setStroke(Color.BLUE);
-		g.setLineWidth(5);
-		g.fillOval(100, 100, 50, 25);
-
 		FlowPane root = new FlowPane(Orientation.VERTICAL);
 		root.addEventHandler(ActionEvent.ACTION, new EventHandler<Event>() {
 			@Override
@@ -82,6 +101,7 @@ public class HelloWorld extends Application {
 			}
 		});
 		root.getChildren().addAll(menuBar, btn, canvas);
+		root.setBackground(new Background(new BackgroundFill(Color.GREEN, new CornerRadii(25, true), Insets.EMPTY)));
 
 		Scene scene = new Scene(root, 300, 250);
 		scene.addMnemonic(new Mnemonic(btn, KeyCombination.valueOf("Shortcut+C")));
