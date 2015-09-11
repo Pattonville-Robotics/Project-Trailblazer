@@ -35,7 +35,7 @@ public class Designer extends Application {
 
 		root.getChildren().addAll(menuBar, canvas);
 		menuBar.getMenus().addAll(fileMenu, editMenu);
-		//menuBar.setUseSystemMenuBar(true);
+		menuBar.setUseSystemMenuBar(true);
 		menuBar.prefWidthProperty().bind(primaryStage.widthProperty());
 		fileMenu.getItems().addAll(newItem, openItem, saveItem);
 		editMenu.getItems().addAll();
