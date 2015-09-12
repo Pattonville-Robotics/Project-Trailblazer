@@ -1,5 +1,6 @@
 package org.psdr3.robotics.trailblazer;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
@@ -23,15 +24,15 @@ public class Designer extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		FlowPane root = new FlowPane(Orientation.VERTICAL);
-		Scene scene = new Scene(root, 500, 500);
-		MenuBar menuBar = new MenuBar();
-		Menu fileMenu = new Menu("File");
-		Menu editMenu = new Menu("Edit");
-		MenuItem newItem = new MenuItem("New map...");
-		MenuItem openItem = new MenuItem("Open map...");
-		MenuItem saveItem = new MenuItem("Save map...");
-		Canvas canvas = new Canvas();
+		final FlowPane root = new FlowPane(Orientation.VERTICAL);
+		final Scene scene = new Scene(root, 500, 500);
+		final MenuBar menuBar = new MenuBar();
+		final Menu fileMenu = new Menu("File");
+		final Menu editMenu = new Menu("Edit");
+		final MenuItem newItem = new MenuItem("New map...");
+		final MenuItem openItem = new MenuItem("Open map...");
+		final MenuItem saveItem = new MenuItem("Save map...");
+		final Canvas canvas = new Canvas(400, 400);
 
 		root.getChildren().addAll(menuBar, canvas);
 		menuBar.getMenus().addAll(fileMenu, editMenu);
@@ -40,10 +41,28 @@ public class Designer extends Application {
 		fileMenu.getItems().addAll(newItem, openItem, saveItem);
 		editMenu.getItems().addAll();
 
-		GraphicsContext g = canvas.getGraphicsContext2D();
+		final GraphicsContext g = canvas.getGraphicsContext2D();
 
 		primaryStage.setTitle("Map Designer");
 		primaryStage.setScene(scene);
+
+		new AnimationTimer() {
+			private double x = 0;
+
+			@Override
+			public void handle(long now) {
+				//This is run during the frame.
+				//System.out.println("Height: " + canvas.getHeight() + " Width: " + canvas.getWidth());
+				g.clearRect(0, 0, g.getCanvas().getWidth(), g.getCanvas().getHeight());
+
+				x += 0.1;
+
+				g.setStroke(Color.BLUE);
+				g.setFill(Color.BLUE);
+				g.fillOval(100 * Math.sin(x) + 100, 50, 100, 100);
+			}
+		}.start();
+
 		primaryStage.show();
 	}
 
