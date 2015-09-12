@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>Extracurricular_Projects</groupId>
-	<artifactId>Extracurricular_Projects</artifactId>
+	<groupId>Trailblazer</groupId>
+	<artifactId>Trailblazer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Extracurricular Projects</name>
-	<description>These are projects outside of the AP Computer Science course.</description>
+	<name>Trailblazer</name>
+	<description>420 blaze it.</description>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
