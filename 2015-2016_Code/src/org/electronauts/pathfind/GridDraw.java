@@ -30,6 +30,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
 
 // TODO: Auto-generated Javadoc
 // TODO Reduce source code size; only include needed things
@@ -69,10 +70,6 @@ public class GridDraw extends JComponent {
 	 */
 	private boolean drawPaths = false;
 	/**
-	 * The help.
-	 */
-	private JMenu file, help;
-	/**
 	 * The frame.
 	 */
 	private JFrame frame;
@@ -80,14 +77,6 @@ public class GridDraw extends JComponent {
 	 * The grid.
 	 */
 	private Grid grid;
-	/**
-	 * The save as file.
-	 */
-	private JMenuItem help1, help2, help3, help4, help5, help6, help7, help8, help9, newFile, openFile, saveFile, saveAsFile;
-	/**
-	 * The menu bar.
-	 */
-	private JMenuBar menuBar;
 
 	/**
 	 * Instantiates a new grid draw.
@@ -220,62 +209,71 @@ public class GridDraw extends JComponent {
 	public void setupDisplay() {
 		this.frame = new JFrame("GridViewer V3.14159");
 		this.frame.setBounds(0, 0, 720, 720);
-		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		this.setBackground(Color.WHITE);
 		this.frame.setBackground(Color.GRAY);
 		this.frame.getContentPane().add(this);
 
-		this.help = new JMenu("Help");
-		this.help.setMnemonic('H');
-		this.file = new JMenu("File");
-		this.file.setMnemonic('F');
+		JMenu help = new JMenu("Help");
+		help.setMnemonic('H');
+		/*
+	  The help.
+	 */
+		JMenu file = new JMenu("File");
+		file.setMnemonic('F');
 
-		this.newFile = new JMenuItem("New Blank Grid...");
-		this.openFile = new JMenuItem("Open...");
-		this.saveFile = new JMenuItem("Save...");
-		this.saveAsFile = new JMenuItem("Save as...");
-		this.newFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		this.openFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		this.saveFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		this.saveAsFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_DOWN_MASK));
+		JMenuItem newFile = new JMenuItem("New Blank Grid...");
+		JMenuItem openFile = new JMenuItem("Open...");
+		JMenuItem saveFile = new JMenuItem("Save...");
+		JMenuItem saveAsFile = new JMenuItem("Save as...");
+		newFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		openFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		saveFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		saveAsFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_DOWN_MASK));
 		final KeyPressActions newFileAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.NEW);
 		final KeyPressActions saveFileAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.CONTROL_S);
 		final KeyPressActions saveAsFileAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.SAVE_AS);
 		final KeyPressActions openFileAction = new KeyPressActions(this.getGrid(), this, KeyPressActions.actionSource.OPEN);
-		this.newFile.addActionListener(newFileAction);
-		this.openFile.addActionListener(openFileAction);
-		this.saveFile.addActionListener(saveFileAction);
-		this.saveAsFile.addActionListener(saveAsFileAction);
-		this.file.add(this.newFile);
-		this.file.add(this.openFile);
-		this.file.add(this.saveFile);
-		this.file.add(this.saveAsFile);
+		newFile.addActionListener(newFileAction);
+		openFile.addActionListener(openFileAction);
+		saveFile.addActionListener(saveFileAction);
+		saveAsFile.addActionListener(saveAsFileAction);
+		file.add(newFile);
+		file.add(openFile);
+		file.add(saveFile);
+		file.add(saveAsFile);
 
-		this.help1 = new JMenuItem("You can use the arrow keys to select a square to modify.");
-		this.help2 = new JMenuItem("Use \"ENTER\" and \"SHIFT + ENTER\" to cycle through possible square contents.");
-		this.help3 = new JMenuItem("Pressing \"P\" will toggle calculation and drawing of paths. Be forewarned: this can take a long time on slower hardware!");
-		this.help4 = new JMenuItem("To save and load Grids, use the \"S\" and \"L\" keys.");
-		this.help5 = new JMenuItem("Press \"R\" to recalculate the paths without toggling them and \"CTRL + R\" to redraw the screen.");
-		this.help6 = new JMenuItem("Press \"O\" to optimize the calculated paths.");
-		this.help7 = new JMenuItem("Use the \"N\" button to toggle high-speed calculation.");
-		this.help8 = new JMenuItem("The green square is start, the blue square is finish, the purple squares are walls, and the numbers are the distance to the start.");
-		this.help9 = new JMenuItem("The yellow line is the maximum optimization, the cyan line is an intermediate level of optimization, and the magenta line is a low level of optimization.");
+		/*
+	  The save as file.
+	 */
+		JMenuItem help1 = new JMenuItem("You can use the arrow keys to select a square to modify.");
+		JMenuItem help2 = new JMenuItem("Use \"ENTER\" and \"SHIFT + ENTER\" to cycle through possible square contents.");
+		JMenuItem help3 = new JMenuItem("Pressing \"P\" will toggle calculation and drawing of paths. Be forewarned: this can take a long time on slower hardware!");
+		JMenuItem help4 = new JMenuItem("To save and load Grids, use the \"S\" and \"L\" keys.");
+		JMenuItem help5 = new JMenuItem("Press \"R\" to recalculate the paths without toggling them and \"CTRL + R\" to redraw the screen.");
+		JMenuItem help6 = new JMenuItem("Press \"O\" to optimize the calculated paths.");
+		JMenuItem help7 = new JMenuItem("Use the \"N\" button to toggle high-speed calculation.");
+		JMenuItem help8 = new JMenuItem("The green square is start, the blue square is finish, the purple squares are walls, and the numbers are the distance to the start.");
+		JMenuItem help9 = new JMenuItem("The yellow line is the maximum optimization, the cyan line is an intermediate level of optimization, and the magenta line is a low level of optimization.");
 
-		this.help.add(this.help1);
-		this.help.add(this.help2);
-		this.help.add(this.help3);
-		this.help.add(this.help4);
-		this.help.add(this.help5);
-		this.help.add(this.help6);
-		this.help.add(this.help7);
-		this.help.add(this.help8);
-		this.help.add(this.help9);
+		help.add(help1);
+		help.add(help2);
+		help.add(help3);
+		help.add(help4);
+		help.add(help5);
+		help.add(help6);
+		help.add(help7);
+		help.add(help8);
+		help.add(help9);
 
-		this.menuBar = new JMenuBar();
-		this.menuBar.add(this.file);
-		this.menuBar.add(this.help);
+		/*
+	  The menu bar.
+	 */
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.add(file);
+		menuBar.add(help);
 
-		this.frame.setJMenuBar(this.menuBar);
+		this.frame.setJMenuBar(menuBar);
 	}
 
 	/**
@@ -285,7 +283,7 @@ public class GridDraw extends JComponent {
 	 */
 	public void loadGrid(final File file) {
 		System.out.println("Began reading in data file.");
-		Input input = null;
+		Input input;
 		try {
 			input = new Input(new FileInputStream(file));
 			if (this.getGrid() != null)
@@ -294,8 +292,6 @@ public class GridDraw extends JComponent {
 				this.setGrid(this.kryo.readObject(input, Grid.class));
 		} catch (final FileNotFoundException e) {
 			e.printStackTrace();
-		} finally {
-			input.close();
 		}
 		System.out.println("Finished reading in data file.");
 	}
@@ -315,7 +311,7 @@ public class GridDraw extends JComponent {
 	 * @param file the file
 	 */
 	public void cacheGrid(final File file) {
-		Output output = null;
+		Output output;
 		try {
 			output = new Output(new FileOutputStream(file));
 			this.kryo.writeObject(output, this.getGrid());
@@ -323,8 +319,6 @@ public class GridDraw extends JComponent {
 		} catch (final Exception e1) {
 			e1.printStackTrace();
 			System.out.println("Failed to cache data.");
-		} finally {
-			output.close();
 		}
 	}
 
@@ -423,6 +417,7 @@ public class GridDraw extends JComponent {
 		try {
 			g2d.drawString(String.format("FPS: %06.2f ; Yellow length: %07.3f; Cyan length: %07.3f; Magenta length: %07.3f", 1 / ((double) (System.nanoTime() - startTime) / 1000000000), this.getGrid().getPaths().get(0).getTotalDistance(), this.getGrid().getPathNodeMaps().get(0).getTotalDistance(), this.getGrid().getPathNodeMap().getTotalDistance()), 5, this.getHeight() - 5);
 		} catch (final Exception e) {
+			e.printStackTrace();
 		}
 		this.repaint();
 	}
@@ -664,7 +659,7 @@ class KeyPressActions extends AbstractAction {
 		}
 	}
 
-	public static enum actionSource {
+	public enum actionSource {
 		B, C, CONTROL_R, CONTROL_S, DOWN, ENTER, L, LEFT, N, NEW, O, OPEN, P, R, RIGHT, SAVE_AS, SHIFT_ENTER, UP
 	}
 }
@@ -695,8 +690,6 @@ class MouseCycleListener implements MouseListener {
 				this.grid.rotateHighlightedSquare(true);
 			else if (e.getButton() == MouseEvent.BUTTON3)
 				this.grid.rotateHighlightedSquare(false);
-			else {
-			}
 
 			PathfindAI.computeDistance(this.grid, this.grid.getStartPoint());
 			if (this.component.getDrawPaths()) {

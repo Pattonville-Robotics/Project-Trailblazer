@@ -173,7 +173,7 @@ public class Motor {
 	 *
 	 * @return the x line start
 	 */
-	public double getxLineStart() {
+	public double getXLineStart() {
 		return this.xLineStart;
 	}
 
@@ -182,7 +182,7 @@ public class Motor {
 	 *
 	 * @param xLineStart the new x line start
 	 */
-	public void setxLineStart(final double xLineStart) {
+	public void setXLineStart(final double xLineStart) {
 		this.xLineStart = xLineStart;
 	}
 
@@ -209,7 +209,7 @@ public class Motor {
 	 *
 	 * @return the y line start
 	 */
-	public double getyLineStart() {
+	public double getYLineStart() {
 		return this.yLineStart;
 	}
 
@@ -218,7 +218,7 @@ public class Motor {
 	 *
 	 * @param yLineStart the new y line start
 	 */
-	public void setyLineStart(final double yLineStart) {
+	public void setYLineStart(final double yLineStart) {
 		this.yLineStart = yLineStart;
 	}
 }

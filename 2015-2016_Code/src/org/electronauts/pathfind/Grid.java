@@ -523,9 +523,6 @@ public class Grid implements Serializable {
 	public void setHighlightedSquare(final int x, final int y) {
 		if (x >= 0 && x < this.grid[0].length && y >= 0 && y < this.grid.length)
 			this.highlightedPoint = new Point(x, y);
-		else {
-			// System.out.println("X or Y out of bounds!");
-		}
 	}
 
 	/**
@@ -604,9 +601,6 @@ public class Grid implements Serializable {
 	 * @return true, if successful
 	 */
 	public boolean testSetHighlightedSquare(final int x, final int y) {
-		if (x >= 0 && x < this.grid[0].length && y >= 0 && y < this.grid.length)
-			return true;
-		else
-			return false;
+		return x >= 0 && x < this.grid[0].length && y >= 0 && y < this.grid.length;
 	}
 }

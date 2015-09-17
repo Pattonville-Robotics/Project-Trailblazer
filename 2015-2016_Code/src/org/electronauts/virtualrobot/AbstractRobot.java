@@ -126,9 +126,9 @@ public abstract class AbstractRobot implements Runnable {
 	 * @return the requested sensor, if available
 	 */
 	public AbstractSensor getSensor(final SensorType sensorType) {
-		for (final AbstractSensor absr : this.sensors)
-			if (absr.getSensorType() == sensorType)
-				return absr;
+		for (final AbstractSensor abstractSensor : this.sensors)
+			if (abstractSensor.getSensorType() == sensorType)
+				return abstractSensor;
 		throw new IllegalArgumentException("Sensor not found!");
 	}
 

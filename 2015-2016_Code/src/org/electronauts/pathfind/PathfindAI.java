@@ -60,8 +60,6 @@ public class PathfindAI implements Runnable {
 						if (!pointSet.contains(new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j]))) {
 							newPoints.add(new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j]));
 							pointSet.add(new Point(points.get(i).x + xMod[j], points.get(i).y + yMod[j]));
-						} else {
-							// System.out.println("Tried to add a point twice!");
 						}
 						// Add it to the new list
 					} else
@@ -95,7 +93,7 @@ public class PathfindAI implements Runnable {
 		// System.out.println(paths);
 
 		boolean allZero = false;
-		int numZero = 0;
+		int numZero;
 		// int progressFromFinish = 0;
 		while (!allZero) {
 			numZero = 0;

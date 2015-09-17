@@ -16,6 +16,7 @@ import javax.swing.JSeparator;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -55,7 +56,7 @@ public class NewFileWindow {
 	private void initialize() {
 		this.frame = new JFrame();
 		this.frame.setBounds(100, 100, 450, 275);
-		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		final JSplitPane splitPane = new JSplitPane();
 		this.frame.getContentPane().add(splitPane, BorderLayout.CENTER);
 
@@ -79,7 +80,7 @@ public class NewFileWindow {
 				NewFileWindow.this.frame.repaint();
 			}
 		});
-		widthSpinner.setModel(new SpinnerNumberModel(new Integer(this.superGridDraw.getGrid().getGrid()[0].length), new Integer(4), null, new Integer(1)));
+		widthSpinner.setModel(new SpinnerNumberModel(this.superGridDraw.getGrid().getGrid()[0].length, 4, null, 1));
 		widthSpinner.setMaximumSize(new Dimension(76, 28));
 		settingsPanel.add(widthSpinner);
 
@@ -95,7 +96,7 @@ public class NewFileWindow {
 				NewFileWindow.this.frame.repaint();
 			}
 		});
-		heightSpinner.setModel(new SpinnerNumberModel(new Integer(this.superGridDraw.getGrid().getGrid().length), new Integer(4), null, new Integer(1)));
+		heightSpinner.setModel(new SpinnerNumberModel(this.superGridDraw.getGrid().getGrid().length, 4, null, 1));
 		heightSpinner.setMaximumSize(new Dimension(76, 28));
 		heightSpinner.setToolTipText("Width");
 		settingsPanel.add(heightSpinner);
@@ -112,7 +113,7 @@ public class NewFileWindow {
 				NewFileWindow.this.frame.repaint();
 			}
 		});
-		squareWidthSpinner.setModel(new SpinnerNumberModel(new Integer(this.superGridDraw.getGrid().getSquareWidth()), null, null, new Integer(1)));
+		squareWidthSpinner.setModel(new SpinnerNumberModel(this.superGridDraw.getGrid().getSquareWidth(), null, null, 1));
 		squareWidthSpinner.setMaximumSize(new Dimension(76, 28));
 		settingsPanel.add(squareWidthSpinner);
 
@@ -128,7 +129,7 @@ public class NewFileWindow {
 				NewFileWindow.this.frame.repaint();
 			}
 		});
-		squareHeightSpinner.setModel(new SpinnerNumberModel(new Integer(this.superGridDraw.getGrid().getSquareHeight()), null, null, new Integer(1)));
+		squareHeightSpinner.setModel(new SpinnerNumberModel(this.superGridDraw.getGrid().getSquareHeight(), null, null, 1));
 		squareHeightSpinner.setMaximumSize(new Dimension(76, 28));
 		settingsPanel.add(squareHeightSpinner);
 
