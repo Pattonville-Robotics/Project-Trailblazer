@@ -33,6 +33,7 @@ public class Designer extends Application {
 		final MenuItem openItem = new MenuItem("Open map...");
 		final MenuItem saveItem = new MenuItem("Save map...");
 		final Canvas canvas = new Canvas(400, 400);
+		final Grid grid = new Grid(10, 10);
 
 		root.getChildren().addAll(menuBar, canvas);
 		menuBar.getMenus().addAll(fileMenu, editMenu);
@@ -41,13 +42,16 @@ public class Designer extends Application {
 		fileMenu.getItems().addAll(newItem, openItem, saveItem);
 		editMenu.getItems().addAll();
 
+		canvas.heightProperty().bind(scene.heightProperty());
+		canvas.widthProperty().bind(scene.widthProperty());
+
 		final GraphicsContext g = canvas.getGraphicsContext2D();
 
 		primaryStage.setTitle("Map Designer");
 		primaryStage.setScene(scene);
 
 		new AnimationTimer() {
-			private double x = 0;
+			long t = 0;
 
 			@Override
 			public void handle(long now) {
@@ -55,11 +59,13 @@ public class Designer extends Application {
 				//System.out.println("Height: " + canvas.getHeight() + " Width: " + canvas.getWidth());
 				g.clearRect(0, 0, g.getCanvas().getWidth(), g.getCanvas().getHeight());
 
-				x += 0.1;
+				long dT = now - t;
+				t = now;
 
 				g.setStroke(Color.BLUE);
 				g.setFill(Color.BLUE);
-				g.fillOval(100 * Math.sin(x) + 100, 50, 100, 100);
+				g.fillOval(100 * Math.sin(System.currentTimeMillis() / 1000d) + 100, 50, 100, 100);
+				g.fillText("Width: " + canvas.getWidth() + " Height: " + canvas.getHeight() + " FPS: " + (10e8f / dT), 10, canvas.getHeight() - 10);
 			}
 		}.start();
 
