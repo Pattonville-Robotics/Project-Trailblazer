@@ -9,6 +9,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.KeyStroke;
+import javax.swing.WindowConstants;
 
 // TODO: Auto-generated Javadoc
 
@@ -87,7 +88,7 @@ public class RobotRunner {
 		};
 		final JFrame frame = new JFrame("Robot testing in progress...");
 		frame.setBounds(0, 0, 720, 720);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		component.setBackground(Color.WHITE);
 		frame.setBackground(Color.WHITE);
 		frame.getContentPane().add(component);

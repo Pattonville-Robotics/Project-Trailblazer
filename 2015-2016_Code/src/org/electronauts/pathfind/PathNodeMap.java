@@ -1,5 +1,7 @@
 package org.electronauts.pathfind;
 
+import com.sun.istack.internal.NotNull;
+
 import org.apache.commons.math3.util.FastMath;
 
 import java.awt.Point;
@@ -71,8 +73,10 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 	@Override
 	public String toString() {
 		final StringBuilder s = new StringBuilder();
-		for (final PathNode p : this.points)
-			s.append(p.getNode().toString() + " ");
+		for (final PathNode p : this.points) {
+			s.append(p.getNode());
+			s.append(" ");
+		}
 		return s.toString();
 	}
 
@@ -82,7 +86,7 @@ public class PathNodeMap implements Comparable<PathNodeMap>, Cloneable, Serializ
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
-	public int compareTo(final PathNodeMap map) {
+	public int compareTo(final @NotNull PathNodeMap map) {
 		if (this.getTotalDistance() > map.getTotalDistance())
 			return 1;
 		else if (this.getTotalDistance() < map.getTotalDistance())

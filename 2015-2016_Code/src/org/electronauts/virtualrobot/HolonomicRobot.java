@@ -111,28 +111,28 @@ public class HolonomicRobot extends AbstractRobot {
 	/**
 	 * @return the xCenter
 	 */
-	public double getxCenter() {
+	public double getXCenter() {
 		return this.xCenter;
 	}
 
 	/**
 	 * @param xCenter the xCenter to set
 	 */
-	public void setxCenter(final double xCenter) {
+	public void setXCenter(final double xCenter) {
 		this.xCenter = xCenter;
 	}
 
 	/**
 	 * @return the yCenter
 	 */
-	public double getyCenter() {
+	public double getYCenter() {
 		return this.yCenter;
 	}
 
 	/**
 	 * @param yCenter the yCenter to set
 	 */
-	public void setyCenter(final double yCenter) {
+	public void setYCenter(final double yCenter) {
 		this.yCenter = yCenter;
 	}
 

@@ -1,5 +1,7 @@
 package org.electronauts.pathfind;
 
+import com.sun.istack.internal.NotNull;
+
 import org.apache.commons.math3.util.FastMath;
 
 import java.awt.Point;
@@ -79,7 +81,7 @@ public class VertexMap implements Comparable<VertexMap>, Cloneable, Serializable
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	@Override
-	public int compareTo(final VertexMap map) {
+	public int compareTo(final @NotNull VertexMap map) {
 		if (this.getTotalDistance() > map.getTotalDistance())
 			return 1;
 		else if (this.getTotalDistance() < map.getTotalDistance())

@@ -83,10 +83,10 @@ public class TankRobot extends AbstractRobot {
 			final PolarPoint p1 = new PolarPoint(motorLDistance, this.getAngle() + FastMath.PI / 2);
 			final PolarPoint p2 = new PolarPoint(motorRDistance, this.getAngle() + FastMath.PI / 2);
 
-			motorL.setX(motorL.getxLineStart() + p1.getX());
-			motorL.setY(motorL.getyLineStart() + p1.getY());
-			motorR.setX(motorR.getxLineStart() + p2.getX());
-			motorR.setY(motorR.getyLineStart() + p2.getY());
+			motorL.setX(motorL.getXLineStart() + p1.getX());
+			motorL.setY(motorL.getYLineStart() + p1.getY());
+			motorR.setX(motorR.getXLineStart() + p2.getX());
+			motorR.setY(motorR.getYLineStart() + p2.getY());
 		}
 	}
 
@@ -231,10 +231,10 @@ public class TankRobot extends AbstractRobot {
 
 			this.setTheta(this.getAngle());
 		} else if (motorL.getRPM() == motorR.getRPM()) {
-			motorL.setxLineStart(motorL.getX());
-			motorL.setyLineStart(motorL.getY());
-			motorR.setxLineStart(motorR.getX());
-			motorR.setyLineStart(motorR.getY());
+			motorL.setXLineStart(motorL.getX());
+			motorL.setYLineStart(motorL.getY());
+			motorR.setXLineStart(motorR.getX());
+			motorR.setYLineStart(motorR.getY());
 		}
 	}
 
