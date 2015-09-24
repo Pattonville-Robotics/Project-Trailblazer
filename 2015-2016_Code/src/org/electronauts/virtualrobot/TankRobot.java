@@ -12,7 +12,7 @@ import java.awt.geom.Point2D;
 
 /**
  * The TankRobot class simulates the motion of a tank-like robot with two motors through time.
- * <p/>
+ * <p>
  * It uses the system's nanosecond timer to keep track of how long it has driven. It uses an equation to find the turning circle of the robot, given the robot's
  * width, the radius of it's wheels, and the RPMs of each of the motors. This system of physics simulation, based on the initial conditions and elapsed time, is
  * much more accurate than one based on the previous state of the robot.
@@ -155,7 +155,7 @@ public class TankRobot extends AbstractRobot {
 	/**
 	 * Paints the robot onto the specified Graphics2D object. The robot is shifted down {@code Y_SHIFT} pixels and reflected to account for the
 	 * {@code JComponent} coordinate system.
-	 * <p/>
+	 * <p>
 	 * The {@code scale} is used to resize the robot to make it more visible. A scale of 1 corresponds to a 1:1 ratio of distance to pixels.
 	 *
 	 * @param g2d   the {@code Graphics2D} that is to be drawn on
