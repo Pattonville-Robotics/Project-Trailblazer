@@ -1,4 +1,4 @@
-package org.psdr3.robotics.trailblazer.math;
+package org.psdr3.robotics.trailblazer.math.geom;
 
 import org.apache.commons.math3.fraction.BigFraction;
 
