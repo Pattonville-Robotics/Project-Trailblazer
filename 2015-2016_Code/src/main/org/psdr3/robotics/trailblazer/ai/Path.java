@@ -21,9 +21,9 @@ public class Path {
 
 	public Path2D.Double getFancyPath() {
 		Path2D.Double fancyPath = new Path2D.Double();
-		fancyPath.moveTo(this.tiles.getFirst().getX() + 0.5, this.tiles.getFirst().getY() + 0.5);
+		fancyPath.moveTo(this.tiles.getFirst().getCol() + 0.5, this.tiles.getFirst().getRow() + 0.5);
 		for (Tile tile : this.tiles.subList(1, this.tiles.size())) {
-			fancyPath.lineTo(tile.getX() + 0.5, tile.getY() + 0.5);
+			fancyPath.lineTo(tile.getCol() + 0.5, tile.getRow() + 0.5);
 		}
 		return fancyPath;
 	}

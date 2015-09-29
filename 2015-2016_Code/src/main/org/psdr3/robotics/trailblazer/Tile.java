@@ -5,13 +5,18 @@ import java.io.Serializable;
 /**
  * Created by skaggsm on 9/3/15.
  */
-public enum Tile implements Serializable {
-	EMPTY, FILLED, START, FINISH;
+public class Tile implements Serializable {
 
-	private int x, y;
-
+	private int row, col;
 	private int distance;
 	private boolean corner;
+	private Type type;
+
+	public Tile(int row, int col, Type type) {
+		this.row = row;
+		this.col = col;
+		this.type = type;
+	}
 
 	public int getDistance() {
 		return distance;
@@ -31,21 +36,34 @@ public enum Tile implements Serializable {
 		return this;
 	}
 
-	public int getX() {
-		return this.x;
+	public Type getType() {
+		return this.type;
 	}
 
-	public Tile setX(int x) {
-		this.x = x;
+	public Tile setType(Type type) {
+		this.type = type;
 		return this;
 	}
 
-	public int getY() {
-		return this.y;
+	public int getRow() {
+		return this.row;
 	}
 
-	public Tile setY(int y) {
-		this.y = y;
+	public Tile setRow(int row) {
+		this.row = row;
 		return this;
+	}
+
+	public int getCol() {
+		return this.col;
+	}
+
+	public Tile setCol(int col) {
+		this.col = col;
+		return this;
+	}
+
+	enum Type {
+		EMPTY, FILLED, START, FINISH;
 	}
 }
